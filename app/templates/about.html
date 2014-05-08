@@ -1,0 +1,32 @@
+{%extends "layout.html" %}
+
+{% block content %}
+
+	<h2>About</h2>
+	<div id='tog'>
+	<p>This is an about page. It gives details and stuff. There will probably be words. Possibly pictures.</p>
+	</div>
+	
+	<script>
+	var x = {{results}};
+	console.log(results);
+	</script>
+	<h3>Oh wait, here's a picture<h3>
+	<a href="/"> 
+	<img src="http://www.bubblews.com/assets/images/news/1642585886_1388432038.jpg" 
+	alt="some_text" width="620" height="420">
+	</a>
+	<script type="text/javascript">
+   $(document).ready(function() {
+   	$('#tog').dblclick(function() {
+   		$(this).hide();
+   	});
+   });
+
+    </script>
+  
+
+
+
+{% endblock %}
+

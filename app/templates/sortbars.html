@@ -1,0 +1,282 @@
+{%extends "layout.html" %}
+
+{% block content %}
+
+<h1><center>{{metric}} by day</center></h1>
+
+		<div id="tooltip" class="hidden">
+			<p><strong>{{metric}}</strong></p>
+			<p><span id="value">0</span></p>
+		</div>
+
+
+		<div id="tooltip2" class="hidden">
+			<p><strong>{{metric}}</strong></p>
+			<p><span id="value">0</span></p>
+		</div>
+		<script type="text/javascript">
+
+			//Width and height
+			var w = 1200;
+			var h = 250;
+			
+			var dataset = {{tmp}};
+
+			var xScale = d3.scale.ordinal()
+							.domain(d3.range(dataset.length))
+							.rangeRoundBands([0, w], 0.05);
+
+			var yScale = d3.scale.linear()
+							.domain([0, d3.max(dataset)])
+							.range([0, h]);
+
+
+			
+			//Create SVG element
+			var svg = d3.select("body")
+						.append("svg")
+						
+						.attr("width", w)
+						.attr("height", h)
+						.attr("class","chart1");
+
+			var xAxis = d3.svg.axis()
+    					.scale(xScale)
+    					.orient("bottom");
+
+			var yAxis = d3.svg.axis()
+			    .scale(yScale)
+			    .orient("left")
+			    .tickFormat(d3.format("2s"));
+
+			var xAxis = d3.svg.axis()
+			    .scale(xScale)
+			    .orient("bottom");
+
+			var yAxis = d3.svg.axis()
+			    .scale(yScale)
+			    .orient("left")
+
+
+			svg.append("g")
+			      .attr("class", "x axis")
+			      .attr("transform", "translate(0," + h + ")")
+			      .call(xAxis);
+
+			  svg.append("g")
+			      .attr("class", "y axis")
+			      .call(yAxis)
+
+			    .append("text")
+			      .attr("transform", "rotate(-90)")
+			      .attr("y", 6)
+			      .attr("dy", ".71em")
+			      .style("text-anchor", "end");
+			
+
+			
+
+			//Create bars
+			svg.selectAll("rect")
+			   .data(dataset)
+			   .enter()
+			   .append("rect")
+			   .attr("x", function(d, i) {
+			   		return xScale(i);
+			   })
+			   .attr("y", function(d) {
+			   		return h - yScale(d);
+			   })
+			   .attr("width", xScale.rangeBand())
+			   .attr("height", function(d) {
+			   		return yScale(d);
+			   })
+			   .attr("fill", "teal")
+			   .attr("opacity", 0.8)
+			   
+			   .on("mouseover", function(d) {
+
+					//Get this bar's x/y values, then augment for the tooltip
+					var xPosition = parseFloat(d3.select(this).attr("x")) + xScale.rangeBand() / 2;
+					var yPosition = parseFloat(d3.select(this).attr("y")) / 2 + h / 2;
+					
+
+					//Update the tooltip position and value
+					d3.select("#tooltip")
+						.style("left", xPosition + "px")
+						.style("top", yPosition + "px")						
+						.select("#value")
+						.text(d);
+			   
+					//Show the tooltip
+					d3.select("#tooltip").classed("hidden", false);
+
+			   })
+			   .on("mouseout", function() {
+			   
+					//Hide the tooltip
+					d3.select("#tooltip").classed("hidden", true);
+					
+			   })
+			   .on("click", function() {
+			   		sortBars();
+			   });
+
+			//Define sort order flag
+			var sortOrder = false;
+			
+			//Define sort function
+			var sortBars = function() {
+
+				//Flip value of sortOrder
+			   	sortOrder = !sortOrder;
+
+				svg.selectAll("rect")
+				   .sort(function(a, b) {
+				   		if (sortOrder) {
+					   		return d3.ascending(a, b);
+				   		} else {
+					   		return d3.descending(a, b);
+				   		}
+				   	})
+				   .transition()
+				   .delay(function(d, i) {
+					   return i * 50;
+				   })
+				   .duration(1000)
+				   .attr("x", function(d, i) {
+				   		return xScale(i);
+				   });
+
+			};			
+
+			var dataset = {{tmp2}};
+			
+
+			var xScale = d3.scale.ordinal()
+							.domain(d3.range(dataset.length))
+							.rangeRoundBands([0, w], 0.05);
+
+			var yScale = d3.scale.linear()
+							.domain([0, d3.max(dataset)])
+							.range([0, h]);
+			//Create SVG element
+			var svg = d3.select("body")
+						.append("svg")
+						
+						.attr("width", w)
+						.attr("height", h)
+						.attr("class","chart2");
+
+						var xAxis = d3.svg.axis()
+    					.scale(xScale)
+    					.orient("bottom");
+
+			var yAxis = d3.svg.axis()
+			    .scale(yScale)
+			    .orient("left")
+			    .tickFormat(d3.format("2s"));
+
+			var xAxis = d3.svg.axis()
+			    .scale(xScale)
+			    .orient("bottom");
+
+			var yAxis = d3.svg.axis()
+			    .scale(yScale)
+			    .orient("left")
+
+
+			svg.append("g")
+			      .attr("class", "x axis")
+			      .attr("transform", "translate(0," + h + ")")
+			      .call(xAxis);
+
+			  svg.append("g")
+			      .attr("class", "y axis")
+			      .call(yAxis)
+
+			    .append("text")
+			      .attr("transform", "rotate(-90)")
+			      .attr("y", 6)
+			      .attr("dy", ".71em")
+			      .style("text-anchor", "end");
+
+			//Create bars
+			svg.selectAll("rect")
+			   .data(dataset)
+			   .enter()
+			   .append("rect")
+			   .attr("id","bar2")
+			   .attr("x", function(d, i) {
+			   		return xScale(i);
+			   })
+			   .attr("y", function(d) {
+			   		return h - yScale(d);
+			   })
+			   .attr("width", xScale.rangeBand())
+			   .attr("height", function(d) {
+			   		return yScale(d);
+			   })
+			   .attr("fill", "#FF3333")
+			   .attr("opacity", 0.8)
+			   
+			   .on("mouseover", function(d) {
+
+					//Get this bar's x/y values, then augment for the tooltip
+					var xPosition = parseFloat(d3.select(this).attr("x")) + xScale.rangeBand() / 2;
+					var yPosition = parseFloat(d3.select(this).attr("y")) / 2 + h + 150;
+					
+
+					//Update the tooltip position and value
+					d3.select("#tooltip2")
+						.style("left", xPosition + "px")
+						.style("top", yPosition + "px")						
+						.select("#value")
+						.text(d);
+			   
+					//Show the tooltip
+					d3.select("#tooltip2").classed("hidden", false);
+
+			   })
+			   .on("mouseout", function() {
+			   
+					//Hide the tooltip
+					d3.select("#tooltip2").classed("hidden", true);
+					
+			   })
+			   .on("click", function() {
+			   		sortBars2();
+			   });
+
+			//Define sort order flag
+			var sortOrder2 = false;
+			
+			//Define sort function
+			var sortBars2 = function() {
+
+				//Flip value of sortOrder
+			   	sortOrder2 = !sortOrder;
+
+				svg.selectAll("#bar2")
+				   .sort(function(a, b) {
+				   		if (sortOrder2) {
+					   		return d3.ascending(a, b);
+				   		} else {
+					   		return d3.descending(a, b);
+				   		}
+				   	})
+				   .transition()
+				   .delay(function(d, i) {
+					   return i * 50;
+				   })
+				   .duration(1000)
+				   .attr("x", function(d, i) {
+				   		return xScale(i);
+				   });
+
+			};			
+			
+		</script>
+
+
+{% endblock %}
