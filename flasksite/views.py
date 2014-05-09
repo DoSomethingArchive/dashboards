@@ -1,4 +1,4 @@
-from app import app, openDB
+from flasksite import app, openDB
 from flask import render_template
 
 @app.route('/')
