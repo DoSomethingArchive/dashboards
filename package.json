@@ -1,0 +1,11 @@
+{
+  "name": "dashboards",
+  "version": "0.0.1",
+  "license": "MIT",
+  "dependencies": {
+    "grunt": "~0.4.4",
+    "grunt-contrib-jshint": "~0.10.0",
+    "load-grunt-config": "^0.8.0",
+    "jshint-stylish": "~0.2.0"
+  }
+}
