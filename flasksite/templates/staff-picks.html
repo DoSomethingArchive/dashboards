@@ -4,7 +4,7 @@
 
 
 
-<a  href="/campaigns/staff-picks">
+<a  href="{{ url_for('staffPicks') }}">
   <div class = "rectangle" id='one'>
     <div class = "text">
     <b>STAFF PICKS</b>
@@ -12,7 +12,7 @@
   </div>
 </a>
 
-<a  href="/groupBarsNonStaff" >
+<a  href="{{ url_for('allCampaigns') }}" >
   <div class = "rectangle" id='two'>
     <b>NON-STAFF PICKS</b>
   </div>
