@@ -1,6 +1,6 @@
-d3.json('/get-staff-picks-data.json', function(error, json) {
-  if (error) return console.warn(error);
-  data = json;
+d3.json("/get-staff-picks-data.json", function(error, json) {
+  if (error) { return console.warn(error); }
+  var data = json;
 
   var margin = {top: 20, right: 20, bottom: 30, left: 40},
       width = 1100 - margin.left - margin.right,
@@ -44,15 +44,6 @@ d3.json('/get-staff-picks-data.json', function(error, json) {
   x1.domain(ageNames).rangeRoundBands([0, x0.rangeBand()]);
   y.domain([0, d3.max(data, function(d) { return d3.max(d.ages, function(d) { return d.value; }); })]);
 
-  var xAxis = d3.svg.axis()
-      .scale(x0)
-      .orient("bottom");
-
-  var yAxis = d3.svg.axis()
-      .scale(y)
-      .orient("left");
-
-
   svg.append("g")
       .attr("class", "x axis")
       .attr("transform", "translate(0," + height + ")")
@@ -68,12 +59,11 @@ d3.json('/get-staff-picks-data.json', function(error, json) {
       .style("text-anchor", "end")
       .text("Active");
 
-
-
   function showTooltip(d) {
     // Get this bar's x/y values, then augment for the tooltip
     var xPosition = parseFloat(d3.select(this).attr("x")) + x0.rangeBand() / 2;
     var yPosition = parseFloat(d3.select(this).attr("y")) / 2 + height / 2;
+    x0.domain(data.map(function(d) { return d.campaign; }));
 
     // Update the tooltip position and value
     d3.select("#tooltip")

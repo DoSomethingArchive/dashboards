@@ -16,7 +16,8 @@
     "globals": {
         "require": false,
         "define": false,
-        "_gaq": false
+        "_gaq": false,
+        "d3" : false
     },
     "strict": true,
     "trailing": true,
