@@ -5,19 +5,6 @@ from flask import render_template
 def home():
   return render_template('home.html')
 
-
-
-@app.route('/morebars')
-def morebars():
-  #results = overall.query.all()
-  #tmp = []
-  #for i in results:
-    #tmp.append(int(i.sign_ups))
-  results = 'hi'
-  tmp = [11,33,56,74,23,99,14]
-  return render_template('morebars.html',results=results,tmp = tmp )
-
-
 @app.route('/groupbars')
 def groupbars():
   return render_template('groupbars.html')
