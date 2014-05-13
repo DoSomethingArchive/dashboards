@@ -6,11 +6,11 @@ def home():
   return render_template('home.html')
 
 @app.route('/campaigns/staff-picks')
-def groupbars():
+def staffPicks():
   return render_template('staff-picks.html')
 
 @app.route('/get-staff-picks-data.json')
-def getGroupBarsData():
+def getStaffPicksData():
   cur = openDB()
   cur.execute('select campaign, sign_ups, new_members, report_backs from overall.overall where staff_pick = "y" and date_add(end_date, interval 7 day) >= curdate() order by sign_ups desc')
   data = cur.fetchall()
@@ -18,47 +18,17 @@ def getGroupBarsData():
   return json.dumps(data)
 
 
-@app.route('/groupBarsNonStaff')
-def groupBarsNonStaff():
-  #results = overall.query.all()
-  #tmp = []
-  #for i in results:
-    #tmp.append(int(i.sign_ups))
+@app.route('/campaigns/all')
+def allCampaigns():
+  return render_template('campaigns-all.html')
 
+@app.route('/get-all-campaigns-data.json')
+def getCampaignsData():
   cur = openDB()
   cur.execute('select campaign, sign_ups, new_members, report_backs from overall.overall where staff_pick = "n" and date_add(end_date, interval 7 day) >= curdate() order by sign_ups desc')
-  predata = []
-  for i in cur.fetchall():
-    x = {}
-    for a in i:
-      if a == 'campaign':
-        x[a]=i[a]
-      if a == 'sign_ups':
-        x['Sign Ups']=i[a]
-      if a == 'new_members':
-        x['New Members']=i[a]
-      if a == 'report_backs':
-        x['Reportbacks']=i[a]
-
-    predata.append(x)
-  data = sorted(predata,reverse=True, key=lambda k: k['Sign Ups'])
-  """
-  for i in cur.fetchall():
-    campaign = {}
-
-    for x in i:
-      campaign['State']=[0],
-      campaign['Sign Ups']=i[1],
-      campaign['New members']=i[2],
-      campaign['Reportbacks']=i[3]
-      data.append(campaign)
-      print campaign
-
-  """
-  print data
+  data = cur.fetchall()
   cur.close()
-
-  return render_template('groupBarsNonStaff.html', data=data )
+  return json.dumps(data)
 
 @app.route('/causes')
 def causes():
