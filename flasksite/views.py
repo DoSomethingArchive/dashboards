@@ -5,11 +5,11 @@ from flask import render_template
 def home():
   return render_template('home.html')
 
-@app.route('/groupbars')
+@app.route('/campaigns/staff-picks')
 def groupbars():
-  return render_template('groupbars.html')
+  return render_template('staff-picks.html')
 
-@app.route('/get-groupbars-data.json')
+@app.route('/get-staff-picks-data.json')
 def getGroupBarsData():
   cur = openDB()
   cur.execute('select campaign, sign_ups, new_members, report_backs from overall.overall where staff_pick = "y" and date_add(end_date, interval 7 day) >= curdate() order by sign_ups desc')

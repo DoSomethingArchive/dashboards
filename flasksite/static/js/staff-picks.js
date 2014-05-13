@@ -1,4 +1,4 @@
-d3.json('/get-groupbars-data.json', function(error, json) {
+d3.json('/get-staff-picks-data.json', function(error, json) {
   if (error) return console.warn(error);
   data = json;
 
