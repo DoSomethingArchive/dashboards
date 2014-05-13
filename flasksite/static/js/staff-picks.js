@@ -68,12 +68,11 @@ d3.json('/get-staff-picks-data.json', function(error, json) {
       .style("text-anchor", "end")
       .text("Active");
 
-
-
   function showTooltip(d) {
     // Get this bar's x/y values, then augment for the tooltip
     var xPosition = parseFloat(d3.select(this).attr("x")) + x0.rangeBand() / 2;
     var yPosition = parseFloat(d3.select(this).attr("y")) / 2 + height / 2;
+    x0.domain(data.map(function(d) { return d.campaign; }));
 
     // Update the tooltip position and value
     d3.select("#tooltip")
