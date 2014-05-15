@@ -22,12 +22,12 @@ def getStaffPicksData():
   return json.dumps(data)
 
 #returns all non-staff picks, cause agnostic
-@app.route('/campaigns/all')
+@app.route('/campaigns/non-staff-picks')
 def allCampaigns():
   return render_template('campaigns-all.html')
 
 #returns json object array of all non-staff picks, cause agnostic
-@app.route('/get-all-campaigns-data.json')
+@app.route('/get-non-staff-picks-data.json')
 def getCampaignsData():
   cur = openDB()
   cur.execute('select campaign, sign_ups, new_members, report_backs from overall.overall where staff_pick = "n" and date_add(end_date, interval 7 day) >= curdate() order by sign_ups desc')
@@ -197,10 +197,6 @@ def sortbars():
 #returns monthly kpi data
 @app.route('/members')
 def members():
-  #results = overall.query.all()
-  #tmp = []
-  #for i in results:
-    #tmp.append(int(i.sign_ups))
 
   cur = openDB()
   cur.execute('select date, total_members_abs, new_membrs_abs, engaged_members_abs, verified_members_abs, campaigns_verified_abs, sms_game_verified_abs from members.bod_2014')
@@ -228,19 +224,6 @@ def members():
     predata.append(x)
     data = sorted(predata,reverse=True, key=lambda k: k['Engaged Members'])
 
-  """
-  for i in cur.fetchall():
-    campaign = {}
-
-    for x in i:
-      campaign['State']=[0],
-      campaign['Sign Ups']=i[1],
-      campaign['New members']=i[2],
-      campaign['Reportbacks']=i[3]
-      data.append(campaign)
-      print campaign
-
-  """
   print data
   cur.close()
 
