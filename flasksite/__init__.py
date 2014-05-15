@@ -4,8 +4,6 @@ import MySQLdb.converters
 import MySQLdb.cursors
 from MySQLdb.constants import FIELD_TYPE
 from random import choice as choice
-import json
-
 app = Flask(__name__)
 
 app.config.from_pyfile('../env/config.cfg')
