@@ -23,12 +23,12 @@ def getStaffPicksData():
 
 #returns all non-staff picks, cause agnostic
 @app.route('/campaigns/non-staff-picks')
-def allCampaigns():
-  return render_template('campaigns-all.html')
+def nonStaffPicks():
+  return render_template('non-staff-picks.html')
 
 #returns json object array of all non-staff picks, cause agnostic
 @app.route('/get-non-staff-picks-data.json')
-def getCampaignsData():
+def getNonStaffPicksData():
   cur = openDB()
   cur.execute('select campaign, sign_ups, new_members, report_backs from overall.overall where staff_pick = "n" and date_add(end_date, interval 7 day) >= curdate() order by sign_ups desc')
   data = cur.fetchall()
