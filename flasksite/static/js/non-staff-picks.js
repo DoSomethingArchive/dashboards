@@ -1,4 +1,4 @@
-d3.json("/get-all-campaigns-data.json", function(error, json) {
+d3.json("/get-non-staff-picks-data.json", function(error, json) {
   if (error) { return console.warn(error); }
   var data = json;
 
