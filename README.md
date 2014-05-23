@@ -3,8 +3,9 @@
 
 To install  
 1. Clone the repo  
-2. Run `npm install`  
-3. Go into the `flasksite` directory and run `pip install`  
+2. Run `npm install`
+3. Run `bower install`
+4. Go into the `flasksite` directory and run `pip install`  
 [Make sure you install pip first](http://pip.readthedocs.org/en/latest/installing.html)
 
 
