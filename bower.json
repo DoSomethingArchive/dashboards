@@ -1,0 +1,23 @@
+{
+  "name": "Dashboards",
+  "version": "0.0.1",
+  "homepage": "https://github.com/DoSomething/dashboards",
+  "authors": [
+    "Andrea Gaither <angaither@gmail.com>"
+  ],
+  "description": "Dashboards for DoSomething.org",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~1.11.1",
+    "d3": "~3.4.8",
+    "epoch": "fastly/epoch#~0.3.5"
+  }
+}
