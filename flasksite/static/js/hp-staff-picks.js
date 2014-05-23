@@ -2,7 +2,7 @@ d3.json("/get-hp-staff-picks-data.json", function(error, json) {
   if (error) { return console.warn(error); }
   var data = json;
 
-  var margin = {top: 20, right: 20, bottom: 30, left: 40},
+  var margin = {top: 10, right: 40, bottom: 150, left: 40},
       width = 1100 - margin.left - margin.right,
       height = 500 - margin.top - margin.bottom;
 
@@ -47,7 +47,14 @@ d3.json("/get-hp-staff-picks-data.json", function(error, json) {
   svg.append("g")
       .attr("class", "x axis")
       .attr("transform", "translate(0," + height + ")")
-      .call(xAxis);
+      .call(xAxis)
+      .selectAll("text")  
+      .style("text-anchor", "end")
+      .attr("dx", "-.8em")
+      .attr("dy", ".15em")
+      .attr("transform", function(d) {
+          return "rotate(-65)" 
+              });
 
   svg.append("g")
       .attr("class", "y axis")
