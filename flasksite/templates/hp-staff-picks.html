@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+
+
+<a  href="{{ url_for('hpStaffPicks') }}"> 
+<div class = "rectangle" id='one'>
+<div class = "text">
+<b>STAFF PICKS</b>
+</div>
+</div>
+</a>
+
+<a  href="{{ url_for('hpNonStaffPicks') }}" > 
+<div class = "rectangle" id='two'>
+
+<b>NON-STAFF PICKS</b>
+</div>
+</a>
+
+
+
+
+<div id="tooltip" class="hidden">
+  
+  <p><span id="value">0</span></p>
+</div>
+
+<script type="text/javascript" src="../../static/js/hp-staff-picks.js"></script>
+{% endblock %}
