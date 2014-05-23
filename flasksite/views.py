@@ -41,32 +41,19 @@ def causes():
   return render_template('causes.html')
 
 #returns homelessness and poverty staff picks campaigns
-@app.route('/hpStaff')
-def hpStaff():
+@app.route('/causes/health-and-poverty/staff-picks')
+def hpStaffPicks():
+  return render_template('hp-staff-picks.html')
 
+#returns json object array of hp staff picks
+@app.route('/get-hp-staff-picks-data.json')
+def getHpStaffPicksData():
   cur = openDB()
-  cur.execute('select campaign, sign_ups, new_members, report_backs from overall.overall where staff_pick = "y" and cause = "homelessness and poverty" and date_add(end_date, interval 7 day) >= curdate() order by sign_ups desc')
-  predata = []
-  for i in cur.fetchall():
-    x = {}
-    for a in i:
-      if a == 'campaign':
-        x[a]=i[a]
-      if a == 'sign_ups':
-        x['Sign Ups']=i[a]
-      if a == 'new_members':
-        x['New Members']=i[a]
-      if a == 'report_backs':
-        x['Reportbacks']=i[a]
-
-    predata.append(x)
-  data = sorted(predata,reverse=True, key=lambda k: k['Sign Ups'])
-
-  print data
+  cur.execute('select campaign, sign_ups, new_members, report_backs from overall.overall where staff_pick = "y" and cause in ("Homelessness","Poverty") and date_add(end_date, interval 7 day) >= curdate() order by sign_ups desc')
+  data = cur.fetchall()
   cur.close()
-
-  return render_template('groupBarsHPStaff.html', data=data )
-
+  return json.dumps(data)
+  
 #returns homelessness and poverty non-staff picks campaigns
 @app.route('/hpNonStaff')
 def hpNonStaff():
