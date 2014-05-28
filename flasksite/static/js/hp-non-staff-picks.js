@@ -108,7 +108,6 @@ d3.json("/get-hp-non-staff-picks-data.json", function(error, json) {
       .attr("y", function(d) { return height; })
       .attr("height", function(d) { return 0 ; })
       .attr("class","bars")
-      .style("opacity",".1")
       .on("mouseover", showTooltip)
       .on("mouseout", hideTooltip);
 
@@ -121,8 +120,7 @@ d3.json("/get-hp-non-staff-picks-data.json", function(error, json) {
     .attr("y", function(d) { return y(d.value); })
     .attr("height", function(d) { return height - y(d.value); })
     .attr("class","bars")
-    .style("fill", function(d) { return color(d.name); })
-    .style("opacity",".7");
+    .style("fill", function(d) { return color(d.name); });
 
 
  var legend = svg.selectAll(".legend")
