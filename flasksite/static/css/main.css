@@ -381,4 +381,7 @@ position:relative;
    
 }
 
+ .bars:hover {
+  opacity:.6;
+}
 
