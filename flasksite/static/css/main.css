@@ -382,6 +382,8 @@ position:relative;
 }
 
  .bars:hover {
-  opacity:.6;
+  opacity:.35;
+  box-shadow: -5px 5px 5px #aaa;
+
 }
 
