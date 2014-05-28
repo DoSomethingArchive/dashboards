@@ -16,7 +16,7 @@ def staffPicks():
 @app.route('/get-staff-picks-data.json')
 def getStaffPicksData():
   cur = openDB()
-  cur.execute('select campaign, sign_ups, new_members, report_backs from overall.overall where staff_pick = "y" and date_add(end_date, interval 7 day) >= curdate() order by sign_ups desc')
+  cur.execute('select concat(upper(substring(replace(campaign,"_"," "),1,1)),substring(replace(campaign,"_"," "),2)) as campaign, sign_ups, new_members, report_backs from overall.overall where staff_pick = "y" and date_add(end_date, interval 7 day) >= curdate() order by sign_ups desc')
   data = cur.fetchall()
   cur.close()
   return json.dumps(data)
@@ -30,9 +30,31 @@ def nonStaffPicks():
 @app.route('/get-non-staff-picks-data.json')
 def getNonStaffPicksData():
   cur = openDB()
-  cur.execute('select campaign, sign_ups, new_members, report_backs from overall.overall where staff_pick = "n" and date_add(end_date, interval 7 day) >= curdate() order by sign_ups desc')
+  cur.execute('select concat(upper(substring(replace(campaign,"_"," "),1,1)),substring(replace(campaign,"_"," "),2)) as campaign, sign_ups, new_members, report_backs from overall.overall where staff_pick = "n" and date_add(end_date, interval 7 day) >= curdate() order by sign_ups desc')
   data = cur.fetchall()
   cur.close()
+  return json.dumps(data)
+
+#returns cause-level json
+@app.route('/get-causes.json')
+def getCausesdata():
+  cur = openDB()
+  q = """
+  select 'Sex + Relationships' as cause, sum(sign_ups) as sign_ups, sum(new_members) as new_members, sum(report_backs) as report_backs, sum(all_traffic) as traffic, round(avg(avg_gate_conversion)*100,2) as conv, count(*) as campaigns from overall.overall where date_add(end_date, interval 14 day) >= curdate() and cause in ('Sex',"Relationships") 
+  union all
+  select 'Homelessness + Poverty' as cause, sum(sign_ups) as sign_ups, sum(new_members) as new_members, sum(report_backs) as report_backs, sum(all_traffic) as traffic, round(avg(avg_gate_conversion)*100,2) as conv, count(*) as campaigns from overall.overall where date_add(end_date, interval 14 day) >= curdate() and cause in ('Homelessness',"Poverty") 
+  union all
+  select 'Bullying + Violence' as cause, sum(sign_ups) as sign_ups, sum(new_members) as new_members, sum(report_backs) as report_backs, sum(all_traffic) as traffic, round(avg(avg_gate_conversion)*100,2) as conv, count(*) as campaigns from overall.overall where date_add(end_date, interval 14 day) >= curdate() and cause in ('Bullying',"Violence") 
+  union all
+  select 'Health' as cause, sum(sign_ups) as sign_ups, sum(new_members) as new_members, sum(report_backs) as report_backs, sum(all_traffic) as traffic, round(avg(avg_gate_conversion)*100,2) as conv, count(*) as campaigns from overall.overall where date_add(end_date, interval 14 day) >= curdate() and cause in ('Mental Health',"Physical Health") 
+  union all
+  select cause, sum(sign_ups) as sign_ups, sum(new_members) as new_members, sum(report_backs) as report_backs, sum(all_traffic) as traffic, round(avg(avg_gate_conversion)*100,2) as conv, count(*) as campaigns from overall.overall where date_add(end_date, interval 14 day) >= curdate() and cause not in ('Bullying',"Violence",'Mental Health',"Physical Health",'Homelessness',"Poverty",'Sex',"Relationships") group by cause
+  """
+  cur.execute(q)
+  data = cur.fetchall()
+  cur.close()
+  json.dumps(data)
+  
   return json.dumps(data)
 
 #returns cause-level page
@@ -40,8 +62,9 @@ def getNonStaffPicksData():
 def causes():
   return render_template('causes.html')
 
+
 #returns homelessness and poverty staff picks campaigns
-@app.route('/causes/health-and-poverty/staff-picks')
+@app.route('/causes/homelessness-and-poverty/staff-picks')
 def hpStaffPicks():
   return render_template('hp-staff-picks.html')
 
@@ -49,13 +72,13 @@ def hpStaffPicks():
 @app.route('/get-hp-staff-picks-data.json')
 def getHpStaffPicksData():
   cur = openDB()
-  cur.execute('select campaign, sign_ups, new_members, report_backs from overall.overall where staff_pick = "y" and cause in ("Homelessness","Poverty") and date_add(end_date, interval 7 day) >= curdate() order by sign_ups desc')
+  cur.execute('select concat(upper(substring(replace(campaign,"_"," "),1,1)),substring(replace(campaign,"_"," "),2)) as campaign, sign_ups, new_members, report_backs from overall.overall where staff_pick = "y" and cause in ("Homelessness","Poverty") and date_add(end_date, interval 7 day) >= curdate() order by sign_ups desc')
   data = cur.fetchall()
   cur.close()
   return json.dumps(data)
 
 #returns homelessness and poverty non-staff picks campaigns
-@app.route('/causes/health-and-poverty/non-staff-picks')
+@app.route('/causes/homelessness-and-poverty/non-staff-picks')
 def hpNonStaffPicks():
   return render_template('hp-non-staff-picks.html')
 
@@ -63,7 +86,7 @@ def hpNonStaffPicks():
 @app.route('/get-hp-non-staff-picks-data.json')
 def getHpNonStaffPicksData():
   cur = openDB()
-  cur.execute('select campaign, sign_ups, new_members, report_backs from overall.overall where staff_pick = "n" and cause in ("Homelessness","Poverty") and date_add(end_date, interval 7 day) >= curdate() order by sign_ups desc')
+  cur.execute('select concat(upper(substring(replace(campaign,"_"," "),1,1)),substring(replace(campaign,"_"," "),2)) as campaign, sign_ups, new_members, report_backs from overall.overall where staff_pick = "n" and cause in ("Homelessness","Poverty") and date_add(end_date, interval 7 day) >= curdate() order by sign_ups desc')
   data = cur.fetchall()
   cur.close()
   return json.dumps(data)
