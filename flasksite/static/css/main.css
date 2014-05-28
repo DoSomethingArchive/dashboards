@@ -195,25 +195,34 @@ rect:hover {
     
     #tooltip2 p {
       margin: 0;
-      ont-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
       font-size: 16px;
       line-height: 20px;
     }
 
 
 
-.axis path,
-.axis line {
+.axis path,.axis line
+ {
   fill: none;
   stroke: #000;
-  shape-rendering: crispEdges;
+  shape-rendering:crispEdges;
+  
+}
+
+.axis text {
+
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+
 }
 
 
-.x.axis path {
-  display: none;
 
-}
+
+
+
+
 
 svg {
   font: 10px sans-serif;
@@ -289,13 +298,15 @@ div.c{
 
 
    width:200px; 
-   height:22px; 
+   height:100px; 
    text-decoration:none;
    border-radius:5px; 
    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-   font-size: 17px;
+   font-size: 15px;
    color:white;
    text-align:center;
+   letter-spacing:1.2px;
+   background:#00CCFF;
    
    vertical-align: middle;
 
@@ -333,7 +344,7 @@ div.c{
  }
  div#c4 {
   position:absolute;
-  top: 300px;
+  top: 350px;
   left:225px;
   background:#0066FF;
  
@@ -342,7 +353,7 @@ div.c{
  }
  div#c5 {
   position:absolute;
-  top: 300px;
+  top: 350px;
   left:625px;
   background:#0066FF;
   
@@ -351,7 +362,7 @@ div.c{
  }
  div#c6 {
   position:absolute;
-  top: 300px;
+  top: 350px;
   left:1025px;
   background:#0066FF;
   
@@ -360,7 +371,7 @@ div.c{
  }
  div#c7 {
   position:absolute;
-  top: 400px;
+  top: 500px;
   left:225px;
   background:#0099FF;
   
@@ -369,7 +380,7 @@ div.c{
  }
  div#c8 {
   position:absolute;
-  top: 400px;
+  top: 500px;
   left:625px;
   background:#0099FF;
  
@@ -378,7 +389,7 @@ div.c{
  }
  div#c9 {
   position:absolute;
-  top: 400px;
+  top: 500px;
   left:1025px;
   background:#0099FF;
   border:2px solid;
@@ -404,4 +415,78 @@ div.c{
   display:block;
   margin-left:auto;
   margin-right:auto;}
+
+  .box{
+    background:orange;
+  opacity:.3;
+
+  }
+
+div.grid{
+  position:absolute;
+  top: 170px;
+  left:115px;
+
+}
+
+#front{
+
+   
+
+
+   width:400px; 
+   height:150px; 
+   text-decoration:none;
+   border-radius:5px; 
+   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+   font-size: 13px;
+   color:white;
+   text-align:center;
+   letter-spacing:1.2px;
+   background:#00CCFF;
+   float: left;
+   border: 1px solid;
+   
+
+}
+
+#front #title{
+
+position:relative;
+  top:20px;
+
+}
+
+#front .text {
+  
+  visibility:hidden;
+  word-wrap: break-word; 
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 18px;
+  color:white;
+}
+#front:hover {
+      opacity:.5;
+      box-shadow: -5px 5px 5px #aaa;
+     
+
+
+    }
+#front:hover #title{
+      font-size: 0px;
+      color: transparent;
+
+     
+
+
+    }
+
+#front:hover .text{
+  visibility:visible;
+  position:relative;
+  top:-90px;
+
+   
+}
+
 
