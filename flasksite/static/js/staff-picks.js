@@ -1,8 +1,10 @@
 d3.json("/get-staff-picks-data.json", function(error, json) {
   if (error) { return console.warn(error); }
   var data = json;
+  var padding = 75;
+  var format = d3.format("0,000");
 
-  var margin = {top: 10, right: 40, bottom: 150, left: 40},
+  var margin = {top: 10, right: 40, bottom: 140, left: 40},
       width = 1100 - margin.left - margin.right,
       height = 500 - margin.top - margin.bottom;
 
@@ -15,7 +17,7 @@ d3.json("/get-staff-picks-data.json", function(error, json) {
       .range([height, 0]);
 
   var color = d3.scale.ordinal()
-      .range(["#663366", "#FFCC00", "#666666"]);
+      .range(["#23b7fb", "#FCD116","#4e2b63"]);
 
   var xAxis = d3.svg.axis()
       .scale(x0)
@@ -23,8 +25,8 @@ d3.json("/get-staff-picks-data.json", function(error, json) {
 
   var yAxis = d3.svg.axis()
       .scale(y)
-      .orient("left")
-      .tickFormat(d3.format("2s"));
+      .orient("left")    
+      .ticks(6);
 
   var svg = d3.select("body").append("svg")
       .attr("width", width + margin.left + margin.right)
@@ -46,25 +48,18 @@ d3.json("/get-staff-picks-data.json", function(error, json) {
 
   svg.append("g")
       .attr("class", "x axis")
-      .attr("transform", "translate(0," + height + ")")
+      .attr("transform", "translate("+padding+"," + height + ")")
       .call(xAxis)
       .selectAll("text")  
       .style("text-anchor", "end")
-      .attr("dx", "-.8em")
-      .attr("dy", ".15em")
       .attr("transform", function(d) {
           return "rotate(-65)" 
               });
 
   svg.append("g")
       .attr("class", "y axis")
-      .call(yAxis)
-      .append("text")
-      .attr("transform", "rotate(-90)")
-      .attr("y", 6)
-      .attr("dy", ".71em")
-      .style("text-anchor", "end")
-      .text("Active");
+      .attr("transform", "translate("+padding+",0)")
+      .call(yAxis);
 
   function showTooltip(d) {
     // Get this bar's x/y values, then augment for the tooltip
@@ -77,7 +72,7 @@ d3.json("/get-staff-picks-data.json", function(error, json) {
       .style("top", (d3.event.pageY-50) + "px")
       .style("left", (d3.event.pageX-100) + "px")
       .select("#value")
-      .text(d.value);
+      .text(format(d.value)); 
 
     // Show the tooltip.
     d3.select("#tooltip").classed("hidden", false);
@@ -91,7 +86,7 @@ d3.json("/get-staff-picks-data.json", function(error, json) {
       .data(data)
       .enter().append("g")
       .attr("class", "g")
-      .attr("transform", function(d) { return "translate(" + x0(d.campaign) + ",0)";});
+      .attr("transform", function(d) { var g_x = x0(d.campaign)+padding; return "translate(" + g_x + ",0)";});
 
   campaign.selectAll("rect")
       .data(function(d) {return d.ages;})
@@ -135,6 +130,6 @@ d3.json("/get-staff-picks-data.json", function(error, json) {
       .attr("y", 9)
       .attr("dy", ".35em")
       .style("text-anchor", "end")
-      .text(function(d) { return d; });
+      .text(function(d) { return d.replace('_',' ').toUpperCase(); });
 
 });
