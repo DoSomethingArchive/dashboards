@@ -287,116 +287,7 @@ div.rectangle{
  }
 
 
-div.c:hover {
-  background:orange;
-  opacity:.3;
-}
 
-div.c{
-
-   
-
-
-   width:200px; 
-   height:100px; 
-   text-decoration:none;
-   border-radius:5px; 
-   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-   font-size: 15px;
-   color:white;
-   text-align:center;
-   letter-spacing:1.2px;
-   background:#00CCFF;
-   
-   vertical-align: middle;
-
- 
-
-
- }
-
- div#c1 {
-  position:absolute;
-  top: 200px;
-  left:225px;
-  background:#00CCFF;
-  
-
-
- }
-
- div#c2 {
-  position:absolute;
-  top: 200px;
-  left:625px;
-  background:#00CCFF;
-
-
- }
- div#c3 {
-  position:absolute;
-  top: 200px;
-  left:1025px;
-  background:#00CCFF;
- 
-
-
- }
- div#c4 {
-  position:absolute;
-  top: 350px;
-  left:225px;
-  background:#0066FF;
- 
-
-
- }
- div#c5 {
-  position:absolute;
-  top: 350px;
-  left:625px;
-  background:#0066FF;
-  
-
-
- }
- div#c6 {
-  position:absolute;
-  top: 350px;
-  left:1025px;
-  background:#0066FF;
-  
-
-
- }
- div#c7 {
-  position:absolute;
-  top: 500px;
-  left:225px;
-  background:#0099FF;
-  
-
-
- }
- div#c8 {
-  position:absolute;
-  top: 500px;
-  left:625px;
-  background:#0099FF;
- 
-
-
- }
- div#c9 {
-  position:absolute;
-  top: 500px;
-  left:1025px;
-  background:#0099FF;
-  border:2px solid;
-  
-
-
- }
 
  div#query {
   
@@ -462,7 +353,7 @@ position:relative;
   visibility:hidden;
   word-wrap: break-word; 
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 18px;
+  font-size: 16px;
   color:white;
 }
 #front:hover {
@@ -485,6 +376,7 @@ position:relative;
   visibility:visible;
   position:relative;
   top:-90px;
+  text-transform: uppercase;
 
    
 }
