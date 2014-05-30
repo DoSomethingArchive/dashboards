@@ -320,7 +320,7 @@ div.grid{
 
 }
 
-#front{
+.front{
 
    
 
@@ -337,18 +337,19 @@ div.grid{
    background:#00CCFF;
    float: left;
    border: 1px solid;
+   cursor: pointer;
    
 
 }
 
-#front #title{
+.front #title{
 
 position:relative;
   top:20px;
 
 }
 
-#front .text {
+.front .text {
   
   visibility:hidden;
   word-wrap: break-word; 
@@ -356,14 +357,14 @@ position:relative;
   font-size: 16px;
   color:white;
 }
-#front:hover {
+.front:hover {
       opacity:.5;
       box-shadow: -5px 5px 5px #aaa;
      
 
 
     }
-#front:hover #title{
+.front:hover #title{
       font-size: 0px;
       color: transparent;
 
@@ -372,7 +373,7 @@ position:relative;
 
     }
 
-#front:hover .text{
+.front:hover .text{
   visibility:visible;
   position:relative;
   top:-90px;
@@ -384,6 +385,35 @@ position:relative;
  .bars:hover {
   opacity:.35;
   box-shadow: -5px 5px 5px #aaa;
+
+}
+
+#staffp {
+
+position:absolute;
+top:150px;
+left:1175px;
+width:75px; 
+height:30px;
+font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 10px;
+text-transform: uppercase;
+cursor: pointer;
+
+}
+
+
+#nstaffp {
+
+position:absolute;
+top:200px;
+left:1175px;
+width:75px; 
+height:30px;
+font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 10px;
+text-transform: uppercase;
+cursor: pointer;
 
 }
 
