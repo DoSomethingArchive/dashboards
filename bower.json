@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "homepage": "https://github.com/DoSomething/dashboards",
   "authors": [
-    "Andrea Gaither <angaither@gmail.com>"
+    "Andrea Gaither <angaither@gmail.com>",
+    "Josh Cusano <joshcusano@gmail.com>"
   ],
   "description": "Dashboards for DoSomething.org",
   "license": "MIT",
