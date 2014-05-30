@@ -1,5 +1,6 @@
 from flasksite import app, openDB, json
-from flask import render_template
+from flask import render_template, request, url_for, jsonify
+
 
 
 #returns homepage
@@ -39,16 +40,17 @@ def getNonStaffPicksData():
 @app.route('/get-causes.json')
 def getCausesdata():
   cur = openDB()
+  #all_casues needed for chart
   q = """
-  select 'Sex + Relationships' as cause, sum(sign_ups) as sign_ups, sum(new_members) as new_members, sum(report_backs) as report_backs, sum(all_traffic) as traffic, round(avg(avg_gate_conversion)*100,2) as conv, count(*) as campaigns from overall.overall where date_add(end_date, interval 14 day) >= curdate() and cause in ('Sex',"Relationships") 
+  select 'Sex + Relationships' as cause, group_concat(distinct cause) as all_causes, sum(sign_ups) as sign_ups, sum(new_members) as new_members, sum(report_backs) as report_backs, sum(all_traffic) as traffic, round(avg(avg_gate_conversion)*100,2) as conv, count(*) as campaigns from overall.overall where date_add(end_date, interval 14 day) >= curdate() and cause in ('Sex',"Relationships") 
   union all
-  select 'Homelessness + Poverty' as cause, sum(sign_ups) as sign_ups, sum(new_members) as new_members, sum(report_backs) as report_backs, sum(all_traffic) as traffic, round(avg(avg_gate_conversion)*100,2) as conv, count(*) as campaigns from overall.overall where date_add(end_date, interval 14 day) >= curdate() and cause in ('Homelessness',"Poverty") 
+  select 'Homelessness + Poverty' as cause, group_concat(distinct cause) as all_causes, sum(sign_ups) as sign_ups, sum(new_members) as new_members, sum(report_backs) as report_backs, sum(all_traffic) as traffic, round(avg(avg_gate_conversion)*100,2) as conv, count(*) as campaigns from overall.overall where date_add(end_date, interval 14 day) >= curdate() and cause in ('Homelessness',"Poverty") 
   union all
-  select 'Bullying + Violence' as cause, sum(sign_ups) as sign_ups, sum(new_members) as new_members, sum(report_backs) as report_backs, sum(all_traffic) as traffic, round(avg(avg_gate_conversion)*100,2) as conv, count(*) as campaigns from overall.overall where date_add(end_date, interval 14 day) >= curdate() and cause in ('Bullying',"Violence") 
+  select 'Bullying + Violence' as cause, group_concat(distinct cause) as all_causes, sum(sign_ups) as sign_ups, sum(new_members) as new_members, sum(report_backs) as report_backs, sum(all_traffic) as traffic, round(avg(avg_gate_conversion)*100,2) as conv, count(*) as campaigns from overall.overall where date_add(end_date, interval 14 day) >= curdate() and cause in ('Bullying',"Violence") 
   union all
-  select 'Health' as cause, sum(sign_ups) as sign_ups, sum(new_members) as new_members, sum(report_backs) as report_backs, sum(all_traffic) as traffic, round(avg(avg_gate_conversion)*100,2) as conv, count(*) as campaigns from overall.overall where date_add(end_date, interval 14 day) >= curdate() and cause in ('Mental Health',"Physical Health") 
+  select 'Health' as cause, group_concat(distinct cause) as all_causes, sum(sign_ups) as sign_ups, sum(new_members) as new_members, sum(report_backs) as report_backs, sum(all_traffic) as traffic, round(avg(avg_gate_conversion)*100,2) as conv, count(*) as campaigns from overall.overall where date_add(end_date, interval 14 day) >= curdate() and cause in ('Mental Health',"Physical Health") 
   union all
-  select cause, sum(sign_ups) as sign_ups, sum(new_members) as new_members, sum(report_backs) as report_backs, sum(all_traffic) as traffic, round(avg(avg_gate_conversion)*100,2) as conv, count(*) as campaigns from overall.overall where date_add(end_date, interval 14 day) >= curdate() and cause not in ('Bullying',"Violence",'Mental Health',"Physical Health",'Homelessness',"Poverty",'Sex',"Relationships") group by cause
+  select cause, group_concat(distinct cause) as all_causes, sum(sign_ups) as sign_ups, sum(new_members) as new_members, sum(report_backs) as report_backs, sum(all_traffic) as traffic, round(avg(avg_gate_conversion)*100,2) as conv, count(*) as campaigns from overall.overall where date_add(end_date, interval 14 day) >= curdate() and cause not in ('Bullying',"Violence",'Mental Health',"Physical Health",'Homelessness',"Poverty",'Sex',"Relationships") group by cause
   """
   cur.execute(q)
   data = cur.fetchall()
@@ -91,70 +93,32 @@ def getHpNonStaffPicksData():
   cur.close()
   return json.dumps(data)
 
-#returns campaign selection template
-@app.route('/form_query', methods=['GET', 'POST'])
-def form_query():
 
-  data =[]
-  return render_template('form_query.html', data=data )
+#returns cause selection template
+@app.route('/cause/campaigns', methods=['post'])
+def causeStaffPicks():
+  data=request.form['button']
+  values = data.split('|')
+  print "these are the values", values
 
-#returns graphed result of input from form_query
-@app.route('/sortbars', methods=['POST'])
-def sortbars():
-  try:
+  causes_list = values[0].split(",")
 
-    tmp = []
-    tmp2 = []
+  staff = values[2]
 
-    c1 = request.form['c1']
-    c2 = request.form['c2']
-    metric = request.form['metric']
-
-    if metric != 'all_traffic':
-      c1_query = 'select {1} from {0}.{1}'.format(c1, metric)
-      cur = openDB()
-      print c1_query
-      cur.execute(c1_query)
-
-      for i in cur.fetchall():
-        tmp.append(i[metric])
-      cur.close()
-
-    else:
-      c1_query = 'select unq_visits from {0}.{1}'.format(c1, metric)
-      cur = openDB()
-      print c1_query
-      cur.execute(c1_query)
-
-      for i in cur.fetchall():
-        tmp.append(i['unq_visits'])
-      cur.close()
+  quoted_causes = ['"'+str(cause)+'"' for cause in causes_list]
+  formatted_causes =  ','.join(quoted_causes)
+  cur = openDB()
+  q = 'select concat(upper(substring(replace(campaign,"_"," "),1,1)),substring(replace(campaign,"_"," "),2)) as campaign, sign_ups, new_members, report_backs from overall.overall where staff_pick = "%s" and cause in (%s) and date_add(end_date, interval 7 day) >= curdate() order by sign_ups desc' % (staff,formatted_causes)
+  
+  cur.execute(q)
+  data = cur.fetchall()
+  cur.close()
+  title = values[1]
+  j = json.dumps(data) 
 
 
-    if metric != 'all_traffic':
-      c2_query = 'select {1} from {0}.{1}'.format(c2, metric)
-      cur = openDB()
-      print c2_query
-      cur.execute(c2_query)
+  return render_template('cause-campaigns.html', title=title,causes=values[0], j=j )
 
-      for i in cur.fetchall():
-        tmp2.append(i[metric])
-      cur.close()
-
-    else:
-      c2_query = 'select unq_visits from {0}.{1}'.format(c2, metric)
-      cur = openDB()
-      print c2_query
-      cur.execute(c2_query)
-
-      for i in cur.fetchall():
-        tmp2.append(i['unq_visits'])
-      cur.close()
-
-
-    return render_template('sortbars.html', tmp=tmp, tmp2=tmp2, c1=c1,c2=c2, metric=metric )
-  except:
-    return render_template('query_error.html')
 
 #returns monthly kpi data
 @app.route('/members')
