@@ -34,16 +34,16 @@ var svg = d3.select("body").append("svg")
   .attr("id","svgMain");
 
 
-var ageNames = d3.keys(data[0]).filter(function(key) { return key !== "campaign"; });
+var metrics = d3.keys(data[0]).filter(function(key) { return key !== "campaign"; });
 
 data.forEach(function(d) {
-d.ages = ageNames.map(function(name) { return {name: name, value: +d[name]}; });
+d.ages = metrics.map(function(name) { return {name: name, value: +d[name]}; });
 d.ages.sort(function(a, b){ return d3.descending(a.value, b.value); });
 });
 
 
 x0.domain(data.map(function(d) { return d.campaign; }));
-x1.domain(ageNames).rangeRoundBands([0, x0.rangeBand()]);
+x1.domain(metrics).rangeRoundBands([0, x0.rangeBand()]);
 y.domain([0, d3.max(data, function(d) { return d3.max(d.ages, function(d) { return d.value; }); })]);
 
 svg.append("g")
@@ -102,7 +102,7 @@ campaign.selectAll("rect")
 campaign.selectAll("rect")
   .transition()
   .ease("linear")
-  .duration(1000)
+  .duration(300)
   .attr("width", x1.rangeBand())
   .attr("x", function(d) { return x1(d.name); })
   .attr("y", function(d) { return y(d.value); })
@@ -112,7 +112,7 @@ campaign.selectAll("rect")
 
 // Legend.
 var legend = svg.selectAll(".legend")
-  .data(ageNames.slice().reverse())
+  .data(metrics.slice().reverse())
   .enter().append("g")
   .attr("class", "legend")
   .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
