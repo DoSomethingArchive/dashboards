@@ -102,7 +102,7 @@ d3.json("/get-staff-picks-data.json", function(error, json) {
   campaign.selectAll("rect")
       .transition()
       .ease("linear")
-      .duration(1000)
+      .duration(300)
       .attr("width", x1.rangeBand())
       .attr("x", function(d) { return x1(d.name); })
       .attr("y", function(d) { return y(d.value); })
