@@ -76,7 +76,7 @@ h2 {
   font-size: 2.2em;
   margin-top: 40px;
   text-align: center;
-  letter-spacing: -2px;
+  letter-spacing: .5px;
 }
  
 h3 {
@@ -427,4 +427,58 @@ border-radius:5px;
   background:#99FF99;
   opacity:.9;
 }
+
+#welcome {
+  animation: test-animation-two .7s;
+  opacity:0;
+  font-size:18px;
+}
+
+@keyframes test-animation-two {
+  0% {
+    opacity: 1;
+
+    
+   
+  }
+
+ 
+  100% {
+    opacity: 0;
+  }
+
+}
+#members {
+  animation: test-animation .75s;
+  position:relative;
+  top:-90px;
+  font-size:20px;
+  
+
+  
+
+}
+
+@keyframes test-animation {
+  0% {
+    opacity: 0;
+    color:orange;
+   
+  
+
+    
+    
+  }
+
+
+  
+  100% {
+    opacity: 0;
+   
+  
+    
+  }
+
+}
+
 
