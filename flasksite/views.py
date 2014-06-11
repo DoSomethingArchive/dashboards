@@ -1,12 +1,22 @@
 from flasksite import app, openDB, json
 from flask import render_template, request, url_for, jsonify
+import locale
+
+
+locale.setlocale(locale.LC_ALL, 'en_US')
 
 
 
 #returns homepage
 @app.route('/')
 def home():
-  return render_template('home.html')
+  cur = openDB()
+  cur.execute("select total from overall.total")
+  data = cur.fetchall()[0]['total'] 
+  formatted_data = locale.format("%d", data, grouping=True)
+  print formatted_data
+  cur.close()
+  return render_template('home.html',formatted_data=formatted_data)
 
 #returns all staff picks, cause agnostic
 @app.route('/campaigns/staff-picks')
@@ -125,30 +135,11 @@ def causeStaffPicks():
 def members():
 
   cur = openDB()
-  cur.execute('select date, total_members_abs, new_membrs_abs, engaged_members_abs, verified_members_abs, campaigns_verified_abs, sms_game_verified_abs from members.bod_2014')
-  predata = []
-  for i in cur.fetchall():
-    x = {}
-    for a in i:
-      if a == 'date':
-        x[a]=i[a]
-
-      if a == 'new_membrs_abs':
-        x['New Members']=i[a]
-      if a == 'engaged_members_abs':
-        x['Engaged Members']=i[a]
-      if a == 'verified_members_abs':
-        x['Verified Members']=i[a]
-      if a == 'campaigns_verified_abs':
-        x['Reportbacks']=i[a]
-      if a == 'sms_game_verified_abs':
-        x['Web Alphas']=i[a]
-
-
-
-
-    predata.append(x)
-    data = sorted(predata,reverse=True, key=lambda k: k['Engaged Members'])
+  cur.execute('select date_format(date, "%M %Y") as date, new_membrs_abs as new_members, engaged_members_abs as engaged_members, active_members_abs as active_members, verified_members_abs as verified_members from members.bod_2014 order by date_format(date, "%Y-%m-%d")' )
+  d = cur.fetchall()
+  cur.close()
+  data = json.dumps(d)
+    
 
   print data
   cur.close()
