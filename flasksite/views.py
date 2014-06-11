@@ -74,36 +74,6 @@ def getCausesdata():
 def causes():
   return render_template('causes.html')
 
-
-#returns homelessness and poverty staff picks campaigns
-@app.route('/causes/homelessness-and-poverty/staff-picks')
-def hpStaffPicks():
-  return render_template('hp-staff-picks.html')
-
-#returns json object array of hp staff picks
-@app.route('/get-hp-staff-picks-data.json')
-def getHpStaffPicksData():
-  cur = openDB()
-  cur.execute('select concat(upper(substring(replace(campaign,"_"," "),1,1)),substring(replace(campaign,"_"," "),2)) as campaign, sign_ups, new_members, report_backs from overall.overall where staff_pick = "y" and cause in ("Homelessness","Poverty") and date_add(end_date, interval 7 day) >= curdate() order by sign_ups desc')
-  data = cur.fetchall()
-  cur.close()
-  return json.dumps(data)
-
-#returns homelessness and poverty non-staff picks campaigns
-@app.route('/causes/homelessness-and-poverty/non-staff-picks')
-def hpNonStaffPicks():
-  return render_template('hp-non-staff-picks.html')
-
-#returns json object array of hp non-staff picks
-@app.route('/get-hp-non-staff-picks-data.json')
-def getHpNonStaffPicksData():
-  cur = openDB()
-  cur.execute('select concat(upper(substring(replace(campaign,"_"," "),1,1)),substring(replace(campaign,"_"," "),2)) as campaign, sign_ups, new_members, report_backs from overall.overall where staff_pick = "n" and cause in ("Homelessness","Poverty") and date_add(end_date, interval 7 day) >= curdate() order by sign_ups desc')
-  data = cur.fetchall()
-  cur.close()
-  return json.dumps(data)
-
-
 #returns cause selection template
 @app.route('/cause/campaigns', methods=['post'])
 def causeStaffPicks():
@@ -125,14 +95,13 @@ def causeStaffPicks():
   cur.close()
   title = values[1]
   j = json.dumps(data) 
-
-
   return render_template('cause-campaigns.html', title=title,causes=values[0], j=j )
 
 
 #returns monthly kpi data
-@app.route('/members')
-def members():
+@app.route('/monthly-stats')
+
+def monthly():
 
   cur = openDB()
   cur.execute('select date_format(date, "%M %Y") as date, new_membrs_abs as new_members, engaged_members_abs as engaged_members, active_members_abs as active_members, verified_members_abs as verified_members from members.bod_2014 order by date_format(date, "%Y-%m-%d")' )
@@ -141,10 +110,9 @@ def members():
   data = json.dumps(d)
     
 
-  print data
-  cur.close()
 
-  return render_template('members.html', data=data )
+
+  return render_template('monthly-stats.html', data=data )
 
 
 
