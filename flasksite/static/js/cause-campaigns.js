@@ -8,6 +8,9 @@ var margin = {top: 10, right: 40, bottom: 140, left: 40},
   width = 1100 - margin.left - margin.right,
   height = 500 - margin.top - margin.bottom;
 
+
+
+
 var x0 = d3.scale.ordinal()
   .rangeRoundBands([0, width], 0.1);
 
@@ -27,8 +30,19 @@ var yAxis = d3.svg.axis()
   .scale(y)
   .orient("left")    
   .ticks(6);
-
-var svg = d3.select("body").append("svg")
+var form = d3.select("body")
+            .append("form")
+            .attr("id","campaigns")
+            .attr("method","post")
+            .attr("action","http://127.0.0.1:5000/test_form")
+            .append("input")
+            .attr("type","hidden")
+            .attr("class","inputData")
+            .attr("name","vals")
+           
+         
+//append svg to the form, not the input element 
+var svg = d3.select("form#campaigns").append("svg")
   .attr("width", width + margin.left + margin.right)
   .attr("height", height + margin.top + margin.bottom)
   .attr("id","svgMain");
@@ -86,6 +100,7 @@ var campaign = svg.selectAll(".campaign")
   .data(data)
   .enter().append("g")
   .attr("class", "g")
+  .on("click",clickFunc)
   .attr("transform", function(d) { var g_x = x0(d.campaign)+padding; return "translate(" + g_x + ",0)";});
 
 campaign.selectAll("rect")
@@ -129,5 +144,18 @@ legend.append("text")
   .attr("dy", ".35em")
   .style("text-anchor", "end")
   .text(function(d) { return d.replace('_',' ').toUpperCase(); });
+function clickFunc(d) {
+    
+    var x = document.getElementById("campaigns");
+    var camp_name = d.campaign;
+    var y = d3.select("input.inputData").attr("value",camp_name)
+    
+    
+    
+ 
+    
+    console.log(camp_name);
+    x.submit();
 
+  }
 
