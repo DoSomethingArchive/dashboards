@@ -115,4 +115,26 @@ def monthly():
   return render_template('monthly-stats.html', data=data )
 
 
+@app.route('/test_form', methods=['post'])
+
+def test_form():
+  #needed becasue better the formatted campaign name. should add a parameter to the campaign json that is db name so no need to format.
+  name=str(request.form['vals']).replace(" ","_").lower()
+  print name
+  q='select sum(web_sign_ups) as su from %s.web_sign_ups' %(name)
+  
+  
+
+  cur = openDB()
+  cur.execute(q)
+  data = cur.fetchall()[0]['su']
+  print data
+
+  cur.close()
+  
+  
+  return render_template('test_form.html',name=name, data=data)
+
+
+
 
