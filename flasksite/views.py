@@ -104,7 +104,7 @@ def causeStaffPicks():
 def monthly():
 
   cur = openDB()
-  cur.execute('select date_format(date, "%M %Y") as date, new_membrs_abs as new_members, engaged_members_abs as engaged_members, active_members_abs as active_members, verified_members_abs as verified_members from members.bod_2014 order by date_format(date, "%Y-%m-%d")' )
+  cur.execute('select date_format(date, "%M %Y") as date, new_members_last_12_percent as new_members, engaged_members_last_12_percent as engaged_members, active_members_last_12_percent as active_members, verified_members_last_12_percent as verified_members from members.bod_2014 order by date_format(date, "%Y-%m-%d")' )
   d = cur.fetchall()
   cur.close()
   data = json.dumps(d)
@@ -121,20 +121,93 @@ def test_form():
   #needed becasue better the formatted campaign name. should add a parameter to the campaign json that is db name so no need to format.
   name=str(request.form['vals']).replace(" ","_").lower()
   print name
-  q='select sum(web_sign_ups) as su from %s.web_sign_ups' %(name)
   
-  
-
+  q_test = 'select is_sms, staff_pick from {0}.campaign_info'.format(name)
   cur = openDB()
-  cur.execute(q)
-  data = cur.fetchall()[0]['su']
-  print data
+  cur.execute(q_test)
+  data = cur.fetchall()
+  is_sms = data[0]['is_sms']
+  is_staff_pick = data[0]['staff_pick']
+
+  #queries
+
+  q_overall = "select sign_ups, new_members, report_backs, all_traffic, average_daily_traffic, avg_gate_conversion from overall.overall where campaign = '{0}' ".format(name)
+
+  q_staff_signup = """
+  select w.date, ifnull(web_sign_ups,0) as web, ifnull(mobile_sign_ups,0) as mobile from {0}.web_sign_ups w left join {0}.mobile_sign_ups m on w.date=m.date
+  union 
+  select m.date, ifnull(web_sign_ups,0) as web, ifnull(mobile_sign_ups,0) as mobile from {0}.web_sign_ups w right join {0}.mobile_sign_ups m on w.date=m.date
+  order by date
+  """.format(name)
+  q_staff_newmembers = """
+  select w.date, ifnull(web_new_members,0) as web, ifnull(mobile_new_members,0) as mobile from {0}.web_new_members w left join {0}.mobile_new_members m on w.date=m.date
+  union 
+  select m.date, ifnull(web_new_members,0) as web, ifnull(mobile_new_members,0) as mobile from {0}.web_new_members w right join {0}.mobile_new_members m on w.date=m.date
+  order by date 
+  """.format(name)
+
+  q_nonstaff_signup = """
+  select date, web_sign_ups as web from {0}.web_sign_ups
+  """.format(name)
+  
+  q_nonstaff_newmembers = """
+  select date, web_new_members as web from {0}.web_new_members
+  """.format(name)
+
+  q_sources_staff = """
+  select * from {0}.sources where source in (select source from {0}.sources  group by source having sum(unq_visits) >= 1000  )
+  """.format(name)
+
+  q_sources_nonstaff = """
+  select * from {0}.sources where source in (select source from {0}.sources  group by source having sum(unq_visits) >= 50  )
+  """.format(name)
+
+  q_traffic_regular = """
+  select t.date, t.unq_visits, ifnull(s.web_sign_ups/t.unq_visits,0) as conversion_rate from {0}.all_traffic t  left join {0}.web_sign_ups s on t.date=s.date
+  """.format(name)
+  q_traffic_sms = """
+  select t.date, t.unq_visits, ifnull(a.alpha_sign_ups/t.unq_visits,0) as conversion_rate from {0}.all_traffic t  left join {0}.web_alphas a on t.date=a.date
+  """.format(name)
+  data = {}
+
+  def query(name,query):
+    cur.execute(query)
+    info = json.dumps(cur.fetchall())
+    data[name]=info
+   
+
+  if is_sms=='n' and is_staff_pick=='y':
+    query('signups',q_staff_signup)
+    query('newmembers',q_staff_newmembers)
+    query('sources',q_sources_staff)
+    query('traffic',q_traffic_regular)
+    query('overall', q_overall)
+
+  if is_sms=='n' and is_staff_pick=='n':
+    query('signups',q_nonstaff_signup)
+    query('newmembers',q_nonstaff_newmembers)
+    query('sources',q_sources_nonstaff)
+    query('traffic',q_traffic_regular)
+    query('overall', q_overall)
+
+  if is_sms=='y' and is_staff_pick=='y':
+    query('signups',q_staff_signup)
+    query('newmembers',q_staff_newmembers)
+    query('sources',q_sources_staff)
+    query('traffic',q_traffic_sms)
+    query('overall', q_overall)
+
+ 
+
+
 
   cur.close()
-  
-  
-  return render_template('test_form.html',name=name, data=data)
+  return render_template('test.html',signups=data['signups'],newmembers=data['newmembers'],sources=data['sources'],traffic=data['traffic'],overall=data['overall'])
 
+
+
+
+  
 
 
 
