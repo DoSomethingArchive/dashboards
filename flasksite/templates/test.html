@@ -32,43 +32,30 @@
 
 </style>
 
-<p>{{overall|safe}}</p>
 
+
+<p>{{name}}</p>
 <div id="chart">
+  <p>Sign Ups by Day</p>
   <svg></svg>
 </div>
 
 <div id="chart2">
+<p>New Members by Day</p>
   <svg></svg>
 </div>
 
 <div id="chart3">
+  <p>Traffic Sources by Day</p>
   <svg></svg>
 </div>
 
 <div id="chart4">
+<p>Traffic and Gate Conversion by Day</p>
   <svg></svg>
 </div>
 
-<script type="text/javascript"> 
 
- 
-/*
-var x = {{d|safe}};
-
-//need to transform source data to match nvd3 format object array - key:source value:[[date,visits],...]
-//get unique sources, then reiterate over to group by sources.
-var sources = [];
-for (i=0;i<x.length;i++) {
-	if (x[i]['source'] )
-	sources.push(x[i]['source']);}
-
-
-
-
-*/
-
-</script>
 <script>
 // Slightly modified code from multiBar example at
 // http://nvd3.org/livecode/#codemirrorNav
@@ -78,6 +65,29 @@ var a = {{signups|safe}};
 var b = {{newmembers|safe}};
 var c = {{sources|safe}};
 var ddd = {{traffic|safe}};
+var e = {{overall|safe}};
+var format = d3.format("0,000");
+var div = d3.select("body")
+              .insert("div","div#chart")
+              .attr("class","grid");
+
+for (i in e[0]) {
+  console.log(i, e[0][i]);
+ 
+  var p = d3.select("div.grid")
+              .append("p")
+              .attr("class","overall")
+              .append("p")
+              .attr("class","words")
+              .html(function(d){
+                if (i==='average_gate_conversion') {
+                  return i.replace("_", " ").toUpperCase().replace("_"," ")+" "+":"+" "+e[0][i];
+                }
+                else {
+                return i.replace("_", " ").toUpperCase().replace("_"," ")+" "+":"+" "+format(e[0][i]);
+              }});
+}
+
 
 
 //make this more general so can use on other 2 data formats
@@ -141,7 +151,7 @@ nv.addGraph(function() {
         .datum(sign_ups)
       .transition().duration(300).call(chart);
 
-    nv.utils.windowResize(chart.update);
+    //nv.utils.windowResize(chart.update);
 
     return chart;
 });
@@ -165,7 +175,7 @@ nv.addGraph(function() {
         .datum(new_members)
       .transition().duration(300).call(chart2);
 
-    nv.utils.windowResize(chart2.update);
+    //nv.utils.windowResize(chart2.update);
 
     return chart2;
 });
@@ -250,7 +260,7 @@ for (var i=0; i<f_source.length; i++) {
                   .useInteractiveGuideline(true)    //Tooltips which show all data points. Very nice!
                    //Let's move the y-axis to the right side.
                   .transitionDuration(300)
-                  .showControls(false)       //Allow user to choose 'Stacked', 'Stream', 'Expanded' mode.
+                  .showControls(true)       //Allow user to choose 'Stacked', 'Stream', 'Expanded' mode.
                   .clipEdge(false);
 
     //Format x-axis labels with custom function.
@@ -270,7 +280,7 @@ for (var i=0; i<f_source.length; i++) {
       .datum(f_source)
       .call(chart3);
 
-    nv.utils.windowResize(chart3.update);
+    //nv.utils.windowResize(chart3.update);
 
     return chart3;
   });
@@ -279,10 +289,19 @@ var t = {key:'Traffic', bar: true, color:'gray', values:[]};
 var c = {key:'Conversion Rate', values:[]};
 
 for (var i=0; i<ddd.length;i++) {
+    if (ddd[i].conversion_rate<=1) {
     var a = [ddd[i].date, ddd[i].conversion_rate];
     var b = [ddd[i].date, ddd[i].unq_visits];
     t.values.push(b);
     c.values.push(a);
+  }
+  else {
+    var a = [ddd[i].date, 1.2];
+    var b = [ddd[i].date, ddd[i].unq_visits];
+    t.values.push(b);
+    c.values.push(a);
+
+  }
 
   }
 traffic_f.push(t);
@@ -295,11 +314,14 @@ nv.addGraph(function() {
       var chart4 = nv.models.linePlusBarChart()
             .margin({top: 30, right: 60, bottom: 50, left: 70})
             //We can set x data accessor to use index. Reason? So the bars all appear evenly spaced.
-            .x(function(d,i) { return i; })
+            .x(function(d,i) {  return i; })
             .y(function(d,i) {return d[1] })
             ;
             //need to only display non-zero elements
-      chart4.xAxis.showMaxMin(false).tickFormat(function(d) {return d3.time.format('%x')(new Date(d));})
+        chart4.xAxis.tickFormat(function(d) {
+        var dx = traffic_f[0].values[d] && traffic_f[0].values[d][0] || 0;
+        return d3.time.format('%x')(new Date(dx))
+      });
         
      
 
@@ -317,7 +339,7 @@ nv.addGraph(function() {
         .duration(100)
         .call(chart4);
 
-      nv.utils.windowResize(chart4.update);
+      //nv.utils.windowResize(chart4.update);
 
       return chart4;
   });
