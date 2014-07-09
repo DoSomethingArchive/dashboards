@@ -315,7 +315,7 @@ div.rectangle{
 
 div.grid{
   position:absolute;
-  top: 170px;
+  top: 100px;
   left:115px;
 
 }
@@ -481,4 +481,66 @@ border-radius:5px;
 
 }
 
+#chart {
+  position:relative;
+   top:400px;
+
+}
+
+#chart2 {
+  position:relative;
+   top:400px;
+
+}
+
+#chart3 {
+  position:relative;
+   top:400px;
+
+}
+
+#chart4 {
+  position:relative;
+   top:400px;
+
+}
+
+
+
+.overall{
+
+   
+
+
+   width:400px; 
+   height:150px; 
+   text-decoration:none;
+   border-radius:5px; 
+   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+   font-size: 13px;
+   color:white;
+   text-align:center;
+   letter-spacing:1.2px;
+   background:#00CCFF;
+   float: left;
+   border: 1px solid;
+   
+   
+
+}
+
+.overall .words{
+
+position:relative;
+  top:20px;
+
+}
+
+.overall:hover {
+      opacity:.5;
+   
+     
+
+
+    }
 
