@@ -131,7 +131,7 @@ def test_form():
 
   #queries
 
-  q_overall = "select sign_ups, new_members, report_backs, all_traffic, average_daily_traffic, avg_gate_conversion from overall.overall where campaign = '{0}' ".format(name)
+  q_overall = "select sign_ups, new_members, report_backs, all_traffic, average_daily_traffic, concat(round(avg_gate_conversion*100,2),'%') as average_gate_conversion from overall.overall where campaign = '{0}' ".format(name)
 
   q_staff_signup = """
   select w.date, ifnull(web_sign_ups,0) as web, ifnull(mobile_sign_ups,0) as mobile from {0}.web_sign_ups w left join {0}.mobile_sign_ups m on w.date=m.date
@@ -202,7 +202,7 @@ def test_form():
 
 
   cur.close()
-  return render_template('test.html',signups=data['signups'],newmembers=data['newmembers'],sources=data['sources'],traffic=data['traffic'],overall=data['overall'])
+  return render_template('test.html',name=name.replace("_"," ").upper(),signups=data['signups'],newmembers=data['newmembers'],sources=data['sources'],traffic=data['traffic'],overall=data['overall'])
 
 
 
