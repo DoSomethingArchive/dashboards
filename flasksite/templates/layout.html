@@ -3,7 +3,12 @@
 	<head>
 		<title>DoSomething Dash</title>
 		<strong><link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}"></strong>
-		<script type="text/javascript" src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+		<script type="text/javascript" src="/static/bower_components/d3/d3.min.js" charset="utf-8"></script>
+		<script type="text/javascript" src="/static/bower_components/jquery/dist/jquery.min.js" charset="utf-8"></script>
+		<link rel="stylesheet" href="/static/bower_components/epoch/epoch.0.3.5.min.css">
+		<script type="text/js" src="/static/bower_components/epoch/epoch.0.3.5.min.js"></script>
+		<script type="text/javascript" src="/static/bower_components/nvd3/nv.d3.min.js" charset="utf-8"></script>
+		<link rel="stylesheet" href="/static/bower_components/nvd3/nv.d3.min.css">
 		<meta charset="utf-8">
 	</head>
 	<body>
@@ -17,7 +22,7 @@
 						<li><a href="{{ url_for('staffPicks') }}">Campaigns</a></li>
 						<li><a href="{{ url_for('causes') }}">Causes</a></li>
 						<li><a href="{{ url_for('monthly') }}">Monthly Stats</a></li>
-						
+
 					</ul>
 				</nav></strong>
 			</div>
