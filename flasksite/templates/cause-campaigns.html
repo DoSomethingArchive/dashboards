@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<h3>{{title}}</h3>
+
+
+
+
+<form method="post" action="http://127.0.0.1:5000/cause/campaigns">
+<button class=spflag id=staffp name="button" type="submit" value="{{causes}}|{{title}}|y">Staff Picks</button>
+<button class=spflag id=nstaffp name="button" type="submit" value="{{causes}}|{{title}}|n">Non Staff Picks</button>
+
+</form>
+
+<div id="tooltip" class="hidden">
+  <p><span id="value">0</span></p>
+</div>
+<script type="text/javascript"> var x = {{j|tojson}};</script>
+<script type="text/javascript" src="../static/js/cause-campaigns.js"></script>
+
+{% endblock %}
