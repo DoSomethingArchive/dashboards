@@ -544,3 +544,21 @@ position:relative;
 
     }
 
+.tick line {display: none;}
+#chart svg {
+  height: 400px;
+
+}
+
+#chart2 svg {
+  height: 400px;
+}
+
+#chart3 svg {
+  height: 400px;
+}
+
+#chart4 svg {
+  height: 400px;
+}
+
