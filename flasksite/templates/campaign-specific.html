@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+
+{% block content %}
+		
+
+<p>{{name}}</p>
+<div id="chart">
+  <p>Sign Ups by Day</p>
+  <svg></svg>
+</div>
+
+<div id="chart2">
+<p>New Members by Day</p>
+  <svg></svg>
+</div>
+
+<div id="chart3">
+  <p>Traffic Sources by Day</p>
+  <svg></svg>
+</div>
+
+<div id="chart4">
+<p>Traffic and Gate Conversion by Day</p>
+  <svg></svg>
+</div>
+<script type="text/javascript">
+var su = {{signups|safe}};
+var nm = {{newmembers|safe}};
+var srcs = {{sources|safe}};
+var trfc = {{traffic|safe}};
+var ovrll = {{overall|safe}};
+</script>
+<script type="text/javascript" src="../../static/js/campaign-specific.js"></script>
+
+{% endblock %}
