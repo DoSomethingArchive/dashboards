@@ -115,9 +115,9 @@ def monthly():
   return render_template('monthly-stats.html', data=data )
 
 
-@app.route('/test_form', methods=['post'])
+@app.route('/cause/campaigns/campaign-specific', methods=['post'])
 
-def test_form():
+def campaignSpecific():
   #needed becasue better the formatted campaign name. should add a parameter to the campaign json that is db name so no need to format.
   name=str(request.form['vals']).replace(" ","_").lower()
   print name
@@ -202,7 +202,7 @@ def test_form():
 
 
   cur.close()
-  return render_template('test.html',name=name.replace("_"," ").upper(),signups=data['signups'],newmembers=data['newmembers'],sources=data['sources'],traffic=data['traffic'],overall=data['overall'])
+  return render_template('campaign-specific.html',name=name.replace("_"," ").upper(),signups=data['signups'],newmembers=data['newmembers'],sources=data['sources'],traffic=data['traffic'],overall=data['overall'])
 
 
 
