@@ -1,5 +1,4 @@
 var data=JSON.parse(x);
-console.log(data);
 
 var padding = 75;
 var format = d3.format("0,000");
@@ -154,7 +153,7 @@ function clickFunc(d) {
     
  
     
-    console.log(camp_name);
+    
     x.submit();
 
   }
