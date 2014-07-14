@@ -545,20 +545,25 @@ position:relative;
     }
 
 .tick line {display: none;}
+
 #chart svg {
   height: 400px;
+  position:relative;
 
 }
 
 #chart2 svg {
   height: 400px;
+  position:relative;
 }
 
 #chart3 svg {
   height: 400px;
+  position:relative;
 }
 
 #chart4 svg {
   height: 400px;
+  position:relative;
 }
 
