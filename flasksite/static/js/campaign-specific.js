@@ -91,7 +91,7 @@ nv.addGraph(function() {
         .datum(sign_ups)
         .transition().duration(300).call(chart);
 
-    //nv.utils.windowResize(chart.update);
+    nv.utils.windowResize(chart.update);
 
     return chart;
 });
@@ -115,7 +115,7 @@ nv.addGraph(function() {
         .datum(new_members)
         .transition().duration(300).call(chart2);
 
-    //nv.utils.windowResize(chart2.update);
+    nv.utils.windowResize(chart2.update);
 
     return chart2;
 });
@@ -232,7 +232,7 @@ nv.addGraph(function() {
         .datum(f_source)
         .call(chart3);
 
-  //nv.utils.windowResize(chart3.update);
+  nv.utils.windowResize(chart3.update);
 
   return chart3;
 });
@@ -294,7 +294,7 @@ nv.addGraph(function() {
         .duration(100)
         .call(chart4);
 
-      //nv.utils.windowResize(chart4.update);
+      nv.utils.windowResize(chart4.update);
 
       return chart4;
   });
