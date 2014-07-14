@@ -85,7 +85,7 @@ nv.addGraph(function() {
         .tickFormat(d3.format(',1f'));
     
     chart.multibar.stacked(true); // default to stacked
-    chart.showControls(true); // don't show controls
+    chart.showControls(false); // don't show controls
 
     d3.select('#chart svg')
         .datum(sign_ups)
@@ -109,7 +109,7 @@ nv.addGraph(function() {
           .tickFormat(d3.format(',1f'));
     
     chart2.multibar.stacked(true); // default to stacked
-    chart2.showControls(true); // don't show controls
+    chart2.showControls(false); // don't show controls
 
     d3.select('#chart2 svg')
         .datum(new_members)
@@ -284,7 +284,7 @@ nv.addGraph(function() {
             .tickFormat(d3.format(',f'));
 
       chart4.y2Axis
-            .tickFormat(function(d) { return d3.format('.f')(d) });
+            .tickFormat(function(d) { return d3.format('%f')(d) });
 
       chart4.bars.forceY([0]);
 
