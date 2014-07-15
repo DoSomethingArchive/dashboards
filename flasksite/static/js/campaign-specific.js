@@ -1,28 +1,26 @@
 // Slightly modified code from multiBar example at
 // http://nvd3.org/livecode/#codemirrorNav
 // to demonstrate defaulting to stacked bar
-
 var format = d3.format("0,000");
 //div for overall metrics
 var div = d3.select("body")
-              .insert("div","div#chart")
-              .attr("class","grid");
+            .insert("div","div#chart")
+            .attr("class","grid");
 //add p for each metric
 for (i in ovrll[0]) {
-  
   var p = d3.select("div.grid")
-              .append("p")
-              .attr("class","overall")
-              .append("p")
-              .attr("class","words")
-              .html(function(d){
-                  if (i==='average_gate_conversion') {
-                      return i.replace("_", " ").toUpperCase().replace("_"," ")+" "+":"+" "+ovrll[0][i];
-                  }
-                  else {
+            .append("p")
+            .attr("class","overall")
+            .append("p")
+            .attr("class","words")
+            .html(function(d){
+              if (i==='average_gate_conversion') {
+                  return i.replace("_", " ").toUpperCase().replace("_"," ")+" "+":"+" "+ovrll[0][i];
+              }
+              else {
                 return i.replace("_", " ").toUpperCase().replace("_"," ")+" "+":"+" "+format(ovrll[0][i]);
-                  }
-              });
+              }
+            });
 }
 
 
@@ -30,20 +28,16 @@ for (i in ovrll[0]) {
 //make this more general so can use on other 2 data formats. this data shping func is used for first 2 data sets
 
 var dataFormat = function(data,metric) {
-  
   var m = {key:'Mobile', values:[]};
   var w = {key:'Web', values:[]};
-  
+
   for (var i = 0; i<data.length; i++) {
-    
     if (data[i].mobile) {
-    
       var element = {x:data[i].date,y:data[i].mobile};
       m.values.push(element);
     }
 
     if (data[i].web) {
-
       var element = {x:data[i].date,y:data[i].web};
       w.values.push(element);
     }
@@ -51,17 +45,13 @@ var dataFormat = function(data,metric) {
 
   if (m.values.length<1) {
     metric.push(w);
-
   }
-
   else {
-  metric.push(m);
-  metric.push(w);
-  
+    metric.push(m);
+    metric.push(w);
+
   }
-
   return metric;
-
 }
 
 var sign_ups=[];
@@ -77,22 +67,20 @@ nv.addGraph(function() {
     var chart = nv.models.multiBarChart();
     //need to set date ticks as date object
     chart.xAxis
-        .tickFormat(function(d) { 
-            return d3.time.format('%x')(new Date(d)) 
+        .tickFormat(function(d) {
+            return d3.time.format('%x')(new Date(d))
         });
 
     chart.yAxis
         .tickFormat(d3.format(',1f'));
-    
+
     chart.multibar.stacked(true); // default to stacked
     chart.showControls(false); // don't show controls
 
     d3.select('#chart svg')
         .datum(sign_ups)
         .transition().duration(300).call(chart);
-
     nv.utils.windowResize(chart.update);
-
     return chart;
 });
 
@@ -101,13 +89,13 @@ nv.addGraph(function() {
     var chart2 = nv.models.multiBarChart();
 
     chart2.xAxis
-          .tickFormat(function(d) { 
-              return d3.time.format('%Y-%m-%d')(new Date(d)) 
+          .tickFormat(function(d) {
+              return d3.time.format('%Y-%m-%d')(new Date(d))
           });
 
     chart2.yAxis
           .tickFormat(d3.format(',1f'));
-    
+
     chart2.multibar.stacked(true); // default to stacked
     chart2.showControls(false); // don't show controls
 
@@ -128,32 +116,32 @@ var formatted_sources = [];
 
 //get list of distinct sources
 for (var i=0; i<srcs.length; i++) {
-  
+
   var s = srcs[i].source;
   var is_in = sources.indexOf(s);
-  
+
   if (is_in===-1) {
     sources.push(s);
   }
-  
+
 }
 
-//get distinct dates - needed because not all sources ran all dates, and nvd3 breaks if individual graph elements do 
+//get distinct dates - needed because not all sources ran all dates, and nvd3 breaks if individual graph elements do
 // not have identical format
 for (var i=0; i<srcs.length; i++) {
-  
+
   var d = srcs[i].date;
   var is_in = dates.indexOf(d);
   if (is_in===-1) {
     dates.push(d);
   }
-  
+
 }
 
 //for each source, find all other sources and dates, format and add to source.values array
 for (var i=0; i<sources.length; i++) {
   element = {key:sources[i],values:[]}
-  
+
   for (var x=0; x<srcs.length; x++) {
     var s = srcs[x].source;
     if (s===sources[i]) {
@@ -164,7 +152,7 @@ for (var i=0; i<sources.length; i++) {
       element.values.push(z);
     }
   }
-  
+
   formatted_sources.push(element);
 
 }
@@ -184,7 +172,7 @@ for (var i=0; i<f_source.length; i++) {
     current_dates.push(d);
     //var is_in = dates.indexOf(d);
     //if (is_in===-1) {
-    //var new_date = 
+    //var new_date =
     //v.push(new_date);
   }
 
@@ -221,8 +209,8 @@ nv.addGraph(function() {
   chart3.xAxis.tickValues([new Date(data3[0].values[0][0]), new Date(data3[0].values[1][0]), new Date(data3[0].values[2][0]),new Date(data3[0].values[3][0])]);
   */
   chart3.xAxis.showMaxMin(false)
-        .tickFormat(function(d) { 
-          return d3.time.format("%x")(new Date(d)) 
+        .tickFormat(function(d) {
+          return d3.time.format("%x")(new Date(d))
         });
 
   chart3.yAxis
@@ -277,8 +265,8 @@ nv.addGraph(function() {
           var dx = traffic_f[0].values[d] && traffic_f[0].values[d][0] || 0;
               return d3.time.format('%x')(new Date(dx))
       });
-        
-     
+
+
 
       chart4.y1Axis
             .tickFormat(d3.format(',f'));
