@@ -12,7 +12,7 @@ locale.setlocale(locale.LC_ALL, 'en_US')
 def home():
   cur = openDB()
   cur.execute("select total from overall.total")
-  data = cur.fetchall()[0]['total'] 
+  data = cur.fetchall()[0]['total']
   formatted_data = locale.format("%d", data, grouping=True)
   print formatted_data
   cur.close()
@@ -52,13 +52,13 @@ def getCausesdata():
   cur = openDB()
   #all_casues needed for chart
   q = """
-  select 'Sex + Relationships' as cause, group_concat(distinct cause) as all_causes, sum(sign_ups) as sign_ups, sum(new_members) as new_members, sum(report_backs) as report_backs, sum(all_traffic) as traffic, round(avg(avg_gate_conversion)*100,2) as conv, count(*) as campaigns from overall.overall where date_add(end_date, interval 14 day) >= curdate() and cause in ('Sex',"Relationships") 
+  select 'Sex + Relationships' as cause, group_concat(distinct cause) as all_causes, sum(sign_ups) as sign_ups, sum(new_members) as new_members, sum(report_backs) as report_backs, sum(all_traffic) as traffic, round(avg(avg_gate_conversion)*100,2) as conv, count(*) as campaigns from overall.overall where date_add(end_date, interval 14 day) >= curdate() and cause in ('Sex',"Relationships")
   union all
-  select 'Homelessness + Poverty' as cause, group_concat(distinct cause) as all_causes, sum(sign_ups) as sign_ups, sum(new_members) as new_members, sum(report_backs) as report_backs, sum(all_traffic) as traffic, round(avg(avg_gate_conversion)*100,2) as conv, count(*) as campaigns from overall.overall where date_add(end_date, interval 14 day) >= curdate() and cause in ('Homelessness',"Poverty") 
+  select 'Homelessness + Poverty' as cause, group_concat(distinct cause) as all_causes, sum(sign_ups) as sign_ups, sum(new_members) as new_members, sum(report_backs) as report_backs, sum(all_traffic) as traffic, round(avg(avg_gate_conversion)*100,2) as conv, count(*) as campaigns from overall.overall where date_add(end_date, interval 14 day) >= curdate() and cause in ('Homelessness',"Poverty")
   union all
-  select 'Bullying + Violence' as cause, group_concat(distinct cause) as all_causes, sum(sign_ups) as sign_ups, sum(new_members) as new_members, sum(report_backs) as report_backs, sum(all_traffic) as traffic, round(avg(avg_gate_conversion)*100,2) as conv, count(*) as campaigns from overall.overall where date_add(end_date, interval 14 day) >= curdate() and cause in ('Bullying',"Violence") 
+  select 'Bullying + Violence' as cause, group_concat(distinct cause) as all_causes, sum(sign_ups) as sign_ups, sum(new_members) as new_members, sum(report_backs) as report_backs, sum(all_traffic) as traffic, round(avg(avg_gate_conversion)*100,2) as conv, count(*) as campaigns from overall.overall where date_add(end_date, interval 14 day) >= curdate() and cause in ('Bullying',"Violence")
   union all
-  select 'Health' as cause, group_concat(distinct cause) as all_causes, sum(sign_ups) as sign_ups, sum(new_members) as new_members, sum(report_backs) as report_backs, sum(all_traffic) as traffic, round(avg(avg_gate_conversion)*100,2) as conv, count(*) as campaigns from overall.overall where date_add(end_date, interval 14 day) >= curdate() and cause in ('Mental Health',"Physical Health") 
+  select 'Health' as cause, group_concat(distinct cause) as all_causes, sum(sign_ups) as sign_ups, sum(new_members) as new_members, sum(report_backs) as report_backs, sum(all_traffic) as traffic, round(avg(avg_gate_conversion)*100,2) as conv, count(*) as campaigns from overall.overall where date_add(end_date, interval 14 day) >= curdate() and cause in ('Mental Health',"Physical Health")
   union all
   select cause, group_concat(distinct cause) as all_causes, sum(sign_ups) as sign_ups, sum(new_members) as new_members, sum(report_backs) as report_backs, sum(all_traffic) as traffic, round(avg(avg_gate_conversion)*100,2) as conv, count(*) as campaigns from overall.overall where date_add(end_date, interval 14 day) >= curdate() and cause not in ('Bullying',"Violence",'Mental Health',"Physical Health",'Homelessness',"Poverty",'Sex',"Relationships") group by cause
   """
@@ -66,7 +66,7 @@ def getCausesdata():
   data = cur.fetchall()
   cur.close()
   json.dumps(data)
-  
+
   return json.dumps(data)
 
 #returns cause-level page
@@ -89,12 +89,12 @@ def causeStaffPicks():
   formatted_causes =  ','.join(quoted_causes)
   cur = openDB()
   q = 'select concat(upper(substring(replace(campaign,"_"," "),1,1)),substring(replace(campaign,"_"," "),2)) as campaign, sign_ups, new_members, report_backs from overall.overall where staff_pick = "%s" and cause in (%s) and date_add(end_date, interval 7 day) >= curdate() order by sign_ups desc' % (staff,formatted_causes)
-  
+
   cur.execute(q)
   data = cur.fetchall()
   cur.close()
   title = values[1]
-  j = json.dumps(data) 
+  j = json.dumps(data)
   return render_template('cause-campaigns.html', title=title,causes=values[0], j=j )
 
 
@@ -108,20 +108,17 @@ def monthly():
   d = cur.fetchall()
   cur.close()
   data = json.dumps(d)
-    
+
 
 
 
   return render_template('monthly-stats.html', data=data )
 
+@app.route('/cause/campaigns/<campaign>')
 
-@app.route('/cause/campaigns/campaign-specific', methods=['post'])
-
-def campaignSpecific():
-  #needed becasue better the formatted campaign name. should add a parameter to the campaign json that is db name so no need to format.
-  name=str(request.form['vals']).replace(" ","_").lower()
-  print name
-  
+def getSpecificCampaign(campaign):
+  # campaign=str(request.form['vals']).replace(" ","_").lower()
+  name=str(campaign).replace("+","_").lower()
   q_test = 'select is_sms, staff_pick from {0}.campaign_info'.format(name)
   cur = openDB()
   cur.execute(q_test)
@@ -135,21 +132,21 @@ def campaignSpecific():
 
   q_staff_signup = """
   select w.date, ifnull(web_sign_ups,0) as web, ifnull(mobile_sign_ups,0) as mobile from {0}.web_sign_ups w left join {0}.mobile_sign_ups m on w.date=m.date
-  union 
+  union
   select m.date, ifnull(web_sign_ups,0) as web, ifnull(mobile_sign_ups,0) as mobile from {0}.web_sign_ups w right join {0}.mobile_sign_ups m on w.date=m.date
   order by date
   """.format(name)
   q_staff_newmembers = """
   select w.date, ifnull(web_new_members,0) as web, ifnull(mobile_new_members,0) as mobile from {0}.web_new_members w left join {0}.mobile_new_members m on w.date=m.date
-  union 
+  union
   select m.date, ifnull(web_new_members,0) as web, ifnull(mobile_new_members,0) as mobile from {0}.web_new_members w right join {0}.mobile_new_members m on w.date=m.date
-  order by date 
+  order by date
   """.format(name)
 
   q_nonstaff_signup = """
   select date, web_sign_ups as web from {0}.web_sign_ups
   """.format(name)
-  
+
   q_nonstaff_newmembers = """
   select date, web_new_members as web from {0}.web_new_members
   """.format(name)
@@ -174,7 +171,7 @@ def campaignSpecific():
     cur.execute(query)
     info = json.dumps(cur.fetchall())
     data[name]=info
-   
+
 
   if is_sms=='n' and is_staff_pick=='y':
     query('signups',q_staff_signup)
@@ -197,17 +194,5 @@ def campaignSpecific():
     query('traffic',q_traffic_sms)
     query('overall', q_overall)
 
- 
-
-
-
   cur.close()
-  return render_template('campaign-specific.html',name=name.replace("_"," ").upper(),signups=data['signups'],newmembers=data['newmembers'],sources=data['sources'],traffic=data['traffic'],overall=data['overall'])
-
-
-
-
-  
-
-
-
+  return render_template('campaign-specific.html',campaign=campaign.replace("+"," ").upper(),signups=data['signups'],newmembers=data['newmembers'],sources=data['sources'],traffic=data['traffic'],overall=data['overall'])

@@ -26,22 +26,14 @@ var xAxis = d3.svg.axis()
 
 var yAxis = d3.svg.axis()
   .scale(y)
-  .orient("left")    
+  .orient("left")
   .ticks(6);
-//create form so can nest chart in the form 
-var form = d3.select("body")
-            .append("form")
-            .attr("id","campaigns")
-            .attr("method","post")
-            .attr("action","/cause/campaigns/campaign-specific")
-            .append("input")
-            .attr("type","hidden")
-            .attr("class","inputData")
-            .attr("name","vals")
-           
-         
-//append svg to the form, not the input element 
-var svg = d3.select("form#campaigns").append("svg")
+
+
+//append svg to the form, not the input element
+var svg = d3.select("body")
+          .attr("id","campaigns")
+          .append("svg")
           .attr("width", width + margin.left + margin.right)
           .attr("height", height + margin.top + margin.bottom)
           .attr("id","svgMain");
@@ -65,7 +57,7 @@ svg.append("g")
         .attr("class", "x axis")
         .attr("transform", "translate("+padding+"," + height + ")")
         .call(xAxis)
-        .selectAll("text")  
+        .selectAll("text")
         .style("text-anchor", "end")
         .attr("transform", function(d) {
             return "rotate(-65)";
@@ -89,7 +81,7 @@ function showTooltip(d) {
           .style("top", (d3.event.pageY-50) + "px")
           .style("left", (d3.event.pageX-100) + "px")
           .select("#value")
-          .text(format(d.value)); 
+          .text(format(d.value));
 
   // Show the tooltip.
         d3.select("#tooltip").classed("hidden", false);
@@ -104,7 +96,7 @@ var campaign = svg.selectAll(".campaign")
           .data(data)
           .enter().append("g")
           .attr("class", "g")
-          .on("click",clickFunc)
+          .on("click",getCampaignSpecificData)
           .attr("transform", function(d) { var g_x = x0(d.campaign)+padding; return "translate(" + g_x + ",0)";});
 
 //add specifc bars to campaign group
@@ -152,12 +144,8 @@ legend.append("text")
           .text(function(d) { return d.replace('_',' ').toUpperCase(); });
 
 //function to make bars submit bar data on click
-function clickFunc(d) {
-          var x = document.getElementById("campaigns");
-          var camp_name = d.campaign;
-          //set input value
-          var y = d3.select("input.inputData").attr("value",camp_name)
-          x.submit();
+function getCampaignSpecificData(d) {
+  var campaign_name = d.campaign.split(' ').join('+');
+  window.location = "/cause/campaigns/" + campaign_name;
 
-  }
-
+}
