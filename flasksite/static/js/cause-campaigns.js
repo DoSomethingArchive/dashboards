@@ -1,6 +1,5 @@
 //have d3 recognize the data from flask as json
 var data=JSON.parse(x);
-
 var padding = 75;
 var format = d3.format("0,000");
 
@@ -146,6 +145,6 @@ legend.append("text")
 //function to make bars submit bar data on click
 function getCampaignSpecificData(d) {
   var campaign_name = d.campaign.split(' ').join('+');
-  window.location = "/cause/campaigns/" + campaign_name;
+  window.location = window.location.pathname + '/' + campaign_name.toLowerCase();
 
 }
