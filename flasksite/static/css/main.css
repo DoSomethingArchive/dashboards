@@ -248,39 +248,73 @@ position:relative;
 staff pick/nonstaff pick buttons
 */
 
+
+
 #staffp {
 
   position:absolute;
-  top:10%;
-  left:90%;
-  width:100px;
-  height:30px;
+  top:19%;
+  left:87%;
+  width:150px;
+  height:50px;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 10px;
+  font-size: 14px;
   text-transform: uppercase;
   cursor: pointer;
   border-radius:5px;
+  background:#d3d3d3;
+  text-decoration:none;
+  text-align:center;
+  color:#2a2a2a;
   }
 
 #nstaffp {
 
   position:absolute;
-  top:15%;
-  left:90%;
-  width:100px;
-  height:30px;
+  top:26%;
+  left:87%;
+  width:150px;
+  height:50px;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 10px;
+  font-size: 14px;
   text-transform: uppercase;
   cursor: pointer;
   border-radius:5px;
+  background:#d3d3d3;
+  text-decoration:none;
+  text-align:center;
+
+  color:#2a2a2a;
 }
+
+p#sp{
+  position:absolute;
+  font-size: 16px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  margin-top: 0px;
+  text-align: center;
+  letter-spacing: -1px;
+  top:32%;
+  left:20%;
+}
+
+p#nsp{
+  position:absolute;
+  font-size: 16px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  margin-top: 0px;
+  text-align: center;
+  letter-spacing: -1px;
+  top:32%;
+  left:8%;
+}
+
+
 
 .spflag:hover{
 
-  box-shadow: -1px 1px 1px #99FF99;
-  background:#99FF99;
-  opacity:.9;
+  box-shadow: -1px 1px 1px #3f3f3f;
+  opacity:.7;
 }
 
 /*
