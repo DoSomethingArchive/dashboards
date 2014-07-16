@@ -79,7 +79,11 @@ def causes():
 def causeStaffPicks(cause):
   title = cause.capitalize()
   causes_list = cause.split("+")
-  staff = "y"
+  if request.args.get('staff') is None:
+   staff = "y"
+  else:
+    staff = request.args.get('staff')
+
   quoted_causes = ['"'+str(cause)+'"' for cause in causes_list]
   formatted_causes =  ','.join(quoted_causes)
   cur = openDB()

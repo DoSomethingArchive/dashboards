@@ -5,13 +5,9 @@
 <h3>{{title}}</h3>
 
 
+<a href="?staff=y" class=spflag  id=staffp>staff picks</a>
+<a href="?staff=n" class=spflag id=nstaffp>non staff picks</a>
 
-
-<form method="post" action="/cause/campaigns">
-<button class=spflag id=staffp name="button" type="submit" value="{{causes}}|{{title}}|y">Staff Picks</button>
-<button class=spflag id=nstaffp name="button" type="submit" value="{{causes}}|{{title}}|n">Non Staff Picks</button>
-
-</form>
 
 <div id="tooltip" class="hidden">
   <p><span id="value">0</span></p>
