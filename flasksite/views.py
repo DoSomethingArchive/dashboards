@@ -18,34 +18,6 @@ def home():
   cur.close()
   return render_template('home.html',formatted_data=formatted_data)
 
-#returns all staff picks, cause agnostic
-@app.route('/campaigns/staff-picks')
-def staffPicks():
-  return render_template('staff-picks.html')
-
-#returns json object array of all staff picks, cause agnostic
-@app.route('/get-staff-picks-data.json')
-def getStaffPicksData():
-  cur = openDB()
-  cur.execute('select concat(upper(substring(replace(campaign,"_"," "),1,1)),substring(replace(campaign,"_"," "),2)) as campaign, sign_ups, new_members, report_backs from overall.overall where staff_pick = "y" and date_add(end_date, interval 7 day) >= curdate() order by sign_ups desc')
-  data = cur.fetchall()
-  cur.close()
-  return json.dumps(data)
-
-#returns all non-staff picks, cause agnostic
-@app.route('/campaigns/non-staff-picks')
-def nonStaffPicks():
-  return render_template('non-staff-picks.html')
-
-#returns json object array of all non-staff picks, cause agnostic
-@app.route('/get-non-staff-picks-data.json')
-def getNonStaffPicksData():
-  cur = openDB()
-  cur.execute('select concat(upper(substring(replace(campaign,"_"," "),1,1)),substring(replace(campaign,"_"," "),2)) as campaign, sign_ups, new_members, report_backs from overall.overall where staff_pick = "n" and date_add(end_date, interval 7 day) >= curdate() order by sign_ups desc')
-  data = cur.fetchall()
-  cur.close()
-  return json.dumps(data)
-
 #returns cause-level json
 @app.route('/get-causes.json')
 def getCausesdata():
@@ -77,6 +49,10 @@ def causes():
 #returns cause selection template
 @app.route('/cause/campaigns/<cause>')
 def causeStaffPicks(cause):
+  if cause== 'all':
+    print 'all'
+  else:
+    print 'not'
   title = cause.capitalize()
   causes_list = cause.split("+")
   if request.args.get('staff') is None:
@@ -94,10 +70,13 @@ def causeStaffPicks(cause):
 
     formatted_causes=formatted_causes
 
+  if cause != 'all':
+    q = 'select concat(upper(substring(replace(campaign,"_"," "),1,1)),substring(replace(campaign,"_"," "),2)) as campaign, sign_ups, new_members, report_backs from overall.overall where staff_pick = "%s" and cause in (%s) and date_add(end_date, interval 7 day) >= curdate() order by sign_ups desc' % (staff,formatted_causes)
+  else:
+    q = 'select concat(upper(substring(replace(campaign,"_"," "),1,1)),substring(replace(campaign,"_"," "),2)) as campaign, sign_ups, new_members, report_backs from overall.overall where staff_pick = "%s" and date_add(end_date, interval 7 day) >= curdate() order by sign_ups desc' % (staff)
+
 
   cur = openDB()
-  q = 'select concat(upper(substring(replace(campaign,"_"," "),1,1)),substring(replace(campaign,"_"," "),2)) as campaign, sign_ups, new_members, report_backs from overall.overall where staff_pick = "%s" and cause in (%s) and date_add(end_date, interval 7 day) >= curdate() order by sign_ups desc' % (staff,formatted_causes)
-
   cur.execute(q)
   data = cur.fetchall()
   cur.close()
