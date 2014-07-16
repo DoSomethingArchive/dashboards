@@ -3,7 +3,10 @@
 {% block content %}
 
 
+
 <p>{{campaign}}</p>
+
+
 <div id="chart">
   <p>Sign Ups by Day</p>
   <svg></svg>
@@ -23,6 +26,7 @@
 <p>Traffic and Gate Conversion by Day</p>
   <svg></svg>
 </div>
+
 <script type="text/javascript">
 var su = {{signups|safe}};
 var nm = {{newmembers|safe}};
