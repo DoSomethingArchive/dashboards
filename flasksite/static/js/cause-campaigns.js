@@ -1,6 +1,8 @@
 //have d3 recognize the data from flask as json
 var data=JSON.parse(x);
+
 var padding = 75;
+
 var format = d3.format("0,000");
 
 var margin = {top: 10, right: 40, bottom: 140, left: 40},
@@ -14,7 +16,7 @@ var x0 = d3.scale.ordinal()
 var x1 = d3.scale.ordinal();
 
 var y = d3.scale.linear()
-  .range([height, 0]);
+  .range([height, 10]);
 //range of colors - dosomething colors
 var color = d3.scale.ordinal()
   .range(["#23b7fb", "#FCD116","#4e2b63"]);
@@ -27,6 +29,7 @@ var yAxis = d3.svg.axis()
   .scale(y)
   .orient("left")
   .ticks(6);
+
 
 
 //append svg to the form, not the input element
@@ -146,5 +149,8 @@ legend.append("text")
 function getCampaignSpecificData(d) {
   var campaign_name = d.campaign.split(' ').join('+');
   window.location = window.location.pathname + '/' + campaign_name.toLowerCase();
-
 }
+
+
+
+

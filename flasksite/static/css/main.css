@@ -95,55 +95,25 @@ p {
   letter-spacing: -1px;
 }
 
-div.bacon {
-   
-    background-color: #FF3366;
-    opacity:.98;
-    margin: 15px;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 35px;
-    color: #FFFFFF;
-    padding: 15px;
-    width: 200px;
-    
+
+
+div#main {
+  
+   display: table;
+    margin: 0 auto;
 
 }
 
-.rec {
-        fill:#FF3333;
-        opacity:.8;
-      }
+svg#svgMain {
 
-#svgMain {
-        padding-top: 120px;
-        display:block;
-        margin-left:auto;
-        margin-right:auto;
+  padding-top:40px;
 
-      }
-
-.chart1 {
-
-        padding-top: 10px;
-        display:block;
-        margin-left:auto;
-        margin-right:auto;
-
-      }
-.chart2 {
-        padding-top: 50px;
-        display:block;
-        margin-left:auto;
-        margin-right:auto;
-
-      }
+}
 
 
-rect:hover {
-      fill: orange;
-      opacity:.6;
 
-    }
+
+
 
     
     
@@ -224,9 +194,7 @@ rect:hover {
 
 
 
-svg {
-  font: 10px sans-serif;
-}
+]
 
 div.rectangle{
 
@@ -250,68 +218,7 @@ div.rectangle{
 
  }
 
- div#one {
-  position:absolute;
-  top: 700px;
-  left:590px;
-  background:#A0A0A0;
-
-
- }
-
-  div#two {
-
-  position:absolute;
-  top: 700px;
-  left:710px;
-  background:#33CCFF;
-  
- }
-
- div#three {
-  position:absolute;
-  top: 700px;
-  left:590px;
-  background:#33CCFF;
-
-
- }
-
-  div#four {
-
-  position:absolute;
-  top: 700px;
-  left:710px;
-  background:#A0A0A0;
-  
- }
-
-
-
-
- div#query {
-  
-
-  width:200px;
-  border:2px solid;
-  border-radius:5px;
-  display:block;
-  margin-left:auto;
-  margin-right:auto;
- }
-
- #apples 
- {
-  padding-top:50px;
-  display:block;
-  margin-left:auto;
-  margin-right:auto;}
-
-  .box{
-    background:orange;
-  opacity:.3;
-
-  }
+ 
 
 div.grid{
   position:absolute;
@@ -391,8 +298,9 @@ position:relative;
 #staffp {
 
 position:absolute;
-top:150px;
-left:1150px;
+top:10%;
+left:90%;
+
 width:100px; 
 height:30px;
 font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -408,8 +316,8 @@ border-radius:5px;
 #nstaffp {
 
 position:absolute;
-top:200px;
-left:1150px;
+top:15%;
+left:90%;
 width:100px; 
 height:30px;
 font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -428,142 +336,155 @@ border-radius:5px;
   opacity:.9;
 }
 
+/*
+welcome on homepage
+ */
 #welcome {
-  animation: test-animation-two .7s;
+
+  animation: welcome-animation .7s;
   opacity:0;
   font-size:18px;
 }
 
-@keyframes test-animation-two {
+/*
+welcome animation
+ */
+@keyframes welcome-animation {
+  
   0% {
-    opacity: 1;
+    opacity: 1;}
 
-    
-   
-  }
-
- 
   100% {
-    opacity: 0;
-  }
-
+    opacity: 0;}
 }
+
+/*
+homepage member number
+ */
 #members {
-  animation: test-animation .75s;
+
+  animation: home-animation .75s;
   position:relative;
   top:-90px;
   font-size:20px;
-  
-
-  
-
 }
 
-@keyframes test-animation {
+/*
+member count animation
+ */
+@keyframes home-animation {
+
   0% {
     opacity: 0;
-    color:orange;
-   
-  
+    color:orange;}
 
-    
-    
-  }
-
-
-  
   100% {
-    opacity: 0;
-   
-  
-    
-  }
-
+  opacity: 0;}
 }
 
-#chart {
-  position:relative;
-   top:400px;
+/*
+center overall stats grid
+ */
+.grid2 {
 
+  text-align: center;
 }
 
-#chart2 {
-  position:relative;
-   top:400px;
-
-}
-
-#chart3 {
-  position:relative;
-   top:400px;
-
-}
-
-#chart4 {
-  position:relative;
-   top:400px;
-
-}
-
-
-
+/*
+grid of overall stats in campaign specific
+ */
 .overall{
 
-   
-
-
-   width:400px; 
-   height:150px; 
+   display: inline-block;
+   width:375px; 
+   height:125px; 
    text-decoration:none;
-   border-radius:5px; 
+   border-radius:4px; 
    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-   font-size: 13px;
+   font-size: 12px;
    color:white;
-   text-align:center;
-   letter-spacing:1.2px;
+   letter-spacing:.5px;
    background:#00CCFF;
-   float: left;
-   border: 1px solid;
-   
-   
-
+   border: 1px solid;   
 }
 
+/*
+text in campaign specific overall boxes
+ */
 .overall .words{
 
 position:relative;
-  top:20px;
-
+top:10px;
 }
 
+/*
+hover effect for campaign specific overall boxes
+ */
 .overall:hover {
-      opacity:.5;
-   
-     
 
+  opacity:.5;
+}
 
-    }
+/*
+override gridlines from nvd3 css 
+ */
+.tick line {
 
-.tick line {display: none;}
+  display: none;
+}
 
+/*
+campaign specific page, chart 1
+ */
 #chart svg {
-  height: 400px;
-  position:relative;
 
+  height: 500px;
 }
 
+/*
+campaign specific page, chart 2
+ */
 #chart2 svg {
-  height: 400px;
-  position:relative;
+
+  height: 500px;    
 }
 
+/*
+campaign specific page, chart 3
+ */
 #chart3 svg {
-  height: 400px;
-  position:relative;
+
+  height: 500px;    
 }
 
+/*
+campaign specific page, chart 4
+ */
 #chart4 svg {
-  height: 400px;
-  position:relative;
+
+  height: 500px;
+  padding-bottom: 100px;  
 }
 
+/*
+overriding nvd3 css for tooltip positioning
+ */
+.nvtooltip {
+
+  margin-top:15%;
+  font-size: 12px;
+}
+
+/*
+p element containing no staff picks text
+ */
+p#nothing {
+
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  margin-top:10%;
+  font-size: 1.8em;
+  font-weight: 600;
+  text-align: center;
+  letter-spacing: .2px;
+  color: #999;
+}
