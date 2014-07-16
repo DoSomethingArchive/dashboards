@@ -75,28 +75,24 @@ def causes():
   return render_template('causes.html')
 
 #returns cause selection template
-@app.route('/cause/campaigns', methods=['post'])
-def causeStaffPicks():
-  data=request.form['button']
-  values = data.split('|')
-  print "these are the values", values
-
-  causes_list = values[0].split(",")
-
-  staff = values[2]
+@app.route('/cause/campaigns/<cause>')
+def causeStaffPicks(cause):
+  title = cause.capitalize()
+  causes_list = cause.split("+")
+  if request.args.get('staff') is None:
+   staff = "y"
+  else:
+    staff = request.args.get('staff')
 
   quoted_causes = ['"'+str(cause)+'"' for cause in causes_list]
   formatted_causes =  ','.join(quoted_causes)
   cur = openDB()
   q = 'select concat(upper(substring(replace(campaign,"_"," "),1,1)),substring(replace(campaign,"_"," "),2)) as campaign, sign_ups, new_members, report_backs from overall.overall where staff_pick = "%s" and cause in (%s) and date_add(end_date, interval 7 day) >= curdate() order by sign_ups desc' % (staff,formatted_causes)
-
   cur.execute(q)
   data = cur.fetchall()
   cur.close()
-  title = values[1]
   j = json.dumps(data)
-  return render_template('cause-campaigns.html', title=title,causes=values[0], j=j )
-
+  return render_template('cause-campaigns.html', title=title,causes=cause, j=j)
 
 #returns monthly kpi data
 @app.route('/monthly-stats')
@@ -114,9 +110,9 @@ def monthly():
 
   return render_template('monthly-stats.html', data=data )
 
-@app.route('/cause/campaigns/<campaign>')
+@app.route('/cause/campaigns/<cause>/<campaign>')
 
-def getSpecificCampaign(campaign):
+def getSpecificCampaign(cause,campaign):
   # campaign=str(request.form['vals']).replace(" ","_").lower()
   name=str(campaign).replace("+","_").lower()
   q_test = 'select is_sms, staff_pick from {0}.campaign_info'.format(name)

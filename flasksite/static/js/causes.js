@@ -6,11 +6,8 @@ d3.json("/get-causes.json", function(error, json) {
   var div = d3.select("body")
               .append("div")
               .attr("class", "grid")
-              .append("form")
-              .attr("method", "post")
-              .attr("action", "/cause/campaigns");
 
-  
+
   div.selectAll('div')
               .data(data)
               .enter()
@@ -24,7 +21,13 @@ d3.json("/get-causes.json", function(error, json) {
               .text(function(d){return d.cause;})
               .append("p")
               .attr("class", "text")
+              .on("click", getCauseCampaigns)
               .html(function(d){return "Sign Ups : " + format(d.sign_ups)+ "</br>" + "New Members : " + format(d.new_members) + "</br>" + "Reportbacks : "+ format(d.report_backs) + "</br>" + "Traffic : "+ format(d.traffic) + "</br>" + "Gate Conversion : " + format(d.conv) + '%' + "</br>" + "Campaigns : " + format(d.campaigns);});
-              
-  
+
+
 });
+
+function getCauseCampaigns(d) {
+  var cause_name = d.cause.split(' ').join('').toLowerCase();
+  window.location = "/cause/campaigns/" + cause_name;
+}
