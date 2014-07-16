@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<h3>{{title}}</h3>
+
+
+<a href="?staff=y" class=spflag id=staffp>staff picks</a>
+<a href="?staff=n" class=spflag id=nstaffp>non staff picks</a>
+
+
+<p id="nothing">There is nothing here. Try non-staff picks or select another cause</p>
+
+<div id="tooltip" class="hidden">
+  <p><span id="value">0</span></p>
+</div>
+</div>
+
+
+
+{% endblock %}
