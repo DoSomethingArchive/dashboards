@@ -100,7 +100,7 @@ def causeStaffPicks(cause):
 def monthly():
 
   cur = openDB()
-  cur.execute('select date_format(date, "%M %Y") as date, new_members_last_12_percent as new_members, engaged_members_last_12_percent as engaged_members, active_members_last_12_percent as active_members, verified_members_last_12_percent as verified_members from members.bod_2014 order by date_format(date, "%Y-%m-%d")' )
+  cur.execute('select date_format(date, "%M %Y") as date, new_members_last_12_percent as new, engaged_members_last_12_percent as engaged, active_members_last_12_percent as active, verified_members_last_12_percent as verified from members.bod_2014 order by date_format(date, "%Y-%m-%d")' )
   d = cur.fetchall()
   cur.close()
   data = json.dumps(d)
