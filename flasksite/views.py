@@ -86,13 +86,27 @@ def causeStaffPicks(cause):
 
   quoted_causes = ['"'+str(cause)+'"' for cause in causes_list]
   formatted_causes =  ','.join(quoted_causes)
+  #needed because health is not a cause space name
+  if formatted_causes == '"health"':
+
+    formatted_causes = "'physical health','mental health'"
+  else:
+
+    formatted_causes=formatted_causes
+
+
   cur = openDB()
   q = 'select concat(upper(substring(replace(campaign,"_"," "),1,1)),substring(replace(campaign,"_"," "),2)) as campaign, sign_ups, new_members, report_backs from overall.overall where staff_pick = "%s" and cause in (%s) and date_add(end_date, interval 7 day) >= curdate() order by sign_ups desc' % (staff,formatted_causes)
+
   cur.execute(q)
   data = cur.fetchall()
   cur.close()
   j = json.dumps(data)
-  return render_template('cause-campaigns.html', title=title,causes=cause, j=j)
+
+  if len(data) > 0:
+    return render_template('cause-campaigns.html', title=title,causes=cause, j=j)
+  else:
+    return render_template('cause-campaigns-nodata.html', title=title,causes=cause)
 
 #returns monthly kpi data
 @app.route('/monthly-stats')
