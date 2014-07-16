@@ -51,7 +51,7 @@ new_json.push(new_element);
 //console.log(new_json[0].values);
 //set margins
 var margin = {top: 10, right: 40, bottom: 140, left: 40},
-  width = 1100 - margin.left - margin.right,
+  width = 1200 - margin.left - margin.right,
   height = 550 - margin.top - margin.bottom;
 //set padding
 var padding = 75;
@@ -60,10 +60,10 @@ var color = d3.scale.ordinal()
   .range(["#23b7fb", "#FCD116","#4e2b63","#66CC33"]);
 
 //great main svg
-var svgMain = d3.select("body").append("svg")
+var svgMain = d3.select("div#main").append("svg")
     .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
-    .attr("id","svgMain").append("g").attr("transform", "translate(" + padding + "," + padding + ")");;
+    .attr("id","svgMain").attr("transform", "translate(" + padding + "," + padding + ")");
 
 //need to use original, preprocessed json to get ordinal domain
 var xScale = d3.scale.ordinal().domain(json.map(function(d){return d.date;})).rangeBands([0,width-padding]);
@@ -91,7 +91,8 @@ var xAxis = d3.svg.axis()
 
 var yAxis = d3.svg.axis()
     .scale(yScale)
-    .orient("left");
+    .orient("left")
+    .tickFormat(d3.format(".1%"));
 //define line function 
 var lineFunc = d3.svg.line()                
   .x(function(d) {return xScale(d.date)+padding+20;})          
@@ -134,7 +135,7 @@ legend.append("rect")
 legend.append("text")
   .attr("x", width + 30)
   .attr("y", 9)
-  .attr("dy", ".35em")
+  .attr("dy", ".25em")
   .style("text-anchor", "end")
   .text(function(d) { return d.replace('_',' ').toUpperCase(); });
 

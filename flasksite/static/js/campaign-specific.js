@@ -4,11 +4,12 @@
 var format = d3.format("0,000");
 //div for overall metrics
 var div = d3.select("body")
+
             .insert("div","div#chart")
-            .attr("class","grid");
+            .attr("class","grid2");
 //add p for each metric
 for (i in ovrll[0]) {
-  var p = d3.select("div.grid")
+  var p = d3.select("div.grid2")
             .append("p")
             .attr("class","overall")
             .append("p")
@@ -242,7 +243,7 @@ for (var i=0; i<trfc.length;i++) {
     }
 
     else {
-    var a = [trfc[i].date, 1.1];
+    var a = [trfc[i].date, 1];
     var b = [trfc[i].date, trfc[i].unq_visits];
     t.values.push(b);
     c.values.push(a);
