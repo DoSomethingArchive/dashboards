@@ -18,6 +18,34 @@ def home():
   cur.close()
   return render_template('home.html',formatted_data=formatted_data)
 
+#returns all staff picks, cause agnostic
+@app.route('/campaigns/staff-picks')
+def staffPicks():
+  return render_template('staff-picks.html')
+
+#returns json object array of all staff picks, cause agnostic
+@app.route('/get-staff-picks-data.json')
+def getStaffPicksData():
+  cur = openDB()
+  cur.execute('select concat(upper(substring(replace(campaign,"_"," "),1,1)),substring(replace(campaign,"_"," "),2)) as campaign, sign_ups, new_members, report_backs from overall.overall where staff_pick = "y" and date_add(end_date, interval 7 day) >= curdate() order by sign_ups desc')
+  data = cur.fetchall()
+  cur.close()
+  return json.dumps(data)
+
+#returns all non-staff picks, cause agnostic
+@app.route('/campaigns/non-staff-picks')
+def nonStaffPicks():
+  return render_template('non-staff-picks.html')
+
+#returns json object array of all non-staff picks, cause agnostic
+@app.route('/get-non-staff-picks-data.json')
+def getNonStaffPicksData():
+  cur = openDB()
+  cur.execute('select concat(upper(substring(replace(campaign,"_"," "),1,1)),substring(replace(campaign,"_"," "),2)) as campaign, sign_ups, new_members, report_backs from overall.overall where staff_pick = "n" and date_add(end_date, interval 7 day) >= curdate() order by sign_ups desc')
+  data = cur.fetchall()
+  cur.close()
+  return json.dumps(data)
+
 #returns cause-level json
 @app.route('/get-causes.json')
 def getCausesdata():
@@ -49,10 +77,6 @@ def causes():
 #returns cause selection template
 @app.route('/cause/campaigns/<cause>')
 def causeStaffPicks(cause):
-  if cause== 'all':
-    print 'all'
-  else:
-    print 'not'
   title = cause.capitalize()
   causes_list = cause.split("+")
   if request.args.get('staff') is None:
@@ -62,30 +86,13 @@ def causeStaffPicks(cause):
 
   quoted_causes = ['"'+str(cause)+'"' for cause in causes_list]
   formatted_causes =  ','.join(quoted_causes)
-  #needed because health is not a cause space name
-  if formatted_causes == '"health"':
-
-    formatted_causes = "'physical health','mental health'"
-  else:
-
-    formatted_causes=formatted_causes
-
-  if cause != 'all':
-    q = 'select concat(upper(substring(replace(campaign,"_"," "),1,1)),substring(replace(campaign,"_"," "),2)) as campaign, sign_ups, new_members, report_backs from overall.overall where staff_pick = "%s" and cause in (%s) and date_add(end_date, interval 7 day) >= curdate() order by sign_ups desc' % (staff,formatted_causes)
-  else:
-    q = 'select concat(upper(substring(replace(campaign,"_"," "),1,1)),substring(replace(campaign,"_"," "),2)) as campaign, sign_ups, new_members, report_backs from overall.overall where staff_pick = "%s" and date_add(end_date, interval 7 day) >= curdate() order by sign_ups desc' % (staff)
-
-
   cur = openDB()
+  q = 'select concat(upper(substring(replace(campaign,"_"," "),1,1)),substring(replace(campaign,"_"," "),2)) as campaign, sign_ups, new_members, report_backs from overall.overall where staff_pick = "%s" and cause in (%s) and date_add(end_date, interval 7 day) >= curdate() order by sign_ups desc' % (staff,formatted_causes)
   cur.execute(q)
   data = cur.fetchall()
   cur.close()
   j = json.dumps(data)
-
-  if len(data) > 0:
-    return render_template('cause-campaigns.html', title=title,causes=cause, j=j)
-  else:
-    return render_template('cause-campaigns-nodata.html', title=title,causes=cause)
+  return render_template('cause-campaigns.html', title=title,causes=cause, j=j)
 
 #returns monthly kpi data
 @app.route('/monthly-stats')
@@ -93,7 +100,7 @@ def causeStaffPicks(cause):
 def monthly():
 
   cur = openDB()
-  cur.execute('select date_format(date, "%M %Y") as date, new_members_last_12_percent as new, engaged_members_last_12_percent as engaged, active_members_last_12_percent as active, verified_members_last_12_percent as verified from members.bod_2014 order by date_format(date, "%Y-%m-%d")' )
+  cur.execute('select date_format(date, "%M %Y") as date, new_members_last_12_percent as new_members, engaged_members_last_12_percent as engaged_members, active_members_last_12_percent as active_members, verified_members_last_12_percent as verified_members from members.bod_2014 order by date_format(date, "%Y-%m-%d")' )
   d = cur.fetchall()
   cur.close()
   data = json.dumps(d)

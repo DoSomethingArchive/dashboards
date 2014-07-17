@@ -3,7 +3,7 @@
 var json = JSON.parse(x);
 
 //initial values(metrics) to parse by. make this dynamic using d3.keys
-var metrics = ['engaged','active','new', 'verified'];
+var metrics = ['engaged_members','active_members','new_members', 'verified_members'];
 
 //raw json orded by date, use this as test data
 /*
@@ -11,36 +11,36 @@ var json = [{date:'2014-01-01','a':'123','b':'555','c':'2000'},{date:'2014-02-01
 */
 //make sure int
 
-json.forEach(function(d) {
+json.forEach(function(d) {                
     for (i in d)
     {
       if (i !=='date')
 
         {d[i]= +d[i];}
 
-        }
+        }                    
   });
 //container for formatted json
 var new_json = [];
-//iterate through the metrics list, then for each metric, iterate throgh the elements in the json.
-//For each element, iterate through the values. If the value matches the metric, add it to the metric object
-//as metric:metricname, values:[{date:date,members,members},...]
+//iterate through the metrics list, then for each metric, iterate throgh the elements in the json. 
+//For each element, iterate through the values. If the value matches the metric, add it to the metric object 
+//as metric:metricname, values:[{date:date,members,members},...] 
 for (var i=0;i<metrics.length;i++) {
 
   var new_element = {metric:metrics[i],values:[]};
-
+  
   for (var x=0;x<json.length;x++) {
 
     for (var k in json[x]) {
 
       if (k===metrics[i]) {
-
+        
         var date = json[x]['date']
         var members = json[x][k]
         //add members by date date:members
         new_element.values.push({'date':date,'members':members});
       }
-
+      
     }
 
   }
@@ -51,7 +51,7 @@ new_json.push(new_element);
 //console.log(new_json[0].values);
 //set margins
 var margin = {top: 10, right: 40, bottom: 140, left: 40},
-  width = 1100- margin.left - margin.right,
+  width = 1200 - margin.left - margin.right,
   height = 550 - margin.top - margin.bottom;
 //set padding
 var padding = 75;
@@ -60,14 +60,13 @@ var color = d3.scale.ordinal()
   .range(["#23b7fb", "#FCD116","#4e2b63","#66CC33"]);
 
 //great main svg
-var svgMain = d3.select("div.main")
-                .append("svg")
-                .attr("width", width + margin.left + margin.right)
-                .attr("height", height + margin.top + margin.bottom)
-                .attr("class","svgMain");
+var svgMain = d3.select("div#main").append("svg")
+    .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+    .attr("id","svgMain").attr("transform", "translate(" + padding + "," + padding + ")");
 
 //need to use original, preprocessed json to get ordinal domain
-var xScale = d3.scale.ordinal().domain(json.map(function(d){return d.date;})).rangeBands([0,width]);
+var xScale = d3.scale.ordinal().domain(json.map(function(d){return d.date;})).rangeBands([0,width-padding]);
 //use original json to get domain for y scale too
 var yScale = d3.scale.linear().domain([0,d3.max(json, function(d) {
   //iteraters through each object to return the highest value, independant of the metric.
@@ -77,13 +76,13 @@ var yScale = d3.scale.linear().domain([0,d3.max(json, function(d) {
   for (i in d) {
     if (i != 'date') {
       if (d[i] > x) {
-        x = d[i]
+        x = d[i]        
       }
     }
   }
-
+  
   return x;
-})]).range([height,0]);
+})]).range([height-padding,0]);
 
 
 var xAxis = d3.svg.axis()
@@ -94,30 +93,30 @@ var yAxis = d3.svg.axis()
     .scale(yScale)
     .orient("left")
     .tickFormat(d3.format(".1%"));
-//define line function
-var lineFunc = d3.svg.line()
-  .x(function(d) {return xScale(d.date)+padding+80;})
-  .y(function(d,i) { return yScale(d.members)+2;})
-  .interpolate("linear");
+//define line function 
+var lineFunc = d3.svg.line()                
+  .x(function(d) {return xScale(d.date)+padding+20;})          
+  .y(function(d,i) { return yScale(d.members);})
+  .interpolate("linear"); 
 //append x axis
 svgMain.append("g")
   .attr("class", "x axis")
-  .attr("transform", "translate("+padding+"," + height + ")")
+  .attr("transform", "translate("+0+"," + (height-padding) + ")")
   .call(xAxis)
-  .selectAll("text")
+  .selectAll("text")  
   .style("text-anchor", "end")
   .attr("transform", function(d) {
-      return "rotate(-65)"
+      return "rotate(-65)" 
           });
 //append y axis
 svgMain.append("g")
       .attr("class", "y axis")
-      .attr("transform", "translate("+padding+",0)")
+      .attr("transform", "translate("+0+",0)")
       .call(yAxis);
 //for each metric in the new_json object array, apply the line function to the values (object array fo dtes and members)
 new_json.forEach(function(d) {
 svgMain.append("path").attr("d", lineFunc(d.values)).attr("stroke", color(d.metric)).attr("stroke-width","3")
-
+                          
                            .attr("fill", "none");});
 
 // Legend.
@@ -125,7 +124,7 @@ var legend = svgMain.selectAll(".legend")
   .data(metrics.slice())
   .enter().append("g")
   .attr("class", "legend")
-  .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+  .attr("transform", function(d, i) { return "translate(-50," + i * 20 + ")"; });
 
 legend.append("rect")
   .attr("x", width + 40)
