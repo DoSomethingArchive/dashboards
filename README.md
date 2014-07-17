@@ -3,15 +3,12 @@
 
 To install  
 1. Clone the repo  
-2. Run `npm install`
-3. Run `bower install`
-4. Go into the `flasksite` directory and run `pip install`  
-[Make sure you install pip first](http://pip.readthedocs.org/en/latest/installing.html)
-
-
-If you're having trouble with the `pip install` and see the error `
-ImportError: No module named MySQLdb`
-Take a look [here](https://gist.github.com/angaither/6004db46ef771c6fd80a) on how to install it correctly.
+2. Run `npm install`  
+3. Run `bower install`  
+4. [Make sure you install pip first](http://pip.readthedocs.org/en/latest/installing.html)  
+5. Go into the `flasksite` directory and run `pip install Flask`  
+6. `pip install MySQL-python` if this gives errors, check   [here](https://gist.github.com/angaither/6004db46ef771c6fd80a)  
+7. Set up your `config.cfg` file  
 
 
 ##Usage
