@@ -4,9 +4,9 @@
 var format = d3.format("0,000");
 //div for overall metrics
 var div = d3.select("body")
-
             .insert("div","div#chart")
             .attr("class","grid2");
+
 //add p for each metric
 for (i in ovrll[0]) {
   var p = d3.select("div.grid2")
