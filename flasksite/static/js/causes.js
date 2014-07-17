@@ -28,6 +28,6 @@ d3.json("/get-causes.json", function(error, json) {
 });
 
 function getCauseCampaigns(d) {
-  var cause_name = d.cause.split(' ').join('').toLowerCase();
+  var cause_name = d.cause.toLowerCase();
   window.location = "/cause/campaigns/" + cause_name;
 }
