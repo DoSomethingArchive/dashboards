@@ -14,7 +14,6 @@ def home():
   cur.execute("select total from overall.total")
   data = cur.fetchall()[0]['total']
   formatted_data = locale.format("%d", data, grouping=True)
-  print formatted_data
   cur.close()
   return render_template('home.html',formatted_data=formatted_data)
 
@@ -49,10 +48,6 @@ def causes():
 #returns cause selection template
 @app.route('/cause/campaigns/<cause>')
 def causeStaffPicks(cause):
-  if cause== 'all':
-    print 'all'
-  else:
-    print 'not'
   title = cause.capitalize()
   causes_list = cause.split("+")
   if request.args.get('staff') is None:
@@ -61,20 +56,12 @@ def causeStaffPicks(cause):
     staff = request.args.get('staff')
 
   quoted_causes = ['"'+str(cause)+'"' for cause in causes_list]
-  formatted_causes =  ','.join(quoted_causes)
-  #needed because health is not a cause space name
-  if formatted_causes == '"health"':
-
-    formatted_causes = "'physical health','mental health'"
-  else:
-
-    formatted_causes=formatted_causes
+  formatted_causes = ','.join(quoted_causes)
 
   if cause != 'all':
     q = 'select concat(upper(substring(replace(campaign,"_"," "),1,1)),substring(replace(campaign,"_"," "),2)) as campaign, sign_ups, new_members, report_backs from overall.overall where staff_pick = "%s" and cause in (%s) and date_add(end_date, interval 7 day) >= curdate() order by sign_ups desc' % (staff,formatted_causes)
   else:
     q = 'select concat(upper(substring(replace(campaign,"_"," "),1,1)),substring(replace(campaign,"_"," "),2)) as campaign, sign_ups, new_members, report_backs from overall.overall where staff_pick = "%s" and date_add(end_date, interval 7 day) >= curdate() order by sign_ups desc' % (staff)
-
 
   cur = openDB()
   cur.execute(q)
