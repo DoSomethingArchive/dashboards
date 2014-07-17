@@ -149,7 +149,3 @@ function getCampaignSpecificData(d) {
   var campaign_name = d.campaign.split(' ').join('+');
   window.location = window.location.pathname + '/' + campaign_name.toLowerCase();
 }
-
-
-
-
