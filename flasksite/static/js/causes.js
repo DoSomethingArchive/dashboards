@@ -5,7 +5,7 @@ d3.json("/get-causes.json", function(error, json) {
 
   var div = d3.select("body")
               .append("div")
-              .attr("class", "main")
+              .attr("class", "grid")
 
 
   div.selectAll('div')

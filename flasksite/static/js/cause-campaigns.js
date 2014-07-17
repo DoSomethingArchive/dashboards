@@ -33,11 +33,12 @@ var yAxis = d3.svg.axis()
 
 
 //append svg to the form, not the input element
-var svg = d3.select("div.main")
+var svg = d3.select("body")
+          .attr("id","campaigns")
           .append("svg")
           .attr("width", width + margin.left + margin.right)
           .attr("height", height + margin.top + margin.bottom)
-          .attr("class","svgMain");
+          .attr("id","svgMain");
 
 //get specific key names
 var metrics = d3.keys(data[0]).filter(function(key) { return key !== "campaign"; });
