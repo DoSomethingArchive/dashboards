@@ -2,24 +2,17 @@
 
 {% block content %}
 
-<h3>{{title}}</h3>
+<h2>{{title}}</h2>
 
-<div id="spbuttonbox">
-
-	<a href="?staff=y" class="spflag" id="staffp">
-		<p id="sp">staff picks</p>
-	</a>
-	<a href="?staff=n" class="spflag" id="nstaffp">
-		<p id="nsp">non-staff picks</p>
-	</a>
-
-</div>
+<nav id="spbuttonbox" class="tabs -dashboard">
+	<a href="?staff=y">staff picks</a>
+  <a href="?staff=n">non-staff picks</a>
+</nav>
 
 <div class="main">
-
-<div id="tooltip" class="hidden">
-  <p><span id="value">0</span></p>
-</div>
+  <div id="tooltip" class="hidden">
+    <p><span id="value">0</span></p>
+  </div>
 </div>
 
 <script type="text/javascript"> var x = {{j|tojson}};</script>

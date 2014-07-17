@@ -4,7 +4,8 @@
   "homepage": "https://github.com/DoSomething/dashboards",
   "authors": [
     "Andrea Gaither <angaither@gmail.com>",
-    "Josh Cusano <joshcusano@gmail.com>"
+    "Josh Cusano <joshcusano@gmail.com>",
+    "David Furnes <david@dfurnes.com>"
   ],
   "description": "Dashboards for DoSomething.org",
   "license": "MIT",
@@ -19,11 +20,12 @@
   "dependencies": {
     "jquery": "~1.11.1",
     "d3": "~3.4.8",
-    "neue": "dosomething/neue#~3.15.2",
-    "nvd3": "~1.1.15-beta"
+    "neue": "dosomething/neue#~4.4.0",
+    "nvd3": "~1.1.15-beta",
+    "html5shiv": "~3.7.2",
+    "respond": "~1.4.2"
   },
   "resolutions": {
-    "jquery": "~1.11.1",
     "d3": "~3.3.13"
   }
 }

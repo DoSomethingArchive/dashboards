@@ -1,115 +1,4 @@
 /*
- * Display navigation links inline
- */
-
-/*
-layout menu
-*/
-.menu {
-  float: right;
-  margin-top: 8px;
-}
-
-.menu li {
-  display: inline;
-}
-
-.menu li + li {
-  margin-left: 35px;
-}
-
-.menu li a {
-  color: #999;
-  text-decoration: none;
-}
-
-/*
-body formatting
-*/
-body {
-  margin: 0;
-  padding: 0;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  color: #444;
-}
-
-/*
-layout header
- */
-
-header {
-  background-color: #2B2B2B;
-  height: 35px;
-  width: 100%;
-  opacity: .9;
-  margin-bottom: 10px;
-}
-
-header h1.logo {
-  margin: 0;
-  font-size: 1.7em;
-  color: #fff;
-  text-transform: uppercase;
-  float: left;
-}
-
-header h1.logo:hover {
-  color: #fff;
-  text-decoration: none;
-}
-
-/*
- * Center the body content
- */
-
-.container {
-  width: 940px;
-  margin: 0 auto;
-}
-
-div.jumbo {
-  padding: 10px 0 30px 0;
-  background-color: #eeeeee;
-  -webkit-border-radius: 6px;
-     -moz-border-radius: 6px;
-          border-radius: 6px;
-}
-
-h2 {
-  font-size: 2.2em;
-  margin-top: 40px;
-  text-align: center;
-  letter-spacing: .5px;
-}
-
-h3 {
-  font-size: 1.7em;
-  font-weight: 100;
-  margin-top: 30px;
-  text-align: center;
-  letter-spacing: -1px;
-  color: #999;
-}
-
-p {
-
-  font-size: 1.5em;
-  margin-top: 40px;
-  text-align: center;
-  letter-spacing: -1px;
-}
-
-/*
-div for cause level bars and monthly stats, default primamry div for most pages
-*/
-div.main {
-    padding-top:30px;
-    margin-left: auto;
-    margin-right: auto;
-    width: 1200px; /* Your width */
-}
-
-/*
 tooltip for cause level bar charts
 */
 #tooltip {
@@ -154,12 +43,10 @@ tooltip for cause level bar charts
     }
 
 #tooltip2.hidden {
-
   display: none;
 }
 
 #tooltip2 p {
-
   margin: 0;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 16px;
@@ -169,26 +56,21 @@ tooltip for cause level bar charts
 /*
 non-nvd3 bar chart axis
 */
-.axis path,.axis line
- {
+.axis path, .axis line {
   fill: none;
   stroke: #000;
   shape-rendering:crispEdges;
-
 }
 
 .axis text {
-
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 14px;
-
 }
 
 /*
 tiles on cause page
 */
 .front{
-
  width:400px;
  height:150px;
  text-decoration:none;
@@ -205,14 +87,11 @@ tiles on cause page
 }
 
 .front #title{
-
-position:relative;
+  position:relative;
   top:20px;
-
 }
 
 .front .text {
-
   visibility:hidden;
   word-wrap: break-word;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -231,15 +110,13 @@ position:relative;
 }
 
 .front:hover .text{
-
   visibility:visible;
   position:relative;
   top:-90px;
   text-transform: uppercase;
 }
 
- .bars:hover {
-
+.bars:hover {
   opacity:.35;
   box-shadow: -5px 5px 5px #aaa;
 }
@@ -249,79 +126,15 @@ staff pick/nonstaff pick buttons
 */
 
 
-
-#staffp {
-
-  position:absolute;
-  top:19%;
-  left:87%;
-  width:150px;
-  height:50px;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 14px;
-  text-transform: uppercase;
-  cursor: pointer;
-  border-radius:5px;
-  background:#d3d3d3;
-  text-decoration:none;
-  text-align:center;
-  color:#2a2a2a;
-  }
-
-#nstaffp {
-
-  position:absolute;
-  top:26%;
-  left:87%;
-  width:150px;
-  height:50px;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 14px;
-  text-transform: uppercase;
-  cursor: pointer;
-  border-radius:5px;
-  background:#d3d3d3;
-  text-decoration:none;
-  text-align:center;
-
-  color:#2a2a2a;
-}
-
-p#sp{
-  position:absolute;
-  font-size: 16px;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  margin-top: 0px;
-  text-align: center;
-  letter-spacing: -1px;
-  top:32%;
-  left:20%;
-}
-
-p#nsp{
-  position:absolute;
-  font-size: 16px;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  margin-top: 0px;
-  text-align: center;
-  letter-spacing: -1px;
-  top:32%;
-  left:8%;
-}
-
-
-
-.spflag:hover{
-
-  box-shadow: -1px 1px 1px #3f3f3f;
-  opacity:.7;
+.tabs.-dashboard {
+  float: right;
+  padding: 12px 0 24px;
 }
 
 /*
 welcome on homepage
  */
 #welcome {
-
   animation: welcome-animation .7s;
   opacity:0;
   font-size:18px;
@@ -331,7 +144,6 @@ welcome on homepage
 welcome animation
  */
 @keyframes welcome-animation {
-
   0% {
     opacity: 1;}
 
@@ -343,7 +155,6 @@ welcome animation
 homepage member number
  */
 #members {
-
   animation: home-animation .75s;
   position:relative;
   top:-90px;
