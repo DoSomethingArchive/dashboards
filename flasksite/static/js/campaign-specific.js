@@ -3,8 +3,7 @@
 // to demonstrate defaulting to stacked bar
 var format = d3.format("0,000");
 //div for overall metrics
-var div = d3.select("body")
-            .insert("div","div#chart")
+var div = d3.select("#campaign-overall-stats")
             .attr("class","grid2");
 
 //add p for each metric
