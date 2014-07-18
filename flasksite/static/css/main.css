@@ -68,60 +68,6 @@ non-nvd3 bar chart axis
 }
 
 /*
-tiles on cause page
-*/
-.front{
- width:400px;
- height:150px;
- text-decoration:none;
- border-radius:5px;
- font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
- font-size: 13px;
- color:white;
- text-align:center;
- letter-spacing:1.2px;
- background:#00CCFF;
- float: left;
- border: 1px solid;
- cursor: pointer;
-}
-
-.front #title{
-  position:relative;
-  top:20px;
-}
-
-.front .text {
-  visibility:hidden;
-  word-wrap: break-word;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 16px;
-  color:white;
-}
-
-.front:hover {
-  opacity:.5;
-  box-shadow: -5px 5px 5px #aaa;
-}
-
-.front:hover #title{
-  font-size: 0px;
-  color: transparent;
-}
-
-.front:hover .text{
-  visibility:visible;
-  position:relative;
-  top:-90px;
-  text-transform: uppercase;
-}
-
-.bars:hover {
-  opacity:.35;
-  box-shadow: -5px 5px 5px #aaa;
-}
-
-/*
 staff pick/nonstaff pick buttons
 */
 
@@ -286,4 +232,17 @@ g in cause level bar
 */
 .g{
   cursor:pointer;
+}
+
+.cause-space {
+  border-radius: 2px;
+  padding: 10px;
+  margin: 0 5% 5% 0;
+  background: #ddd;
+  width: 45%;
+  float: left;
+}
+.cause-space:hover {
+  background: #eee;
+  cursor: pointer;
 }
