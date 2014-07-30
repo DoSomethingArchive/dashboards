@@ -68,7 +68,10 @@ nv.addGraph(function() {
     //need to set date ticks as date object
     chart.xAxis
         .tickFormat(function(d) {
-            return d3.time.format('%x')(new Date(d))
+            var year = parseInt(d.substring(0, d.indexOf('-')));
+            var month = parseInt(d.substring(d.indexOf('-') + 1, d.lastIndexOf('-')));
+            var day = parseInt(d.substring(d.lastIndexOf('-') + 1, d.length));
+            return d3.time.format('%x')(new Date(year, month - 1, day));
         });
 
     chart.yAxis
