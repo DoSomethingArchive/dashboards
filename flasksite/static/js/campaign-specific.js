@@ -62,13 +62,13 @@ var new_members=[];
 
 dataFormat(nm,new_members);
 
-//chart 1 - sign ups
-nv.addGraph(function() {
+var makeMultiBarChart = function(selector, data) {
     var chart = nv.models.multiBarChart();
-    //need to set date ticks as date object
+    // need to set date ticks as date object
     chart.xAxis
         .tickFormat(function(d) {
-            return d3.time.format('%x')(new Date(d))
+            d = ds.convertDate(d);
+            return d3.time.format('%x')(d);
         });
 
     chart.yAxis
@@ -77,36 +77,18 @@ nv.addGraph(function() {
     chart.multibar.stacked(true); // default to stacked
     chart.showControls(false); // don't show controls
 
-    d3.select('#chart svg')
-        .datum(sign_ups)
+    d3.select(selector + ' svg')
+        .datum(data)
         .transition().duration(300).call(chart);
     nv.utils.windowResize(chart.update);
     return chart;
-});
+};
+
+//chart 1 - sign ups
+makeMultiBarChart('#chart', sign_ups);
 
 //chart 2 - new members
-nv.addGraph(function() {
-    var chart2 = nv.models.multiBarChart();
-
-    chart2.xAxis
-          .tickFormat(function(d) {
-              return d3.time.format('%Y-%m-%d')(new Date(d))
-          });
-
-    chart2.yAxis
-          .tickFormat(d3.format(',1f'));
-
-    chart2.multibar.stacked(true); // default to stacked
-    chart2.showControls(false); // don't show controls
-
-    d3.select('#chart2 svg')
-        .datum(new_members)
-        .transition().duration(300).call(chart2);
-
-    nv.utils.windowResize(chart2.update);
-
-    return chart2;
-});
+makeMultiBarChart('#chart2', new_members);
 
 //data shping for chart 3
 
@@ -210,7 +192,8 @@ nv.addGraph(function() {
   */
   chart3.xAxis.showMaxMin(false)
         .tickFormat(function(d) {
-          return d3.time.format("%x")(new Date(d))
+            d = ds.convertDate(d);
+            return d3.time.format("%x")(d);
         });
 
   chart3.yAxis
@@ -262,8 +245,9 @@ nv.addGraph(function() {
                     ;
             //need to only display non-zero elements
       chart4.xAxis.tickFormat(function(d) {
-          var dx = traffic_f[0].values[d] && traffic_f[0].values[d][0] || 0;
-              return d3.time.format('%x')(new Date(dx))
+        var dx = traffic_f[0].values[d] && traffic_f[0].values[d][0] || 0;
+        dx = ds.convertDate(dx);
+        return d3.time.format('%x')(dx);
       });
 
 
