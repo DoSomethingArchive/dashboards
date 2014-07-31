@@ -67,7 +67,7 @@ var makeMultiBarChart = function(selector, data) {
     // need to set date ticks as date object
     chart.xAxis
         .tickFormat(function(d) {
-            d = convertDate(d);
+            d = ds.convertDate(d);
             return d3.time.format('%x')(d);
         });
 
@@ -192,7 +192,7 @@ nv.addGraph(function() {
   */
   chart3.xAxis.showMaxMin(false)
         .tickFormat(function(d) {
-            d = convertDate(d);
+            d = ds.convertDate(d);
             return d3.time.format("%x")(d);
         });
 
@@ -246,7 +246,7 @@ nv.addGraph(function() {
             //need to only display non-zero elements
       chart4.xAxis.tickFormat(function(d) {
         var dx = traffic_f[0].values[d] && traffic_f[0].values[d][0] || 0;
-        dx = convertDate(dx);
+        dx = ds.convertDate(dx);
         return d3.time.format('%x')(dx);
       });
 
