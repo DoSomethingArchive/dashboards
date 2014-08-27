@@ -14,8 +14,90 @@ def home():
   cur.execute("select total from overall.total")
   data = cur.fetchall()[0]['total']
   formatted_data = locale.format("%d", data, grouping=True)
+
+
+  q_net = """
+  select c.date as x, (c.created+m.created+COALESCE(muc.created,0))-(o.opted_out+muo.opted_out) as y from
+
+  (select date_format(created_at, '%Y-%m-%d') as date, ifnull(count(*),0) as created from data.mcomm where date_format(created_at, '%Y-%m-%d') != '0000-00-00' and date_format(created_at, '%Y-%m-%d') >= date_sub(curdate(), interval 3 month) group by date_format(created_at, '%Y-%m-%d')) c
+
+
+left join
+
+(select date_format(confirm_time, '%Y-%m-%d') as date, ifnull(count(*), 0) as created from data.mailchimp_sub where date_format(confirm_time, '%Y-%m-%d') != '0000-00-00' and date_format(confirm_time, '%Y-%m-%d') >= date_sub(curdate(), interval 3 month) group by date_format(confirm_time, '%Y-%m-%d')) m
+
+on c.date=m.date
+
+left join
+
+(select date_format(confirm_time, '%Y-%m-%d') as date, ifnull(count(*), 0) as created from data.mailchimp_unsub where date_format(confirm_time, '%Y-%m-%d') != '0000-00-00' and date_format(confirm_time, '%Y-%m-%d') >= date_sub(curdate(), interval 3 month) group by date_format(confirm_time, '%Y-%m-%d')) muc
+
+on c.date=muc.date
+
+left join
+
+(select date_format(unsub_time, '%Y-%m-%d') as date, ifnull(count(*), 0) as opted_out from data.mailchimp_unsub where date_format(unsub_time, '%Y-%m-%d') != '0000-00-00' and date_format(unsub_time, '%Y-%m-%d') >= date_sub(curdate(), interval 3 month) group by date_format(unsub_time, '%Y-%m-%d')) muo
+
+on c.date=muo.date
+
+
+left join
+
+  (select date_format(opted_out_at, '%Y-%m-%d') as date, ifnull(count(*), 0) as opted_out from data.mcomm where date_format(opted_out_at, '%Y-%m-%d') != '0000-00-00' and date_format(opted_out_at, '%Y-%m-%d') >= date_sub(curdate(), interval 3 month) group by date_format(opted_out_at, '%Y-%m-%d')
+  ) o on c.date=o.date
+
+  """
+  cur.execute(q_net)
+
+  data2 = cur.fetchall()
+
+  data2_f = json.dumps(data2)
+
+  q_m_nm = """
+  select date_format(created_at, '%Y-%m-%d') as x, ifnull(count(*),0) as y from data.mcomm where date_format(created_at, '%Y-%m-%d') != '0000-00-00' and date_format(created_at, '%Y-%m-%d') >= date_sub(curdate(), interval 3 month) group by date_format(created_at, '%Y-%m-%d')
+  """
+  cur.execute(q_m_nm)
+
+  data3 = cur.fetchall()
+
+  data3_f = json.dumps(data3)
+
+  q_mc_nm = """
+  select m.date as x, m.created+COALESCE(muc.created,0) as y from
+  (select date_format(confirm_time, '%Y-%m-%d') as date, ifnull(count(*), 0) as created from data.mailchimp_sub where date_format(confirm_time, '%Y-%m-%d') != '0000-00-00' and date_format(confirm_time, '%Y-%m-%d') >= date_sub(curdate(), interval 3 month)  and  date_format(confirm_time, '%Y-%m-%d') <= date_add(curdate(), interval 1 day) group by date_format(confirm_time, '%Y-%m-%d')) m
+  left join
+  (select date_format(confirm_time, '%Y-%m-%d') as date, ifnull(count(*), 0) as created from data.mailchimp_unsub where date_format(confirm_time, '%Y-%m-%d') != '0000-00-00' and date_format(confirm_time, '%Y-%m-%d') >= date_sub(curdate(), interval 3 month) group by date_format(confirm_time, '%Y-%m-%d')) muc
+  on m.date=muc.date
+  """
+  cur.execute(q_mc_nm)
+
+  data4 = cur.fetchall()
+
+  data4_f = json.dumps(data4)
+
+  q_m_oo = """
+  select date_format(opted_out_at, '%Y-%m-%d') as x, ifnull(count(*), 0) as y from data.mcomm where date_format(opted_out_at, '%Y-%m-%d') != '0000-00-00' and date_format(opted_out_at, '%Y-%m-%d') >= date_sub(curdate(), interval 3 month) group by date_format(opted_out_at, '%Y-%m-%d')
+  """
+  cur.execute(q_m_oo)
+
+  data5 = cur.fetchall()
+
+  data5_f = json.dumps(data5)
+
+  q_mc_oo = """
+  select date_format(unsub_time, '%Y-%m-%d') as x, ifnull(count(*), 0) as y from data.mailchimp_unsub where date_format(unsub_time, '%Y-%m-%d') != '0000-00-00' and date_format(unsub_time, '%Y-%m-%d') >= date_sub(curdate(), interval 3 month) group by date_format(unsub_time, '%Y-%m-%d')
+  """
+  cur.execute(q_mc_oo)
+
+  data6 = cur.fetchall()
+
+  data6_f = json.dumps(data6)
+
   cur.close()
-  return render_template('home.html',formatted_data=formatted_data)
+
+
+
+  return render_template('home.html',formatted_data=formatted_data, data2 = data2_f, data3 = data3_f, data4 = data4_f, data5 = data5_f, data6 = data6_f)
 
 #returns cause-level json
 @app.route('/get-causes.json')
@@ -61,7 +143,7 @@ def causeStaffPicks(cause):
   if cause != 'all':
     q = 'select concat(upper(substring(replace(campaign,"_"," "),1,1)),substring(replace(campaign,"_"," "),2)) as campaign, sign_ups, new_members, report_backs from overall.overall where staff_pick = "%s" and cause in (%s) and date_add(end_date, interval 7 day) >= curdate() order by sign_ups desc' % (staff,formatted_causes)
   else:
-    q = 'select concat(upper(substring(replace(campaign,"_"," "),1,1)),substring(replace(campaign,"_"," "),2)) as campaign, sign_ups, new_members, report_backs from overall.overall where staff_pick = "%s" and date_add(end_date, interval 7 day) >= curdate() order by sign_ups desc' % (staff)
+    q = 'select concat(upper(substring(replace(campaign,"_"," "),1,1)),substring(replace(campaign,"_"," "),2)) as campaign, sign_ups, new_members, report_backs from overall.overall where staff_pick = "%s" order by sign_ups desc' % (staff)
 
   cur = openDB()
   cur.execute(q)
