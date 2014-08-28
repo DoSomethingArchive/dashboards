@@ -14,11 +14,11 @@ var shapeData = function(main_list) {
   for (var i=0; i<main_list.length;i++) {
     coerceToInt(main_list[i].values);
   }
-
 }
 
 //net members
 var master = [{key:'Net New Members', values:x, color: '#37006E'}];
+
 shapeData(master);
 
 //gross members
@@ -33,26 +33,16 @@ shapeData(master3);
 var makeMyChart = function(svgname,data) {
 nv.addGraph(function() {
     var chart = nv.models.multiBarChart()
+        .transitionDuration(350)
+        .reduceXTicks(true)   //If 'false', every single x-axis tick label will be rendered.
+        .rotateLabels(0)      //Angle to rotate x-axis labels.
+        .showControls(false)   //Allow user to switch between 'Grouped' and 'Stacked' mode.
+        .groupSpacing(0.1)
+        .stacked(true);
 
-
-      .transitionDuration(350)
-      .reduceXTicks(true)   //If 'false', every single x-axis tick label will be rendered.
-      .rotateLabels(0)      //Angle to rotate x-axis labels.
-      .showControls(false)   //Allow user to switch between 'Grouped' and 'Stacked' mode.
-      .groupSpacing(0.1)
-      .stacked(true)
-          //Distance between each group of bars.
-    ;
-
-
-        chart.xAxis
+      chart.xAxis
         .tickFormat(function(d) {
-
-          //console.log(d);
-
-
           d = ds.convertDate(d);
-
           return d3.time.format('%x')(d)
         });
 
