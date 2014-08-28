@@ -2,6 +2,8 @@ from flasksite import app, openDB, json, queryToData
 from flask import render_template, request, url_for, jsonify
 import locale
 import queries
+import requests
+
 
 locale.setlocale(locale.LC_ALL, 'en_US')
 
@@ -11,7 +13,7 @@ def home():
   cur = openDB()
 
   data = int(queryToData(cur,queries.home_total_members,0,'total'))
-  formatted_data = locale.format("%d", data, grouping=True)
+  formatted_data = formatThousandNumber(data)
 
   data2_f = queryToData(cur,queries.home_net_members_daily)
 
@@ -25,7 +27,13 @@ def home():
 
   cur.close()
 
-  return render_template('home.html',formatted_data=formatted_data, data2 = data2_f, data3 = data3_f, data4 = data4_f, data5 = data5_f, data6 = data6_f)
+  # Get facebook data
+  r = requests.get("http://graph.facebook.com/7630216751/")
+  fbook = (json.loads(r.content))
+  likes = formatThousandNumber(fbook["likes"])
+  talking_about = formatThousandNumber(fbook["talking_about_count"])
+
+  return render_template('home.html',formatted_data=formatted_data, data2 = data2_f, data3 = data3_f, data4 = data4_f, data5 = data5_f, data6 = data6_f, likes=likes,talking_about=talking_about)
 
 #returns cause-level json
 @app.route('/get-causes.json')
@@ -117,3 +125,6 @@ def getSpecificCampaign(cause,campaign):
 
   cur.close()
   return render_template('campaign-specific.html',campaign=campaign.replace("+"," ").upper(),signups=data['signups'],newmembers=data['newmembers'],sources=data['sources'],traffic=data['traffic'],overall=data['overall'])
+
+def formatThousandNumber(num):
+  return locale.format("%d", num, grouping=True)
