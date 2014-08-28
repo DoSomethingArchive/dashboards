@@ -2,38 +2,30 @@
 
 {% block content %}
 
-
-<style>
-
-.positive{
-	fill:blue;
-}
-
-</style>
-	<div class="jumbo">
-		<div id="welcome">
-		<h2>fetching...</h2>
-		</div>
-		<div id = "members">
-		<h2 id="total_member_count">CURRENT MEMBERS: {{formatted_data}}</h2>
-		</div>
-
-	<div id="chart">
-  <h4>Net New Members, Past 90 Days</h4>
-  <svg></svg>
+<div class="jumbo">
+	<div id="welcome">
+	 <h2>fetching...</h2>
+	</div>
+	<div id = "members">
+	 <h2 id="total_member_count">CURRENT MEMBERS: {{formatted_data}}</h2>
 	</div>
 
-	<div id="chart2">
-  <h4>Gross New Members, Past 90 Days</h4>
-  <svg></svg>
-	</div>
+  <div id="chart">
+    <h4>Net New Members, Past 90 Days</h4>
+    <svg></svg>
+  </div>
 
-	<div id="chart3">
-  <h4>Gross Opted-Out Members, Past 90 Days</h4>
-  <svg></svg>
-	</div>
+  <div id="chart2">
+    <h4>Gross New Members, Past 90 Days</h4>
+    <svg></svg>
+  </div>
 
-	</div>
+  <div id="chart3">
+    <h4>Gross Opted-Out Members, Past 90 Days</h4>
+    <svg></svg>
+  </div>
+
+</div>
 
 <script type="text/javascript">
 var x = {{data2|safe}};
