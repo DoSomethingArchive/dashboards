@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+
+<div id="chart">
+    <h4>Active by Month</h4>
+    <svg></svg>
+ </div>
+
+ <div class='active_stats'>
+ 	<div class='stats' id='average_active_all'></div>
+ 	<div class='stats' id='average_active_last_month'></div>
+ </div>
+
+ <div id="chart2">
+    <h4>Verified by Month</h4>
+    <svg></svg>
+ </div>
+
+  <div class='verified_stats'>
+ 	<div class='stats' id='average_verified_all'></div>
+ 	<div class='stats' id='average_verified_last_month'></div>
+ </div>
+
+<div id="chart3">
+    <h4>New by Month</h4>
+    <svg></svg>
+ </div>
+
+ <div class='new_stats'>
+ 	<div class='stats' id='average_new_all'></div>
+ 	<div class='stats' id='average_new_last_month'></div>
+ </div>
+
+
+<script type="text/javascript">
+var active_data = {{active|safe}};
+var verified_data = {{verified|safe}};
+var new_data = {{new_m|safe}};
+</script>
+
+<script type="text/javascript" src="/static/js/kpi-page.js"></script>
+{% endblock %}
