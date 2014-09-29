@@ -70,7 +70,10 @@ getSpecificCampaign_traffic_regular = "select t.date, t.unq_visits, ifnull(s.web
 
 getSpecificCampaign_traffic_sms = "select t.date, t.unq_visits, ifnull(a.alpha_sign_ups/t.unq_visits,0) as conversion_rate from {0}.all_traffic t  left join {0}.web_alphas a on t.date=a.date"
 
+kpisActive = "select * from data.active_by_month order by date"
 
+kpisVerified = "select * from data.verified_by_month order by date"
 
+kpisNew = "select * from data.new_by_month order by date"
 
 
