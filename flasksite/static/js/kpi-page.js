@@ -51,59 +51,58 @@ kpiChart.prototype.addStatsToPage= function () {
 	var last_month=this.metric+'_last_month';
 	var all =this.metric+'_all';
 	document.getElementById(last_month)
-		.innerHTML = 'Pecent change, last month: '+this.compare_last_month.toString()+'%';
+		.innerHTML = 'Pecent change, last month average: '+this.compare_last_month.toString()+'%';
 	document.getElementById(all)
 		.innerHTML = 'Pecent change, year average: '+this.compare_all.toString()+'%';
+
+}
+
+kpiChart.prototype.colorBar = function(c) {
+
+	var chart_string = c.slice(0, -4);
+	var chart_rect = chart_string+' rect';
+
+ 	var checkExist = setInterval(function() {
+
+    if ($(chart_rect).length) {
+      $chart = $(chart_string);
+ 			$lastRect = $chart.find('rect:last-child');
+ 			$lastRect.css({'fill':'#FFCC33'});
+
+      clearInterval(checkExist);
+    	}
+    }, 10);
 }
 
 //stats for active
-active = new kpiChart(active_data,'average_active','#99FF66','#chart svg');
+active = new kpiChart(active_data,'average_active','#368BC1','#chart svg');
 active.getShape();
 active.getAverages();
 active.buildChart(active.chart_svg,active.master_array);
 active.addStatsToPage();
+active.colorBar(active.chart_svg);
 
 //stats for verified
-verified = new kpiChart(verified_data,'average_verified','#99FF66','#chart2 svg');
+verified = new kpiChart(verified_data,'average_verified','#151B54','#chart2 svg');
 verified.getShape();
 verified.getAverages();
 verified.buildChart(verified.chart_svg,verified.master_array);
 verified.addStatsToPage();
+verified.colorBar(verified.chart_svg);
 
 //stats for new
-new_m = new kpiChart(new_data,'average_new','#99FF66','#chart3 svg');
+new_m = new kpiChart(new_data,'average_new','#368BC1','#chart3 svg');
 new_m.getShape();
 new_m.getAverages();
 new_m.buildChart(new_m.chart_svg,new_m.master_array);
 new_m.addStatsToPage();
+new_m.colorBar(new_m.chart_svg);
 
-//only colors first set
-$(window).load(
-	function(){
-		var i = 0;
-		$("div#chart rect").each(function()
-			{
-				var x=$(this).attr('transform');
-				if (x!=undefined) {
-				y = parseFloat(x.slice(10,18));
-				if (y > i) {
-					i=y;
-					}
-				}
-		});
 
-		$("div#chart rect").each(function(d)
-			{
-				var x=$(this).attr('transform');
-				if (x!=undefined) {
-				y = parseFloat(x.slice(10,18));
 
-				if (y === i) {
-					console.log(y);
-					$(this).css("fill","#5F9EA0");
 
-					}
-				}
-		});
-	}
-);
+
+
+
+
+
