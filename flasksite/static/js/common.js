@@ -1,24 +1,20 @@
 var ds = {};
 
 ds.convertDate = function(date) {
-    var converted = new Date(date);
-    converted.setTime(converted.getTime() + converted.getTimezoneOffset() * 60 * 1000);
-    return converted;
+  var converted = new Date(date);
+  converted.setTime(converted.getTime() + converted.getTimezoneOffset() * 60 * 1000);
+  return converted;
 };
-
 
 //ensure all data that should be int is int
 ds.coerceToInt = function(list) {
-
-for (var i=0;i<list.length;i++) {
-
-	list[i]['y']=+list[i].y;
-	}
-};
+  for (var i=0;i<list.length;i++) {
+    list[i]['y']=+list[i].y;
+  }
+}
 
 //apply coerceToInt to objects in main array
 ds.shapeData = function(main_list) {
-
   for (var i=0; i<main_list.length;i++) {
     coerceToInt(main_list[i].values);
   }
@@ -51,4 +47,4 @@ nv.addGraph(function() {
 
     return chart;
 	});
-};
+}
