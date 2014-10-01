@@ -126,5 +126,24 @@ def getSpecificCampaign(cause,campaign):
   cur.close()
   return render_template('campaign-specific.html',campaign=campaign.replace("+"," ").upper(),signups=data['signups'],newmembers=data['newmembers'],sources=data['sources'],traffic=data['traffic'],overall=data['overall'])
 
+@app.route('/kpis')
+def kpis():
+  q_active = queries.kpisActive
+  cur = openDB()
+  active = queryToData(cur,q_active)
+
+  q_verified = queries.kpisVerified
+  cur = openDB()
+  verified = queryToData(cur,q_verified)
+
+  q_new = queries.kpisNew
+  cur = openDB()
+  new = queryToData(cur,q_new)
+
+  cur.close()
+  return render_template('kpi_page.html', active=active, verified=verified, new_m=new)
+
+
+
 def formatThousandNumber(num):
   return locale.format("%d", num, grouping=True)

@@ -62,7 +62,7 @@ getSpecificCampaign_nonstaff_sign_up = "select date, web_sign_ups as web from {0
 
 getSpecificCampaign_nonstaff_new_members = "select date, web_new_members as web from {0}.web_new_members"
 
-getSpecificCampaign_staff_sources = "select * from {0}.sources where source in (select source from {0}.sources  group by source having sum(unq_visits) >= 1000  )"
+getSpecificCampaign_staff_sources = "select * from {0}.sources where source in (select source from {0}.sources  group by source having sum(unq_visits) >= 500  )"
 
 getSpecificCampaign_nonstaff_sources = "select * from {0}.sources where source in (select source from {0}.sources  group by source having sum(unq_visits) >= 50  )"
 
@@ -70,7 +70,10 @@ getSpecificCampaign_traffic_regular = "select t.date, t.unq_visits, ifnull(s.web
 
 getSpecificCampaign_traffic_sms = "select t.date, t.unq_visits, ifnull(a.alpha_sign_ups/t.unq_visits,0) as conversion_rate from {0}.all_traffic t  left join {0}.web_alphas a on t.date=a.date"
 
+kpisActive = "select * from data.active_by_month order by date"
 
+kpisVerified = "select * from data.verified_by_month order by date"
 
+kpisNew = "select * from data.new_by_month order by date"
 
 
