@@ -62,7 +62,7 @@ getSpecificCampaign_nonstaff_sign_up = "select date, web_sign_ups as web from {0
 
 getSpecificCampaign_nonstaff_new_members = "select date, web_new_members as web from {0}.web_new_members"
 
-getSpecificCampaign_staff_sources = "select * from {0}.sources where source in (select source from {0}.sources  group by source having sum(unq_visits) >= 1000  )"
+getSpecificCampaign_staff_sources = "select * from {0}.sources where source in (select source from {0}.sources  group by source having sum(unq_visits) >= 500  )"
 
 getSpecificCampaign_nonstaff_sources = "select * from {0}.sources where source in (select source from {0}.sources  group by source having sum(unq_visits) >= 50  )"
 
