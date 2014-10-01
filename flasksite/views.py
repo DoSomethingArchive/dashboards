@@ -123,8 +123,6 @@ def getSpecificCampaign(cause,campaign):
     query('traffic',queries.getSpecificCampaign_traffic_sms.format(name))
     query('overall', queries.getSpecificCampaign_overall.format(name))
 
-  print data
-
   cur.close()
   return render_template('campaign-specific.html',campaign=campaign.replace("+"," ").upper(),signups=data['signups'],newmembers=data['newmembers'],sources=data['sources'],traffic=data['traffic'],overall=data['overall'])
 
