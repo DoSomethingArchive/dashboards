@@ -38,19 +38,38 @@ var svg = d3.select("div.main")
           .attr("width", width + margin.left + margin.right)
           .attr("height", height + margin.top + margin.bottom)
           .attr("class","svgMain");
+//sort keys by value
+var objSort = function () {
+  var temp_array =[];
+  var final_array=[];
+  var a = data[0];
 
-//get specific key names
-var metrics = d3.keys(data[0]).filter(function(key) { return key !== "campaign"; });
+  for (var i in a) {
+    if (i != 'campaign') {
+      var temper_array = [];
+      temper_array.push(i);
+      temper_array.push(a[i]);
+      temp_array.push(temper_array);
+    }
+  }
+temp_array.sort(function(a,b){return b[1]-a[1]})
+  for (var z = 0; z < temp_array.length; z++) {
+    final_array.push(temp_array[z][0]);
+  }
+return final_array;
+}
+var metrics = objSort();
 
 //shape campaign-specific data
 data.forEach(function(d) {
           d.ages = metrics.map(function(name) { return {name: name, value: +d[name]}; });
-          d.ages.sort(function(a, b){ return d3.descending(a.value, b.value); });
+
 });
 
 //set domians
 x0.domain(data.map(function(d) { return d.campaign; }));
 x1.domain(metrics).rangeRoundBands([0, x0.rangeBand()]);
+console.log(metrics);
 y.domain([0, d3.max(data, function(d) { return d3.max(d.ages, function(d) { return d.value; }); })]);
 
 //call xAxis
@@ -102,7 +121,7 @@ var campaign = svg.selectAll(".campaign")
 
 //add specifc bars to campaign group
 campaign.selectAll("rect")
-          .data(function(d) {return d.ages;})
+          .data(function(d) {console.log(d.ages); return d.ages;})
           .enter().append("rect")
           .attr("width", x1.rangeBand())
           .attr("x", function(d) { return x1(d.name); })
@@ -118,7 +137,7 @@ campaign.selectAll("rect")
           .ease("linear")
           .duration(300)
           .attr("width", x1.rangeBand())
-          .attr("x", function(d) { return x1(d.name); })
+          .attr("x", function(d) { console.log(d.name); console.log(x1(d.name)); return x1(d.name); })
           .attr("y", function(d) { return y(d.value); })
           .attr("height", function(d) { return height - y(d.value); })
           .attr("class","bars")
