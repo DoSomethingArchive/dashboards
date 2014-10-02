@@ -1,3 +1,9 @@
+//window
+
+h = window.innerHeight;
+w = window.innerWidth;
+
+
 //have d3 recognize the data from flask as json
 var data=JSON.parse(x);
 
@@ -5,9 +11,9 @@ var padding = 75;
 
 var format = d3.format("0,000");
 
-var margin = {top: 10, right: 40, bottom: 140, left: 40},
-  width = 1100 - margin.left - margin.right,
-  height = 500 - margin.top - margin.bottom;
+var margin = {top: 10, right: 20, bottom: 200, left: 10},
+  width = (w-500) - margin.left - margin.right,
+  height = (h-300) - margin.top - margin.bottom;
 
 //set scale for entire chart
 var x0 = d3.scale.ordinal()
@@ -69,7 +75,7 @@ data.forEach(function(d) {
 //set domians
 x0.domain(data.map(function(d) { return d.campaign; }));
 x1.domain(metrics).rangeRoundBands([0, x0.rangeBand()]);
-console.log(metrics);
+
 y.domain([0, d3.max(data, function(d) { return d3.max(d.ages, function(d) { return d.value; }); })]);
 
 //call xAxis
@@ -121,7 +127,7 @@ var campaign = svg.selectAll(".campaign")
 
 //add specifc bars to campaign group
 campaign.selectAll("rect")
-          .data(function(d) {console.log(d.ages); return d.ages;})
+          .data(function(d){ return d.ages;})
           .enter().append("rect")
           .attr("width", x1.rangeBand())
           .attr("x", function(d) { return x1(d.name); })
@@ -137,7 +143,7 @@ campaign.selectAll("rect")
           .ease("linear")
           .duration(300)
           .attr("width", x1.rangeBand())
-          .attr("x", function(d) { console.log(d.name); console.log(x1(d.name)); return x1(d.name); })
+          .attr("x", function(d) {  return x1(d.name); })
           .attr("y", function(d) { return y(d.value); })
           .attr("height", function(d) { return height - y(d.value); })
           .attr("class","bars")
