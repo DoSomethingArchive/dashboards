@@ -1,3 +1,7 @@
+/*there is a lot to still improve, mostly regarding resizing and centering the svg. Currently, the svg centers well
+until the screen reaches tablet size, and then it jump to the left corner. The legend could also use some positioning
+and resizing logic. Finally, the staff pick and non-staff pick buttons should be repositioned.*/
+
 //randomly return array of colors. Outside of chart function so color stays the same when resized
 var randColor = function() {
   var color_array = [["#368BC1","#FBB917","#659EC7"],["#BCC6CC","#C11B17","#848482"],["#4E387E","#B2C248","#5E5A80"]];
