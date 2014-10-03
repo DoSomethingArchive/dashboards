@@ -32,12 +32,12 @@ var dataFormat = function(data,metric) {
 
   for (var i = 0; i<data.length; i++) {
     if (data[i].mobile) {
-      var element = {x:data[i].date,y:data[i].mobile};
+      var element = {x:data[i].date,y:+data[i].mobile};
       m.values.push(element);
     }
 
     if (data[i].web) {
-      var element = {x:data[i].date,y:data[i].web};
+      var element = {x:data[i].date,y:+data[i].web};
       w.values.push(element);
     }
   }
