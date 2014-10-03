@@ -1,6 +1,8 @@
 /*there is a lot to still improve, mostly regarding resizing and centering the svg. Currently, the svg centers well
 until the screen reaches tablet size, and then it jump to the left corner. The legend could also use some positioning
 and resizing logic. Finally, the staff pick and non-staff pick buttons should be repositioned.*/
+//update: I think the svg resizing issues have to do with neue - it centers right until the screen reaches tablet size
+//and neue switchs the header to the mobile verision. Talk to Furnes.
 
 //randomly return array of colors. Outside of chart function so color stays the same when resized
 var randColor = function() {
