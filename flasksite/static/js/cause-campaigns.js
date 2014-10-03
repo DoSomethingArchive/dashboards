@@ -1,7 +1,7 @@
 //randomly return array of colors. Outside of chart function so color stays the same when resized
 var randColor = function() {
-  var color_array = [["#368BC1","#FBB917","#659EC7"],["#BCC6CC","#C11B17","#848482"],["#4E387E","#B2C248","#5E5A80"]]
-  var colors = color_array[Math.floor(Math.random() * color_array.length)]
+  var color_array = [["#368BC1","#FBB917","#659EC7"],["#BCC6CC","#C11B17","#848482"],["#4E387E","#B2C248","#5E5A80"]];
+  var colors = color_array[Math.floor(Math.random() * color_array.length)];
   return colors;
 }
 
@@ -71,6 +71,7 @@ var makeChart = function (h,w,c) {
       }
     }
     temp_array.sort(function(a,b){return b[1]-a[1]})
+
     for (var z = 0; z < temp_array.length; z++) {
       final_array.push(temp_array[z][0]);
     }
