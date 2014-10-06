@@ -144,6 +144,7 @@ grid of overall stats in campaign specific
    letter-spacing:.5px;
    background:#00CCFF;
    border: 1px solid;
+   line-height:100px;
 }
 
 /*
@@ -153,6 +154,7 @@ text in campaign specific overall boxes
 
 position:relative;
 top:10px;
+color:white;
 }
 
 /*
@@ -269,3 +271,4 @@ p.metric_subheader {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 14px;
 }
+
