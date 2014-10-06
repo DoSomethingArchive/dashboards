@@ -209,20 +209,20 @@ var c = {key:'Conversion Rate', values:[]};
 
 //create the objects for each metric
 //some conversion rates are over 100% becasue of low traffic (or internal traffic from ds) and internal sign ups
-for (var i=0; i<trfc.length;i++) {
+for (var i = 0; i < trfc.length; i++) {
 
-  if (trfc[i].conversion_rate<=1) {
-  var a = [trfc[i].date, trfc[i].conversion_rate];
-  var b = [trfc[i].date, trfc[i].unq_visits];
-  t.values.push(b);
-  c.values.push(a);
+  if (trfc[i].conversion_rate <= 1) {
+    var a = [trfc[i].date, trfc[i].conversion_rate];
+    var b = [trfc[i].date, trfc[i].unq_visits];
+    t.values.push(b);
+    c.values.push(a);
   }
 
   else {
-  var a = [trfc[i].date, 1];
-  var b = [trfc[i].date, trfc[i].unq_visits];
-  t.values.push(b);
-  c.values.push(a);
+    var a = [trfc[i].date, 1];
+    var b = [trfc[i].date, trfc[i].unq_visits];
+    t.values.push(b);
+    c.values.push(a);
   }
 }
 
