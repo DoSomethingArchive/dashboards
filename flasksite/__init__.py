@@ -4,11 +4,16 @@ import MySQLdb.converters
 import MySQLdb.cursors
 from MySQLdb.constants import FIELD_TYPE
 from random import choice as choice
+from cache import cache
 import json
 
 app = Flask(__name__)
 
 app.config.from_pyfile('../env/config.cfg')
+app.config['CACHE_TYPE'] = 'simple'
+
+cache.init_app(app)
+
 my_conv = { FIELD_TYPE.LONG: int }
 
 def openDB():
