@@ -1,14 +1,17 @@
 from flasksite import app, openDB, json, queryToData
 from flask import render_template, request, url_for, jsonify
+from cache import cache
 import locale
 import queries
 import requests
+
 
 
 locale.setlocale(locale.LC_ALL, 'en_US')
 
 #returns homepage
 @app.route('/')
+@cache.cached(timeout=1000)
 def home():
   cur = openDB()
 
@@ -27,13 +30,11 @@ def home():
 
   cur.close()
 
-  # Get facebook data
-  r = requests.get("http://graph.facebook.com/7630216751/")
-  fbook = (json.loads(r.content))
+  fbook = get_facebook_data()
   likes = formatThousandNumber(fbook["likes"])
   talking_about = formatThousandNumber(fbook["talking_about_count"])
 
-  return render_template('home.html',formatted_data=formatted_data, data2 = data2_f, data3 = data3_f, data4 = data4_f, data5 = data5_f, data6 = data6_f, likes=likes,talking_about=talking_about)
+  return render_template('home.html',formatted_data=formatted_data, data2 = data2_f, data3 = data3_f, data4 = data4_f, data5 = data5_f, data6 = data6_f, talking_about = talking_about, likes = likes)
 
 #returns cause-level json
 @app.route('/get-causes.json')
@@ -147,3 +148,9 @@ def kpis():
 
 def formatThousandNumber(num):
   return locale.format("%d", num, grouping=True)
+
+# @cache.cached(timeout=50, key_prefix='facebook_data')
+def get_facebook_data():
+      r = requests.get("http://graph.facebook.com/7630216751/")
+      fbook = (json.loads(r.content))
+      return fbook
