@@ -51,9 +51,9 @@ kpiChart.prototype.addStatsToPage= function () {
   var last_month = this.metric + '_last_month';
   var all = this.metric + '_all';
 	document.getElementById(last_month)
-		.innerHTML = 'Pecent change, last month average: ' + this.compare_last_month.toString() + '%';
+		.innerHTML = 'Percent change, last month average: ' + this.compare_last_month.toString() + '%';
 	document.getElementById(all)
-		.innerHTML = 'Pecent change, year average: ' + this.compare_all.toString() + '%';
+		.innerHTML = 'Percent change, year average: ' + this.compare_all.toString() + '%';
 }
 
 kpiChart.prototype.colorBar = function(c) {
