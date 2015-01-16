@@ -184,8 +184,8 @@ makeChart(h,w,color);
 
 //function to resize chart.
 var resizeChart = function() {
-  var h = window.innerHeight;
-  var w = window.innerWidth;
+  var h = window.outerHeight;
+  var w = window.outerWidth;
   //remove old svg
   d3.select('svg').remove();
   makeChart(h,w,color)
