@@ -14,8 +14,8 @@ var randColor = function() {
 var color = randColor();
 
 //h&w based on window size
-h = window.innerHeight;
-w = window.innerWidth;
+h = window.outerHeight;
+w = window.outerWidth;
 
 //make the chart, input height, width, color
 var makeChart = function (h,w,c) {
