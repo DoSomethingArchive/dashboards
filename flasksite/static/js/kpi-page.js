@@ -45,7 +45,7 @@ kpiChart.prototype.getAverages = function () {
   this.compare_last_month = Math.round(((this.averages.this_month_average/this.averages.average_last_month)-1) *100);
 }
 
-kpiChart.prototype.buildChart = ds.makeMyChart;
+kpiChart.prototype.buildChart = ds.makeBarChart;
 
 kpiChart.prototype.addStatsToPage= function () {
   var last_month = this.metric + '_last_month';
