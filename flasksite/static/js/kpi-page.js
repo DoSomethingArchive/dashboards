@@ -93,3 +93,10 @@ new_m.getAverages();
 new_m.buildChart(new_m.chart_svg,new_m.master_array);
 new_m.addStatsToPage();
 new_m.colorBar(new_m.chart_svg);
+
+window.onresize = function() {
+  active.colorBar(active.chart_svg);
+  verified.colorBar(verified.chart_svg);
+  new_m.colorBar(new_m.chart_svg);
+}
+
