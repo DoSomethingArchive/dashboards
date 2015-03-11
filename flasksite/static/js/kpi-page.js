@@ -79,12 +79,21 @@ active.addStatsToPage();
 active.colorBar(active.chart_svg);
 
 //stats for verified
-verified = new kpiChart(verified_data,'average_verified','#151B54','#chart2 svg');
-verified.getShape();
-verified.getAverages();
-verified.buildChart(verified.chart_svg,verified.master_array);
-verified.addStatsToPage();
-verified.colorBar(verified.chart_svg);
+verified_w = new kpiChart(verified_data_web,'average_verified','#151B54','#chart2 svg');
+verified_w.getShape();
+//verified_w.getAverages();
+verified_w.buildChart(verified_w.chart_svg,verified_w.master_array);
+//verified_w.addStatsToPage();
+verified_w.colorBar(verified_w.chart_svg);
+
+
+//stats for verified
+verified_s = new kpiChart(verified_data_sms,'average_verified','#151B54','#chart4 svg');
+verified_s.getShape();
+//verified_s.getAverages();
+verified_s.buildChart(verified_s.chart_svg,verified_s.master_array);
+//verified_s.addStatsToPage();
+verified_s.colorBar(verified_s.chart_svg);
 
 //stats for new
 new_m = new kpiChart(new_data,'average_new','#368BC1','#chart3 svg');
