@@ -72,7 +72,9 @@ getSpecificCampaign_traffic_sms = "select t.date, t.unq_visits, ifnull(a.alpha_s
 
 kpisActive = "select * from data.active_by_month order by date"
 
-kpisVerified = "select * from data.verified_by_month order by date"
+kpisVerifiedWeb = "select date, average_verified_web as average_verified, days_in_month from data.verified_by_month order by date"
+
+kpisVerifiedSMS = "select date, average_verified_sms as average_verified, days_in_month from data.verified_by_month order by date"
 
 kpisNew = "select * from data.new_by_month order by date"
 
