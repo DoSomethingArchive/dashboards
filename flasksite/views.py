@@ -133,20 +133,20 @@ def kpis():
   cur = openDB()
   active = queryToData(cur,q_active)
 
-  q_verified_web = queries.kpisVerifiedWeb
+  q_verified_all_s = queries.kpisVerifiedAll_S
   cur = openDB()
-  verified_web = queryToData(cur,q_verified_web)
+  verified_all_s = queryToData(cur,q_verified_all_s)
 
-  q_verified_sms = queries.kpisVerifiedSMS
+  q_verified_all_w = queries.kpisVerifiedAll_W
   cur = openDB()
-  verified_sms = queryToData(cur,q_verified_sms)
+  verified_all_w = queryToData(cur,q_verified_all_w)
 
   q_new = queries.kpisNew
   cur = openDB()
   new = queryToData(cur,q_new)
 
   cur.close()
-  return render_template('kpi_page.html', active=active, verified_web=verified_web, verified_sms=verified_sms, new_m=new)
+  return render_template('kpi_page.html', active=active, verified_all_w=verified_all_w, verified_all_s=verified_all_s,  new_m=new)
 
 
 
