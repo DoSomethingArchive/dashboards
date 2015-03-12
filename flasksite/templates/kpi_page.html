@@ -15,7 +15,7 @@
  </div>
 
  <div class="chart" id="chart2">
-    <h4>Web Verified by Month</h4>
+    <h4>Verified by Month</h4>
     <p class='metric_subheader'>Members that reported back to at least one campaign</p>
     <svg></svg>
  </div>
@@ -23,17 +23,6 @@
   <div class='verified_stats'>
  	<div class='stats' id='average_verified_all'></div>
  	<div class='stats' id='average_verified_last_month'></div>
- </div>
-
- <div class="chart" id="chart4">
-    <h4>SMS Verified by Month</h4>
-    <p class='metric_subheader'>Members that reported back to at least one campaign</p>
-    <svg></svg>
- </div>
-
-  <div class='verified_stats'>
-    <div class='stats' id='average_verified_all'></div>
-    <div class='stats' id='average_verified_last_month'></div>
  </div>
 
 <div class="chart" id="chart3">
@@ -50,8 +39,8 @@
 
 <script type="text/javascript">
 var active_data = {{active|safe}};
-var verified_data_sms = {{verified_sms|safe}};
-var verified_data_web = {{verified_web|safe}};
+var verified_all_w = {{verified_all_w|safe}};
+var verified_all_s = {{verified_all_s|safe}};
 var new_data = {{new_m|safe}};
 </script>
 
