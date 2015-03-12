@@ -3,59 +3,66 @@ String.prototype.capitalize = function () {
 }
 
 //all values set to 0 get reassigned values in further functions
-function kpiChart(data, metric, color, chart_svg) {
-  this.input_data = data;
+//master_array is in the following format - [{key: key_name, values: [], color: color}];
+//extra parameters are just a new object in master_array,
+//example - [{key:'SMS', values:verified_all_s, color: '#151B54'},{key:'Web', values:verified_all_w, color: '#00CCFF'}]
+//need to also give a metric, this name is based on the id for kpi_pgae.html, because using this name to find elements on
+//the page.
+//chart_svg is the id of the chart
+function kpiChart(metric, master_array, chart_svg) {
   this.metric = metric;
-  this.key_name = this.metric.slice(8).capitalize() + ' Members';
-  this.master_array = [{key: this.key_name, values: [], color: color}];
-  this.averages = {total: 0, average_last_month: 0, this_month_average: 0};
+  this.master_array = master_array;
   this.compare_all = 0;
   this.compare_last_month = 0;
   this.chart_svg = chart_svg;
 }
-
-kpiChart.prototype.getShape = function () {
-  for (var i = 0; i<this.input_data.length; i++) {
-  temp_obj = {};
-  temp_obj.x = this.input_data[i].date;
-  temp_obj.y = this.input_data[i][this.metric] * this.input_data[i].days_in_month;
-  this.master_array[0].values.push(temp_obj);
-	}
+//making sure int
+kpiChart.prototype.coerceToInt = function () {
+  for (var x=0; x<this.master_array.length; x++) {
+    for (var i = 0; i<this.master_array[x].values.length; i++) {
+      this.master_array[x].values[i].y=+this.master_array[x].values[i].y*this.master_array[x].values[i].days_in_month;
+    }
+  }
 }
-
+//compresses master array to on array, then reconverts each month to average per day, and then compares it
+//to last month and the past 12
 kpiChart.prototype.getAverages = function () {
-	for (var i=0; i<this.input_data.length;i++) {
-    //first if statement gets averages for all months except the current
-    if (i<this.input_data.length-1) {
-		  this.averages.total+=this.input_data[i][this.metric];
-      //second if statement gets the average for the last month
-		  if (i === this.input_data.length-2) {
-		    this.averages.average_last_month = this.input_data[i][this.metric];
-      }
-	  }
-    //gets the average for the current month
-    else {
-      this.averages.this_month_average = this.input_data[i][this.metric];
-		}
-	}
-  //compares the current month average to the average of all previous months
-  this.compare_all = Math.round(
-	  (this.averages.this_month_average/(this.averages.total/(this.input_data.length-1))-1) *100);
-	//compares the current month average to the last month average
-  this.compare_last_month = Math.round(((this.averages.this_month_average/this.averages.average_last_month)-1) *100);
+  //compress array
+  var master_length = this.master_array.length;
+  var values_length = this.master_array[0].values.length;
+  this.totals_array = new Array;
+  for (var i=0; i<values_length; i++){
+    var total = 0;
+    for (var x = 0; x<master_length; x++) {
+      total += (this.master_array[x].values[i].y/this.master_array[x].values[i].days_in_month);
+    }
+    this.totals_array.push(total);
+  }
+  //get last 13
+  this.totals_array = this.totals_array.slice(-13,values_length);
+  //calc this month to last month
+  this.compare_last_month = Math.round((this.totals_array[12]/this.totals_array[11]-1)*100);
+  //get average of last 12
+  var total_last_12 = 0;
+  for (var q = 0; q<12; q++) {
+    total_last_12 += this.totals_array[q];
+  }
+  //calc this month to average of last 12
+  this.compare_all = Math.round((this.totals_array[12]/(total_last_12/12)-1)*100);
 }
-
+//build chart
 kpiChart.prototype.buildChart = ds.makeBarChart;
-
+//find stat box on page and add updated averages
 kpiChart.prototype.addStatsToPage= function () {
   var last_month = this.metric + '_last_month';
+  console.log(last_month);
   var all = this.metric + '_all';
 	document.getElementById(last_month)
 		.innerHTML = 'Percent change, last month average: ' + this.compare_last_month.toString() + '%';
 	document.getElementById(all)
 		.innerHTML = 'Percent change, year average: ' + this.compare_all.toString() + '%';
 }
-
+//color the current month yellow
 kpiChart.prototype.colorBar = function(c) {
   var chart_string = c.slice(0, -4);
   var chart_rect = chart_string +' rect';
@@ -71,41 +78,33 @@ kpiChart.prototype.colorBar = function(c) {
 }
 
 //stats for active
-active = new kpiChart(active_data,'average_active','#368BC1','#chart svg');
-active.getShape();
+active = new kpiChart('average_active', [{key:'Active', values:active_data, color:'#368BC1'}], '#chart svg');
+active.coerceToInt();
 active.getAverages();
 active.buildChart(active.chart_svg,active.master_array);
 active.addStatsToPage();
 active.colorBar(active.chart_svg);
 
 //stats for verified
-verified_w = new kpiChart(verified_data_web,'average_verified','#151B54','#chart2 svg');
-verified_w.getShape();
-//verified_w.getAverages();
-verified_w.buildChart(verified_w.chart_svg,verified_w.master_array);
-//verified_w.addStatsToPage();
-verified_w.colorBar(verified_w.chart_svg);
-
-
-//stats for verified
-verified_s = new kpiChart(verified_data_sms,'average_verified','#151B54','#chart4 svg');
-verified_s.getShape();
-//verified_s.getAverages();
-verified_s.buildChart(verified_s.chart_svg,verified_s.master_array);
-//verified_s.addStatsToPage();
-verified_s.colorBar(verified_s.chart_svg);
+verified_all = new kpiChart('average_verified', [{key:'SMS', values:verified_all_s, color: '#151B54'},{key:'Web', values:verified_all_w, color: '#00CCFF'}], '#chart2 svg');
+verified_all.coerceToInt();
+verified_all.getAverages();
+verified_all.buildChart(verified_all.chart_svg,verified_all.master_array);
+verified_all.addStatsToPage();
+verified_all.colorBar(verified_all.chart_svg);
 
 //stats for new
-new_m = new kpiChart(new_data,'average_new','#368BC1','#chart3 svg');
-new_m.getShape();
+new_m = new kpiChart('average_new', [{key:'New', values:new_data, color:'#368BC1'}], '#chart3 svg');
+new_m.coerceToInt();
 new_m.getAverages();
 new_m.buildChart(new_m.chart_svg,new_m.master_array);
 new_m.addStatsToPage();
 new_m.colorBar(new_m.chart_svg);
 
+//recolor last month on resize
 window.onresize = function() {
   active.colorBar(active.chart_svg);
-  verified.colorBar(verified.chart_svg);
+  verified_all.colorBar(verified_all.chart_svg);
   new_m.colorBar(new_m.chart_svg);
 }
 
