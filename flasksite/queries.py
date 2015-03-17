@@ -78,4 +78,8 @@ kpisVerifiedAll_W = "select date as x, average_verified_web as y, days_in_month 
 
 kpisNew = "select date as x, average_new as y, days_in_month from data.new_by_month order by date"
 
+kpiText = "select all_text from kpi_content order by timestamp desc limit 1"
+
+kpiTextInsert = "insert into kpi_content (timestamp, all_text) values ('%s','%s')"
+
 
