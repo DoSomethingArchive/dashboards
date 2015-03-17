@@ -17,6 +17,7 @@ function kpiChart(metric, master_array, chart_svg) {
   this.chart_svg = chart_svg;
 }
 //making sure int
+
 kpiChart.prototype.coerceToInt = function () {
   for (var x=0; x<this.master_array.length; x++) {
     for (var i = 0; i<this.master_array[x].values.length; i++) {
@@ -55,7 +56,6 @@ kpiChart.prototype.buildChart = ds.makeBarChart;
 //find stat box on page and add updated averages
 kpiChart.prototype.addStatsToPage= function () {
   var last_month = this.metric + '_last_month';
-  console.log(last_month);
   var all = this.metric + '_all';
 	document.getElementById(last_month)
 		.innerHTML = 'Percent change, last month average: ' + this.compare_last_month.toString() + '%';
@@ -107,4 +107,18 @@ window.onresize = function() {
   verified_all.colorBar(verified_all.chart_svg);
   new_m.colorBar(new_m.chart_svg);
 }
+//change these so works for all buttons and text boxes. add a column to the table that says which box the txt is coming from
+//can do one query to start, just return json with first for each metric
+document.getElementById('editable_text_active').innerHTML=q_text[0].all_text;
+
+function submitText() {
+    $.post('/kpisubmit', {text : document.getElementById('editable_text_active').innerHTML})
+    .done(function (x){
+        document.getElementById('my_button_active').innerHTML='Success!';
+        setTimeout(function(){document.getElementById('my_button_active').innerHTML='Submit';}, 200);
+    }).fail(function (x){document.getElementById('my_button_active').innerHTML='Server Error, Not Submitted!';
+  });
+}
+
+
 
