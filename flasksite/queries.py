@@ -78,4 +78,11 @@ kpisVerifiedAll_W = "select date as x, average_verified_web as y, days_in_month 
 
 kpisNew = "select date as x, average_new as y, days_in_month from data.new_by_month order by date"
 
+kpiText = """select k.box_id, replace(replace(all_text, '|', "'"),'%^&','"') as all_text from data.kpi_content k
+          join ( select box_id, max(timestamp) as timestamp from data.kpi_content group by box_id ) t
+          on k.box_id=t.box_id and k.timestamp=t.timestamp
+          group by box_id"""
+
+kpiTextInsert = "insert into kpi_content (timestamp, all_text, box_id) values ('%s','%s', '%s')"
+
 
