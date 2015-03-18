@@ -107,16 +107,21 @@ window.onresize = function() {
   verified_all.colorBar(verified_all.chart_svg);
   new_m.colorBar(new_m.chart_svg);
 }
-//change these so works for all buttons and text boxes. add a column to the table that says which box the txt is coming from
-//can do one query to start, just return json with first for each metric
-document.getElementById('editable_text_active').innerHTML=q_text[0].all_text;
 
-function submitText() {
-    $.post('/kpisubmit', {text : document.getElementById('editable_text_active').innerHTML})
+//return most recent text for each text box by metric
+for (var i = 0; i < q_text.length; i++) {
+  document.getElementById(q_text[i].box_id).innerHTML=q_text[i].all_text;
+}
+
+//on button submit, write text to the server with the box_id.
+//Change the button to say success! if works, and highlight a server error if not
+function submitText(my_id) {
+    var text_box = 'editable_text'+my_id.slice(9);
+    $.post('/kpisubmit', {text : document.getElementById(text_box).innerHTML, box_id : text_box})
     .done(function (x){
-        document.getElementById('my_button_active').innerHTML='Success!';
-        setTimeout(function(){document.getElementById('my_button_active').innerHTML='Submit';}, 200);
-    }).fail(function (x){document.getElementById('my_button_active').innerHTML='Server Error, Not Submitted!';
+        document.getElementById(my_id).innerHTML='Success!';
+        setTimeout(function(){document.getElementById(my_id).innerHTML='Submit';}, 200);
+    }).fail(function (x){document.getElementById(my_id).innerHTML='Server Error, Not Submitted!';
   });
 }
 
