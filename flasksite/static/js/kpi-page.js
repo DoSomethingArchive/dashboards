@@ -17,6 +17,7 @@ function kpiChart(metric, master_array, chart_svg) {
   this.chart_svg = chart_svg;
 }
 //making sure int
+
 kpiChart.prototype.coerceToInt = function () {
   for (var x=0; x<this.master_array.length; x++) {
     for (var i = 0; i<this.master_array[x].values.length; i++) {
@@ -55,7 +56,6 @@ kpiChart.prototype.buildChart = ds.makeBarChart;
 //find stat box on page and add updated averages
 kpiChart.prototype.addStatsToPage= function () {
   var last_month = this.metric + '_last_month';
-  console.log(last_month);
   var all = this.metric + '_all';
 	document.getElementById(last_month)
 		.innerHTML = 'Percent change, last month average: ' + this.compare_last_month.toString() + '%';
@@ -107,4 +107,23 @@ window.onresize = function() {
   verified_all.colorBar(verified_all.chart_svg);
   new_m.colorBar(new_m.chart_svg);
 }
+
+//return most recent text for each text box by metric
+for (var i = 0; i < q_text.length; i++) {
+  document.getElementById(q_text[i].box_id).innerHTML=q_text[i].all_text;
+}
+
+//on button submit, write text to the server with the box_id.
+//Change the button to say success! if works, and highlight a server error if not
+function submitText(my_id) {
+    var text_box = 'editable_text'+my_id.slice(9);
+    $.post('/kpisubmit', {text : document.getElementById(text_box).innerHTML, box_id : text_box})
+    .done(function (x){
+        document.getElementById(my_id).innerHTML='Success!';
+        setTimeout(function(){document.getElementById(my_id).innerHTML='Submit';}, 200);
+    }).fail(function (x){document.getElementById(my_id).innerHTML='Server Error, Not Submitted!';
+  });
+}
+
+
 

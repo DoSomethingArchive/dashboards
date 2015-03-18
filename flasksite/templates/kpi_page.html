@@ -2,17 +2,23 @@
 
 {% block content %}
 
-
 <div class="chart" id="chart">
     <h4>Active by Month</h4>
     <p class='metric_subheader'>Members that signed up to at least one campaign</p>
     <svg></svg>
  </div>
 
- <div class='active_stats'>
- 	<div class='stats' id='average_active_all'></div>
- 	<div class='stats' id='average_active_last_month'></div>
- </div>
+<div class='main_stats'>
+    <div class='edit_stats' id='editable_text_active' contenteditable="true">
+        This is a paragraph. It is editable. Try to change this text.
+    </div>
+    <div class='padding_div'></div>
+    <div class='outer_averages'>
+ 	  <div class='innerstats' id='average_active_all'></div>
+ 	  <div class='innerstats' id='average_active_last_month'></div>
+    </div>
+    <button type="button" id="my_button_active" class="kpi_button" onclick="submitText(this.id)">Submit</button>
+</div>
 
  <div class="chart" id="chart2">
     <h4>Verified by Month</h4>
@@ -20,10 +26,17 @@
     <svg></svg>
  </div>
 
-  <div class='verified_stats'>
- 	<div class='stats' id='average_verified_all'></div>
- 	<div class='stats' id='average_verified_last_month'></div>
- </div>
+<div class='main_stats'>
+    <div class='edit_stats' id='editable_text_verified' contenteditable="true">
+        This is a paragraph. It is editable. Try to change this text.
+    </div>
+    <div class='padding_div'></div>
+    <div class='outer_averages'>
+        <div class='innerstats' id='average_verified_all'></div>
+        <div class='innerstats' id='average_verified_last_month'></div>
+    </div>
+    <button type="button" id="my_button_verified" class="kpi_button" onclick="submitText(this.id)">Submit</button>
+</div>
 
 <div class="chart" id="chart3">
     <h4>New by Month</h4>
@@ -31,17 +44,24 @@
     <svg></svg>
  </div>
 
- <div class='new_stats'>
- 	<div class='stats' id='average_new_all'></div>
- 	<div class='stats' id='average_new_last_month'></div>
- </div>
-
+<div class='main_stats'>
+    <div class='edit_stats' id='editable_text_new' contenteditable="true">
+        This is a paragraph. It is editable. Try to change this text.
+    </div>
+    <div class='padding_div'></div>
+    <div class='outer_averages'>
+        <div class='innerstats' id='average_new_all'></div>
+        <div class='innerstats' id='average_new_last_month'></div>
+    </div>
+    <button type="button" id="my_button_new" class="kpi_button" onclick="submitText(this.id)">Submit</button>
+</div>
 
 <script type="text/javascript">
 var active_data = {{active|safe}};
 var verified_all_w = {{verified_all_w|safe}};
 var verified_all_s = {{verified_all_s|safe}};
 var new_data = {{new_m|safe}};
+var q_text = {{q_text|safe}};
 </script>
 
 <script type="text/javascript" src="/static/js/kpi-page.js"></script>
