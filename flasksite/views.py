@@ -150,13 +150,16 @@ def kpis():
   q_text = queries.kpiText
   cur = openDB()
   text = queryToData(cur,q_text)
-
   cur.close()
+
   return render_template('kpi_page.html', active=active, verified_all_w=verified_all_w, verified_all_s=verified_all_s,  new_m=new, q_text=text)
 
+#need to handle quotes
 @app.route('/kpisubmit', methods=['POST'])
 def kpisubmit():
-  q_insert = queries.kpiTextInsert % (dt.now(), request.form['text'])
+  #get rid of quotes aspostraphes when writing to mysql, and replace them later when called to the page
+  text = request.form['text'].replace("'","|").replace('"',"%^&")
+  q_insert = queries.kpiTextInsert % (dt.now(), text, request.form['box_id'])
   cur = openDB()
   insert = queryToData(cur,q_insert)
   return q_insert
