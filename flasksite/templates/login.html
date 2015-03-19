@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<!--needed for messaging for authentication issues -->
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul>
+      {% for message in messages %}
+        <li>{{ message }} </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+
+<h2>Welcome! Please sign in with your DoSomething email</h2>
+<form action="" method="post" name="login">
+  {{ form.hidden_tag() }}
+  <input id="openid" name="openid" size="80" type="hidden" value="https://www.google.com/accounts/o8/id">
+
+  <p><input id="login_button" type="submit" value="Sign In"></p>
+
+  <p>{{ form.remember_me }} Remember Me</p>
+</form>
+
+{% endblock %}
