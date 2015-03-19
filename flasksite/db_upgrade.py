@@ -1,4 +1,5 @@
 import sys
+import os
 #get parent path and set path to /env
 parent_path = os.sep.join(os.getcwd().split(os.sep)[:-1])
 path_env = parent_path + '/env'
