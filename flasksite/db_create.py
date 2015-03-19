@@ -1,7 +1,9 @@
 import sys
 #Run to create sqlalchemy for the first time
-#set so can import config vars
-sys.path.insert(0, '/users/dosomething/git/dashboards/env')
+#get parent path and set path to /env
+parent_path = os.sep.join(os.getcwd().split(os.sep)[:-1])
+path_env = parent_path + '/env'
+sys.path.insert(0, path_env)
 from migrate.versioning import api
 from config import SQLALCHEMY_DATABASE_URI
 from config import SQLALCHEMY_MIGRATE_REPO
