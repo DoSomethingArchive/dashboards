@@ -1,7 +1,6 @@
 {% extends "layout.html" %}
 
 {% block content %}
-
 <div class="chart" id="chart">
     <h4>Active by Month</h4>
     <p class='metric_subheader'>Members that signed up to at least one campaign</p>
@@ -17,7 +16,10 @@
  	  <div class='innerstats' id='average_active_all'></div>
  	  <div class='innerstats' id='average_active_last_month'></div>
     </div>
+    <!--makes submit button accessible to admin -->
+    {% if user_role=='admin' %}
     <button type="button" id="my_button_active" class="kpi_button" onclick="submitText(this.id)">Submit</button>
+    {%endif%}
 </div>
 
  <div class="chart" id="chart2">
@@ -35,7 +37,9 @@
         <div class='innerstats' id='average_verified_all'></div>
         <div class='innerstats' id='average_verified_last_month'></div>
     </div>
+    {% if user_role=='admin' %}
     <button type="button" id="my_button_verified" class="kpi_button" onclick="submitText(this.id)">Submit</button>
+    {%endif%}
 </div>
 
 <div class="chart" id="chart3">
@@ -53,7 +57,9 @@
         <div class='innerstats' id='average_new_all'></div>
         <div class='innerstats' id='average_new_last_month'></div>
     </div>
+    {% if user_role=='admin' %}
     <button type="button" id="my_button_new" class="kpi_button" onclick="submitText(this.id)">Submit</button>
+    {%endif%}
 </div>
 
 <script type="text/javascript">
