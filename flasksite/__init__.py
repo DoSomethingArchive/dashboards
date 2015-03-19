@@ -15,6 +15,10 @@ import sys
 current_path = os.getcwd()
 path_env = current_path + '/env'
 sys.path.insert(0, path_env)
+#also add parent path
+parent_path = os.sep.join(os.getcwd().split(os.sep)[:-1])
+parent_path_env = parent_path + '/env'
+sys.path.insert(0, parent_path_env)
 from config import basedir
 
 #initialize app
