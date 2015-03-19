@@ -14,7 +14,6 @@ import sys
 #get current dir and set path for env dir so can import config vars
 current_path = os.getcwd()
 path_env = current_path + '/env'
-print path_env
 sys.path.insert(0, path_env)
 from config import basedir
 
