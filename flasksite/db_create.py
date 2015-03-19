@@ -1,4 +1,5 @@
 import sys
+import os
 #Run to create sqlalchemy for the first time
 #get parent path and set path to /env
 parent_path = os.sep.join(os.getcwd().split(os.sep)[:-1])
