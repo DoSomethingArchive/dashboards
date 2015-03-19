@@ -2,9 +2,9 @@
 import imp
 import os
 import sys
-#get parent path and set path to /env
-parent_path = os.sep.join(os.getcwd().split(os.sep)[:-1])
-path_env = parent_path + '/env'
+#get current path and set path to /env
+current_path = os.getcwd()
+path_env = current_path + '/env'
 sys.path.insert(0, path_env)
 from migrate.versioning import api
 from flasksite import db
