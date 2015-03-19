@@ -1,5 +1,6 @@
 #!flask/bin/python
 import imp
+import os
 import sys
 #get parent path and set path to /env
 parent_path = os.sep.join(os.getcwd().split(os.sep)[:-1])
