@@ -1,6 +1,6 @@
 import sys
 import os
-#Run to create sqlalchemy for the first time. run from home, not flasksite
+#Run to create sqlalchemy for the first time. move and run from home, not flasksite
 #get current path and set path to /env
 current_path = os.getcwd()
 path_env = current_path + '/env'
