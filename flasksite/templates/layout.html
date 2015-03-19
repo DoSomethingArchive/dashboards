@@ -4,7 +4,6 @@
 <head>
   <meta charset="utf-8">
   <title>Dashboards | DoSomething.org</title>
-
   <script type="text/javascript" src="/static/bower_components/neue/js/vendor/modernizr.js"></script>
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -56,7 +55,15 @@
               <strong>KPIs</strong>
               <span>Org-wide KPIs.</span>
             </a>
-          </li>
+        </li>
+
+        <li id='logout'>
+          {% if g.user.is_authenticated() %}
+          <a href="{{ url_for('logout') }}">
+            <strong>LOGOUT</strong>
+          </a>
+        </li>
+       {% endif %}
 
         </ul>
       </div>
@@ -65,7 +72,9 @@
     <header role="banner" class="-basic -styleguide">
       <div class="wrapper">
         <h1 class="__title">Dashboards</h1>
+
       </div>
+
     </header>
 
     <main>
