@@ -1,4 +1,4 @@
-
+console.log(master2);
 //ensure all data that should be int is int
 var coerceToInt = function(list) {
 
@@ -23,8 +23,10 @@ shapeData(master);
 
 //gross members
 var master2 = [{key:'Mobile', values:x2, color: '#1A661A'},{key:'Email', values:x3, color: '#00FF00'}];
+console.log(master2);
 shapeData(master2);
 
+console.log(master2);
 //gross opt-outs
 var master3 = [{key:'Mobile', values:x4, color: '#800000'},{key:'Email', values:x5, color: '#FF3333'}];
 shapeData(master3);
