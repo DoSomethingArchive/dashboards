@@ -48,7 +48,7 @@ def login():
         return redirect(url_for('home'))
 
       else:
-        error =  'Unknown user. Go away'
+        error =  flash("I don't know you. Go away.")
         return render_template('login.html', error=error)
 
     except Exception as e:
