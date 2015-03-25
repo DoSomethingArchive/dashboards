@@ -12,14 +12,19 @@
   {% endif %}
 {% endwith %}
 
-<h2>Welcome! Please sign in with your DoSomething email</h2>
-<form action="" method="post" name="login">
-  {{ form.hidden_tag() }}
-  <input id="openid" name="openid" size="80" type="hidden" value="https://www.google.com/accounts/o8/id">
+<h2>Welcome!</h2>
+<h3>Please sign in with your DoSomething email</h3>
 
-  <p><input id="login_button" type="submit" value="Sign In"></p>
+<meta name="google-signin-client_id" content="591215977635-4le163h9esok61lvdena1qgf50sgfe5c.apps.googleusercontent.com">
 
-  <p>{{ form.remember_me }} Remember Me</p>
+<form action={{url_for('login')}} method="post" id ="login_form">
+
+  <input type="hidden" name = 'email' id ="g_text_form" >
+  <div class="g-signin2" data-onsuccess="onSignIn" onclick="loginFormSubmit()"</div>
+
 </form>
+
+<script src="https://apis.google.com/js/platform.js"></script>
+<script type="text/javascript" src="/static/js/login.js"></script>
 
 {% endblock %}
