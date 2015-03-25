@@ -34,6 +34,7 @@
     <nav class="chrome--nav white floating">
       <a class="logo" href="{{ url_for('home') }}"><img src="/static/bower_components/neue/dist/assets/images/ds-logo.png" alt="DoSomething.org"></a>
       <a class="hamburger js-toggle-mobile-menu" href="#">&#xe606;</a>
+      {% if g.user.is_authenticated() %}
       <div class="menu">
         <ul class="primary-nav">
           <li>
@@ -58,15 +59,15 @@
         </li>
 
         <li id='logout'>
-          {% if g.user.is_authenticated() %}
           <a href="{{ url_for('logout') }}">
             <strong>LOGOUT</strong>
           </a>
         </li>
-       {% endif %}
+
 
         </ul>
       </div>
+      {% endif %}
     </nav>
 
     <header role="banner" class="-basic -styleguide">
