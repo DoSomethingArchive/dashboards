@@ -1,12 +1,19 @@
-from flasksite import db
+from flask.ext.sqlalchemy import SQLAlchemy
 
+db = SQLAlchemy()
 #model for user login and roles
 class User(db.Model):
+    __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
-    nickname = db.Column(db.String(64), index=True, unique=True)
-    email = db.Column(db.String(120), index=True, unique=True)
-    role = db.Column(db.String(25), index=True, unique=False)
+    nickname = db.Column(db.String(100))
+    email = db.Column(db.String(100))
+    role = db.Column(db.String(100))
 
+    def __init__(self, nickname, email, role):
+
+        self.nickname = nickname.lower()
+        self.email = email.lower()
+        self.role = role
     def is_authenticated(self):
         return True
 
