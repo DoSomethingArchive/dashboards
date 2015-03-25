@@ -19,7 +19,6 @@ sys.path.insert(0, path_env)
 parent_path = os.sep.join(os.getcwd().split(os.sep)[:-1])
 parent_path_env = parent_path + '/env'
 sys.path.insert(0, parent_path_env)
-from config import basedir
 
 #initialize app
 app = Flask(__name__)
@@ -27,13 +26,18 @@ app.config.from_pyfile('../env/config.py')
 app.config['CACHE_TYPE'] = 'simple'
 
 #db settings
-db = SQLAlchemy(app)
+db_sett = 'mysql://%s:%s@%s/%s' % (app.config['USER'], app.config['PW'], app.config['HOST'], app.config['DB_USERS'])
+app.config['SQLALCHEMY_DATABASE_URI'] =  db_sett
+
+
+from models import db
+db.init_app(app)
 
 #login settings
 lm = LoginManager()
 lm.init_app(app)
 lm.login_view = 'login'
-oid = OpenID(app, os.path.join(basedir, 'tmp'))
+
 cache.init_app(app)
 
 #MySQL conversions
