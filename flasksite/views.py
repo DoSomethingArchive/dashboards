@@ -1,6 +1,8 @@
-from flasksite import app, openDB, json, queryToData, forms, db, lm, oid, models
-from flask import render_template, request, url_for, jsonify, flash, redirect, session, url_for, request, g
+from flasksite import app, openDB, json, lm, queryToData, models
+from flask import Flask, render_template, request, url_for, jsonify, flash, redirect, session, url_for, request, g
 from flask.ext.login import login_user, logout_user, current_user, login_required
+from models import db
+from flask.ext.mail import Message, Mail
 from cache import cache
 import locale
 import queries
@@ -9,66 +11,54 @@ from datetime import datetime as dt
 
 locale.setlocale(locale.LC_ALL, 'en_US')
 
-#load user
-@lm.user_loader
-def load_user(id):
-    return models.User.query.get(int(id))
-
-#login in page.
-@app.route('/login', methods=['GET', 'POST'])
-@oid.loginhandler
-def login():
-  if g.user is not None and g.user.is_authenticated():
-    return redirect(url_for('home'))
-
-  form = forms.LoginForm()
-
-  if form.validate_on_submit():
-    session['remember_me'] = form.remember_me.data
-    return oid.try_login(form.openid.data, ask_for=['nickname', 'email'])
-
-  return render_template('login.html',
-                           title='Sign In',
-                           form=form,
-                           providers=app.config['OPENID_PROVIDERS'])
-
-#Handles login. If no email of null, deny access. If user in system and gmail login successful, allow.
-#If user email ends in 'dosomething', and gmail login successful, create account with basic role and allow
-@oid.after_login
-def after_login(resp):
-    if resp.email is None or resp.email == "":
-        flash('Invalid login. Please try again.')
-        return redirect(url_for('login'))
-    #get user data from db
-    user = models.User.query.filter_by(email=resp.email).first()
-
-    if user is None and resp.email.split('@')[1] == 'dosomething.org':
-        nickname = resp.nickname
-        if nickname is None or nickname == "":
-            nickname = resp.email.split('@')[0]
-        user = models.User(nickname=nickname, email=resp.email, role='basic')
-        db.session.add(user)
-        db.session.commit()
-
-    if user is not None:
-      remember_me = False
-      if 'remember_me' in session:
-        remember_me = session['remember_me']
-        session.pop('remember_me', None)
-
-    else:
-      flash('User does not exist. Go away.')
-      return redirect(url_for('login'))
-    #perform login
-    login_user(user, remember=remember_me)
-    return redirect(request.args.get('next') or url_for('home'))
-
-#store user data
+#needed to get global user object before request
 @app.before_request
 def before_request():
     g.user = current_user
 
-#handle logout
+#loads user
+@lm.user_loader
+def load_user(id):
+  return models.User.query.get(int(id))
+
+#login in page.
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+  #Takes post data. If existing user, login,
+  #if user doesn't exist, but  dosomething user, create basic account and login
+  #else, return user to login page
+  if request.method == 'POST':
+
+    try:
+      email = request.form['email']
+      source = email.split('@')[1]
+      name = email.split('@')[0]
+      user = models.User.query.filter_by(email=email).first()
+
+      if user is not None and user.is_authenticated():
+        login_user(user)
+        return redirect(url_for('home'))
+
+      if user is None and source == 'dosomething.org':
+        u = models.User(nickname=name, email=email, role='basic')
+        db.session.add(u)
+        db.session.commit()
+        user = models.User.query.filter_by(email=email).first()
+        login_user(user)
+        return redirect(url_for('home'))
+
+      else:
+        error =  'Unknown user. Go away'
+        return render_template('login.html', error=error)
+
+    except Exception as e:
+      print e
+      return render_template('login.html')
+
+  elif request.method == 'GET':
+    return render_template('login.html')
+
+#logout
 @app.route('/logout')
 def logout():
     logout_user()
@@ -107,7 +97,6 @@ def home():
 @login_required
 def getCausesdata():
   cur = openDB()
-  #all_casues needed for chart
   data = queryToData(cur,queries.getCausesdata_causes)
   return data
 
@@ -133,6 +122,7 @@ def causeStaffPicks(cause):
 
   if cause != 'all':
     q = queries.causeStaffPicks_formatted_causes % (staff,formatted_causes)
+
   else:
     q = queries.causeStaffPicks_causes % (staff)
 
@@ -142,6 +132,7 @@ def causeStaffPicks(cause):
 
   if len(j) > 2:
     return render_template('cause-campaigns.html', title=title,causes=cause, j=j)
+
   else:
     return render_template('cause-campaigns-nodata.html', title=title,causes=cause)
 
@@ -194,12 +185,13 @@ def getSpecificCampaign(cause,campaign):
     query('overall', queries.getSpecificCampaign_overall.format(name))
 
   cur.close()
+
   return render_template('campaign-specific.html',campaign=campaign.replace("+"," ").upper(),signups=data['signups'],newmembers=data['newmembers'],sources=data['sources'],traffic=data['traffic'],overall=data['overall'])
 
+#kpis page
 @app.route('/kpis')
 @login_required
 def kpis():
-
   q_active = queries.kpisActive
   cur = openDB()
   active = queryToData(cur,q_active)
@@ -232,6 +224,7 @@ def kpisubmit():
   q_insert = queries.kpiTextInsert % (dt.now(), text, request.form['box_id'])
   cur = openDB()
   insert = queryToData(cur,q_insert)
+
   return q_insert
 
 def formatThousandNumber(num):
@@ -239,6 +232,8 @@ def formatThousandNumber(num):
 
 # @cache.cached(timeout=50, key_prefix='facebook_data')
 def get_facebook_data():
-      r = requests.get("http://graph.facebook.com/7630216751/")
-      fbook = (json.loads(r.content))
-      return fbook
+  r = requests.get("http://graph.facebook.com/7630216751/")
+  fbook = (json.loads(r.content))
+  return fbook
+
+
