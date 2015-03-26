@@ -2,7 +2,6 @@ from flasksite import app, openDB, json, lm, queryToData, models
 from flask import Flask, render_template, request, url_for, jsonify, flash, redirect, session, url_for, request, g
 from flask.ext.login import login_user, logout_user, current_user, login_required
 from models import db
-from flask.ext.mail import Message, Mail
 from cache import cache
 import locale
 import queries
