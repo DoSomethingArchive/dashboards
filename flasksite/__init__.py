@@ -56,30 +56,6 @@ def openDB():
 #handles quering mysql, output to json
 def queryToData(cursor_obj,query,index=None,keyname=None,need_json=None):
 
-<<<<<<< HEAD
-  if index==None and keyname==None and need_json==None:
-
-    cursor_obj.execute(query)
-    data = cursor_obj.fetchall()
-    data_f = json.dumps(data)
-
-    return data_f
-
-  if index!=None and keyname!=None and need_json==None:
-
-    cursor_obj.execute(query)
-    data = cursor_obj.fetchall()[index][keyname]
-    data_f = json.dumps(data)
-
-    return data_f
-
-  if index==None and keyname==None and need_json!=None:
-
-    cursor_obj.execute(query)
-    data = cursor_obj.fetchall()
-
-    return data
-=======
 	if index==None and keyname==None and need_json==None:
 
 		cursor_obj.execute(query)
@@ -102,7 +78,6 @@ def queryToData(cursor_obj,query,index=None,keyname=None,need_json=None):
 		data = cursor_obj.fetchall()
 
 		return data
->>>>>>> e35f279a2a052791b401a672304236f9d9049cfe
 
 import views, models
 if __name__ == '__main__':
