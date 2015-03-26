@@ -85,4 +85,7 @@ kpiText = """select k.box_id, replace(replace(all_text, '|', "'"),'%^&','"') as 
 
 kpiTextInsert = "insert into kpi_content (timestamp, all_text, box_id) values ('%s','%s', '%s')"
 
+# campaign metadata endpoint query
+campaignDataEnpoint_basic_campaign_metadata = "select campaign, sign_ups, new_members, report_backs, all_traffic, start_date, end_date  from overall.overall where nid = '%s'"
+
 
