@@ -237,10 +237,10 @@ def get_facebook_data():
   return fbook
 
 @app.route('/campaignDataEnpoint/<nid>')
-def end(nid):
-  q = "select campaign, sign_ups, new_members, start_date, end_date  from overall.overall where nid = '%s'" % (nid)
+def campaignDataEnpoint(nid):
+  q_metadata = queries.campaignDataEnpoint_basic_campaign_metadata % (nid)
   cur = openDB()
-  text = queryToData(cur,q)
+  text = queryToData(cur,q_metadata)
   return text
 
 
