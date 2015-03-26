@@ -25,11 +25,9 @@ app = Flask(__name__)
 app.config.from_pyfile('../env/config.py')
 app.config['CACHE_TYPE'] = 'simple'
 
-db_sett = 'mysql://%s:%s@%s/%s' % (app.config['USER'], app.config['PW'], app.config['HOST'], app.config['DB_USERS'])
-
 #db settings
-app.config['SQLALCHEMY_DATABASE_URI'] = db_sett
-
+db_sett = 'mysql://%s:%s@%s/%s' % (app.config['USER'], app.config['PW'], app.config['HOST'], app.config['DB_USERS'])
+app.config['SQLALCHEMY_DATABASE_URI'] =  db_sett
 
 from models import db
 db.init_app(app)
@@ -58,6 +56,7 @@ def openDB():
 #handles quering mysql, output to json
 def queryToData(cursor_obj,query,index=None,keyname=None,need_json=None):
 
+<<<<<<< HEAD
   if index==None and keyname==None and need_json==None:
 
     cursor_obj.execute(query)
@@ -80,6 +79,30 @@ def queryToData(cursor_obj,query,index=None,keyname=None,need_json=None):
     data = cursor_obj.fetchall()
 
     return data
+=======
+	if index==None and keyname==None and need_json==None:
+
+		cursor_obj.execute(query)
+		data = cursor_obj.fetchall()
+		data_f = json.dumps(data)
+
+		return data_f
+
+	if index!=None and keyname!=None and need_json==None:
+
+		cursor_obj.execute(query)
+		data = cursor_obj.fetchall()[index][keyname]
+		data_f = json.dumps(data)
+
+		return data_f
+
+	if index==None and keyname==None and need_json!=None:
+
+		cursor_obj.execute(query)
+		data = cursor_obj.fetchall()
+
+		return data
+>>>>>>> e35f279a2a052791b401a672304236f9d9049cfe
 
 import views, models
 if __name__ == '__main__':
