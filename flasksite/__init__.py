@@ -1,12 +1,11 @@
 from flask import Flask, request, jsonify
 from flask.ext.login import LoginManager
-from flask.ext.openid import OpenID
 from flask.ext.sqlalchemy import SQLAlchemy
 import MySQLdb
 import MySQLdb.converters
 import MySQLdb.cursors
 from MySQLdb.constants import FIELD_TYPE
-from random import choice as choice
+from random import choice as c
 from cache import cache
 import json
 import os
