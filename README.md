@@ -14,4 +14,4 @@ To install
 ##Usage
 
 To run locally clone the project, then run `python runserver.py`
-Visit  http://127.0.0.1:5000/
+Visit http://localhost:5000/login
