@@ -20,7 +20,7 @@
   "dependencies": {
     "jquery": "~1.11.1",
     "d3": "~3.4.8",
-    "neue": "dosomething/neue#~4.4.0",
+    "neue": "dosomething/neue#~6.2.3",
     "nvd3": "~1.1.15-beta",
     "html5shiv": "~3.7.2",
     "respond": "~1.4.2"

@@ -4,7 +4,6 @@
 <head>
   <meta charset="utf-8">
   <title>Dashboards | DoSomething.org</title>
-
   <script type="text/javascript" src="/static/bower_components/neue/js/vendor/modernizr.js"></script>
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -31,48 +30,49 @@
 <body>
 
 <div class="chrome">
-  <div id="top" class="chrome--wrapper">
-    <nav class="chrome--nav white floating">
-      <a class="logo" href="{{ url_for('home') }}"><img src="/static/bower_components/neue/dist/assets/images/ds-logo.png" alt="DoSomething.org"></a>
-      <a class="hamburger js-toggle-mobile-menu" href="#">&#xe606;</a>
-      <div class="menu">
-        <ul class="primary-nav">
+  <div id="top" class="wrapper">
+    <nav class="navigation -white -floating">
+      <a class="navigation__logo" href="{{ url_for('home') }}"></a>
+      <div class="navigation__menu">
+        <ul class="navigation__primary">
           <li>
             <a href="/cause/campaigns/all">
-              <strong>Campaigns</strong>
-              <span>Sign-ups and stats.</span>
+              <strong class="navigation__title">Campaigns</strong>
+              <span class="navigation__subtitle">Sign-ups and stats.</span>
             </a>
           </li>
 
           <li>
             <a href="/causes">
-              <strong>Causes</strong>
-              <span>Stats by cause space.</span>
+              <strong class="navigation__title">Causes</strong>
+              <span class="navigation__subtitle">Stats by cause space.</span>
             </a>
           </li>
 
         <li>
             <a href="/kpis">
-              <strong>KPIs</strong>
-              <span>Org-wide KPIs.</span>
+              <strong class="navigation__title">KPIs</strong>
+              <span class="navigation__subtitle">Org-wide KPIs.</span>
             </a>
-          </li>
-
+        </li>
         </ul>
       </div>
     </nav>
 
-    <header role="banner" class="-basic -styleguide">
+    <header role="banner" class="header">
       <div class="wrapper">
-        <h1 class="__title">Dashboards</h1>
+        <h1 class="header__title">Dashboards</h1>
       </div>
+
     </header>
 
     <main>
       <div class="container">
         <div id="content" class="wrapper">
+          <div class="container__block">
           {% block content %}
           {% endblock %}
+          </div>
         </div>
       </div>
     </main>
