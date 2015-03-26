@@ -236,4 +236,13 @@ def get_facebook_data():
   fbook = (json.loads(r.content))
   return fbook
 
+@app.route('/campaignDataEnpoint/<nid>')
+def end(nid):
+  q = "select campaign, sign_ups, new_members, start_date, end_date  from overall.overall where nid = '%s'" % (nid)
+  cur = openDB()
+  text = queryToData(cur,q)
+  return text
+
+
+
 
