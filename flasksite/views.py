@@ -240,7 +240,6 @@ def campaignDataEnpoint(nid):
   try:
     nid = int(nid)
     q_metadata = queries.campaignDataEnpoint_basic_campaign_metadata % (nid)
-    print q_metadata
     cur = openDB()
     text = queryToData(cur,q_metadata)
     return text
