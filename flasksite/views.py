@@ -196,15 +196,15 @@ def kpis():
   active = queryToData(cur,q_active)
 
   q_verified_all_s = queries.kpisVerifiedAll_S
-  cur = openDB()
+  cur = openDB2()
   verified_all_s = queryToData(cur,q_verified_all_s)
 
   q_verified_all_w = queries.kpisVerifiedAll_W
-  cur = openDB()
+  cur = openDB2()
   verified_all_w = queryToData(cur,q_verified_all_w)
 
   q_new = queries.kpisNew
-  cur = openDB()
+  cur = openDB2()
   new = queryToData(cur,q_new)
 
   q_text = queries.kpiText
