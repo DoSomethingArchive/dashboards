@@ -52,6 +52,17 @@ def openDB():
   cur = db.cursor()
   return cur
 
+#connect to separate db
+def openDB2():
+  db = MySQLdb.connect(host=app.config['HOST2'], #hostname
+                    user=app.config['USER2'], # username
+                    passwd=app.config['PW2'], # password
+                    db=app.config['DB2'], # db
+                    conv=my_conv,# datatype conversions
+                    cursorclass=MySQLdb.cursors.DictCursor)
+  cur = db.cursor()
+  return cur
+
 #handles quering mysql, output to json
 def queryToData(cursor_obj,query,index=None,keyname=None,need_json=None):
 
