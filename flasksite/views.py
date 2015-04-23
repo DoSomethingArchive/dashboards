@@ -1,4 +1,4 @@
-from flasksite import app, openDB, json, lm, queryToData, models
+from flasksite import app, openDB, openDB2, json, lm, queryToData, models
 from flask import Flask, render_template, request, url_for, jsonify, flash, redirect, session, url_for, request, g
 from flask.ext.login import login_user, logout_user, current_user, login_required
 from models import db
@@ -192,19 +192,19 @@ def getSpecificCampaign(cause,campaign):
 @login_required
 def kpis():
   q_active = queries.kpisActive
-  cur = openDB()
+  cur = openDB2()
   active = queryToData(cur,q_active)
 
   q_verified_all_s = queries.kpisVerifiedAll_S
-  cur = openDB()
+  cur = openDB2()
   verified_all_s = queryToData(cur,q_verified_all_s)
 
   q_verified_all_w = queries.kpisVerifiedAll_W
-  cur = openDB()
+  cur = openDB2()
   verified_all_w = queryToData(cur,q_verified_all_w)
 
   q_new = queries.kpisNew
-  cur = openDB()
+  cur = openDB2()
   new = queryToData(cur,q_new)
 
   q_text = queries.kpiText
