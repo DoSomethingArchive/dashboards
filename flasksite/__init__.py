@@ -55,17 +55,14 @@ def openDB():
 
 #connect to separate db
 def openDB2():
-  try:
-    db2 = MySQLdb.connect(host=app.config['HOST2'], #hostname
-                      user=app.config['USER2'], # username
-                      passwd=app.config['PW2'], # password
-                      db=app.config['DB2'], # db
-                      conv=my_conv,# datatype conversions
-                      cursorclass=MySQLdb.cursors.DictCursor)
-    cur2 = db2.cursor()
-    return cur2
-  except Exception as e:
-    print e
+  db2 = MySQLdb.connect(host=app.config['HOST2'], #hostname
+                    user=app.config['USER2'], # username
+                    passwd=app.config['PW2'], # password
+                    db=app.config['DB2'], # db
+                    conv=my_conv,# datatype conversions
+                    cursorclass=MySQLdb.cursors.DictCursor)
+  cur2 = db2.cursor()
+  return cur2
 
 #handles quering mysql, output to json
 def queryToData(cursor_obj,query,index=None,keyname=None,need_json=None):
