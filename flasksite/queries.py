@@ -70,13 +70,13 @@ getSpecificCampaign_traffic_regular = "select t.date, t.unq_visits, ifnull(s.web
 
 getSpecificCampaign_traffic_sms = "select t.date, t.unq_visits, ifnull(a.alpha_sign_ups/t.unq_visits,0) as conversion_rate from {0}.all_traffic t  left join {0}.web_alphas a on t.date=a.date"
 
-kpisActive = "select date as x, average_active as y, days_in_month from data.active_by_month order by date"
+kpisActive = "select date as x, average_active as y, days_in_month from active_by_month order by date"
 
-kpisVerifiedAll_S = "select date as x, average_verified_sms as y, days_in_month from data.verified_by_month order by date"
+kpisVerifiedAll_S = "select date as x, average_verified_sms as y, days_in_month from verified_by_month order by date"
 
-kpisVerifiedAll_W = "select date as x, average_verified_web as y, days_in_month from data.verified_by_month order by date"
+kpisVerifiedAll_W = "select date as x, average_verified_web as y, days_in_month from verified_by_month order by date"
 
-kpisNew = "select date as x, average_new as y, days_in_month from data.new_by_month order by date"
+kpisNew = "select date as x, average_new as y, days_in_month from new_by_month order by date"
 
 kpiText = """select k.box_id, replace(replace(all_text, '|', "'"),'%^&','"') as all_text from data.kpi_content k
           join ( select box_id, max(timestamp) as timestamp from data.kpi_content group by box_id ) t
