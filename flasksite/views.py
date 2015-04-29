@@ -75,17 +75,18 @@ def home():
   data = int(json.loads(data))
   formatted_data = formatThousandNumber(data)
 
-  data2_f = queryToData(cur,queries.home_net_members_daily)
+  data2_f = queryToData(cur2,queries.home_net_members_daily)
 
-  data3_f = queryToData(cur,queries.home_gross_mobile_new_members)
+  data3_f = queryToData(cur2,queries.home_gross_mobile_new_members)
 
-  data4_f = queryToData(cur,queries.home_gross_mail_new_members)
+  data4_f = queryToData(cur2,queries.home_gross_mail_new_members)
 
-  data5_f = queryToData(cur,queries.home_gross_mobile_optedout_members)
+  data5_f = queryToData(cur2,queries.home_gross_mobile_optedout_members)
 
-  data6_f = queryToData(cur,queries.home_gross_mail_optedout_members)
+  data6_f = queryToData(cur2,queries.home_gross_mail_optedout_members)
 
   cur.close()
+  cur2.close()
 
   fbook = get_facebook_data()
   likes = formatThousandNumber(fbook["likes"])
