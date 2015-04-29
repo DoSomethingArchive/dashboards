@@ -12,15 +12,15 @@ home_total_members = """select
                         mobile_users
                         where status = 'Active Subscriber' """
 
-home_net_members_daily = "select date as x, net as y from data.list_tracking"
+home_net_members_daily = "select date as x, net as y from list_tracking"
 
-home_gross_mobile_new_members = "select date as x, mobile_created as y from data.list_tracking"
+home_gross_mobile_new_members = "select date as x, mobile_created as y from list_tracking"
 
-home_gross_mail_new_members = "select date as x, mail_created as y from data.list_tracking"
+home_gross_mail_new_members = "select date as x, mail_created as y from list_tracking"
 
-home_gross_mobile_optedout_members = "select date as x, mobile_opt_out as y from data.list_tracking"
+home_gross_mobile_optedout_members = "select date as x, mobile_opt_out as y from list_tracking"
 
-home_gross_mail_optedout_members = "select date as x, mail_opt_out as y from data.list_tracking"
+home_gross_mail_optedout_members = "select date as x, mail_opt_out as y from list_tracking"
 
 
 #getCausesdata
