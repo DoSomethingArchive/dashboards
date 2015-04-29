@@ -2,7 +2,15 @@
 
 
 #queries for home
-home_total_members = "select total from overall.total"
+home_total_members = """select
+                        round(
+                          (count(phone_number)
+                          +
+                          (select count(*) from mailchimp_sub ))
+                          *.905)
+                        from
+                        mobile_users
+                        where status = 'Active Subscriber' """
 
 home_net_members_daily = "select date as x, net as y from data.list_tracking"
 
