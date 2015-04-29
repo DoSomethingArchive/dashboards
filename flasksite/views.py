@@ -71,7 +71,8 @@ def home():
   cur = openDB()
   cur2 = openDB2()
 
-  data = int(queryToData(cur2,queries.home_total_members,0,'total'))
+  data = queryToData(cur2,queries.home_total_members,0,'total')
+  data = int(json.loads(data))
   formatted_data = formatThousandNumber(data)
 
   data2_f = queryToData(cur,queries.home_net_members_daily)
