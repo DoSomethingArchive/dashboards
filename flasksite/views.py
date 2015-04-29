@@ -69,8 +69,9 @@ def logout():
 @cache.cached(timeout=1000)
 def home():
   cur = openDB()
+  cur2 = openDB2()
 
-  data = int(queryToData(cur,queries.home_total_members,0,'total'))
+  data = int(queryToData(cur2,queries.home_total_members,0,'total'))
   formatted_data = formatThousandNumber(data)
 
   data2_f = queryToData(cur,queries.home_net_members_daily)
