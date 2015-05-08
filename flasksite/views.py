@@ -38,7 +38,7 @@ def login():
         login_user(user)
         return redirect(url_for('home'))
 
-      if user is None and source == 'dosomething.org':
+      if user is None and source == 'dosomething.org' or user is None and source == 'tmiagency.org':
         u = models.User(nickname=name, email=email, role='basic')
         db.session.add(u)
         db.session.commit()
@@ -138,6 +138,18 @@ def causeStaffPicks(cause):
   else:
     return render_template('cause-campaigns-nodata.html', title=title,causes=cause)
 
+#gets list of campaigns
+@app.route('/list-campaigns')
+@login_required
+def listCampaigns():
+
+  cur2 = openDB2()
+  data = queryToData(cur2,queries.list_all_campaigns)
+  cur2.close()
+
+  return render_template('list-campaigns.html', data=data )
+
+
 #returns monthly kpi data
 @app.route('/monthly-stats')
 @login_required
@@ -152,7 +164,10 @@ def monthly():
 @app.route('/cause/campaigns/<cause>/<campaign>')
 @login_required
 def getSpecificCampaign(cause,campaign):
+  #when redoing this function, don't need to break it down so far. because there are no longer tables for each campaign
+  #if there si no data it will just be blank. the decsionibg happens for conversion rate, report backs, and impact.
   # campaign=str(request.form['vals']).replace(" ","_").lower()
+  print campaign
   name=str(campaign).replace("+","_").lower()
   cur = openDB()
   data = queryToData(cur,queries.getSpecificCampaign_campaign_info.format(name),need_json=0)
@@ -248,6 +263,35 @@ def campaignDataEnpoint(nid):
     return text
   except:
     return json.dumps({'error':500})
+
+@app.route('/<campaign>')
+@login_required
+def getSpecificCampaignNew(campaign):
+  campaign = campaign.replace('^&^', '#')
+
+  cur2 = openDB2()
+  data = queryToData(cur2,queries.list_one_campaign.format(campaign),need_json=0)
+  print data
+  #ned to differentiate out sms games because of web alphas, even for sign ups
+  #some new members issues?
+  #sorces by campaign run?
+  #sources different for non staff as lower threshold
+  if data[0]['mobile_ids'] is not None and data[0]['mobile_ids'] != '0':
+    c_id = ",".join(['"'+i+'"' for i in data[0]['mobile_ids'].split(',') if i != 0])
+  else:
+    c_id = "'999'"
+
+
+  su = queryToData(cur2,queries.new_sign_ups_new.format(c_id, data[0]['nid']))
+  nm = queryToData(cur2,queries.new_members_new.format(c_id, data[0]['nid']))
+  srcs = queryToData(cur2,queries.sources_new.format(data[0]['nid']))
+  print queries.new_members_new.format(c_id, data[0]['nid'])
+  print srcs
+
+
+
+  return render_template('campaign-new.html', campaign=campaign, su=su, nm=nm, srcs=srcs)
+
 
 
 
