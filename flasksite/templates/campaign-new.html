@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<h2>{{campaign}}</h2>
+
+<div id="chart">
+  <p>Sign Ups by Day</p>
+  <svg></svg>
+</div>
+
+<div id="chart2">
+<p>New Members by Day</p>
+  <svg></svg>
+</div>
+
+<div id="chart3">
+  <p>Traffic Sources by Day</p>
+  <svg></svg>
+</div>
+
+<script type="text/javascript">
+var su = {{su|safe}};
+var nm = {{nm|safe}};
+var srcs = {{srcs|safe}}
+
+
+</script>
+
+<script type="text/javascript">
+//chart 1 - sign ups
+ds.makeMultiBarChart('#chart', ds.multiBarDataFormat(su));
+
+//chart 2 - new members
+ds.makeMultiBarChart('#chart2', ds.multiBarDataFormat(nm));
+
+//chart 3 - traffic sources
+ds.makeStackedAreaChart('#chart3 svg',ds.stackedAreaDataFormat(srcs));
+</script
+{% endblock %}
