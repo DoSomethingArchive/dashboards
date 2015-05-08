@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<ul id="campaignlist"></ul>
+<script type="text/javascript">
+var data = {{data|safe}};
+var list = document.getElementById("campaignlist");
+
+
+
+
+for (i=0; i<data.length; i++) {
+  var elem = document.createElement("li");
+  var textnode = document.createTextNode(data[i].title);
+  elem.appendChild(textnode);
+  list.appendChild(elem);
+
+
+}
+
+var ul = document.getElementById('campaignlist');
+
+ul.addEventListener('click', function(e) {
+    if (e.target.tagName === 'LI'){
+      var li_content = e.target.textContent.replace('#','^&^');
+      window.location = '/' + li_content;
+    }
+});
+
+</script>
+
+{% endblock %}
