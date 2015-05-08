@@ -96,4 +96,45 @@ kpiTextInsert = "insert into kpi_content (timestamp, all_text, box_id) values ('
 # campaign metadata endpoint query
 campaignDataEnpoint_basic_campaign_metadata = "select campaign, sign_ups, new_members, report_backs, all_traffic, start_date, end_date  from overall.overall where nid = %d"
 
+list_all_campaigns = "select  title from users_and_activities.campaign_master order by title"
+
+list_one_campaign = """select c.nid, title, alias, status, group_concat(m.campaign_id) as mobile_ids,
+                        case
+                        when m.campaign_id = 0 or m.campaign_id is null
+                        then 0
+                        else 1
+                        end as has_mobile,
+                        case
+                        when s.campaign_id = 0 or s.campaign_id is null
+                        then 0
+                        else 1
+                        end as is_sms
+                        from users_and_activities.campaign_master c left join users_and_activities.mobile_campaign_ids m on c.nid=m.nid left join user_processing.sms_games s on m.campaign_id=s.campaign_id where title = "{0}" group by c.nid"""
+
+new_sign_ups_new = """select date_format(from_unixtime(timestamp), '%Y-%m-%d') as date, ifnull(count(uid),0) as web, ifnull(phones,0) as mobile
+                  from dosomething.dosomething_signup w
+                  left join
+                  (select date_format(activated_at, '%Y-%m-%d') as date, count(phone_number) as phones
+                  from users_and_activities.mobile_subscriptions
+                  where campaign_id in ( {0}) and been_alpha = 0 and first_seen_campaign = 1
+                  group by date_format(activated_at, '%Y-%m-%d')) m
+                  on date_format(from_unixtime(timestamp), '%Y-%m-%d')=m.date
+                  where nid = {1}
+                  group by date_format(from_unixtime(timestamp), '%Y-%m-%d')"""
+
+new_members_new = """select date_format(from_unixtime(timestamp), '%Y-%m-%d') as date, ifnull(count(w.uid),0) as web, ifnull(phones,0) as mobile
+                    from dosomething.dosomething_signup w
+                    join users_and_activities.web_users wu on w.uid=wu.uid
+                    left join
+                    (select date_format(activated_at, '%Y-%m-%d') as date, count(m.phone_number) as phones
+                    from users_and_activities.mobile_subscriptions m
+                    join users_and_activities.mobile_users mu
+                    on m.phone_number=mu.phone_number
+                    where campaign_id in ( {0}) and been_alpha = 0 and first_seen_campaign = 1 and date_add(mu.created_at, interval 5 minute) >= m.activated_at
+                    group by date_format(activated_at, '%Y-%m-%d')) m
+                    on date_format(from_unixtime(timestamp), '%Y-%m-%d')=m.date
+                    where nid = {1} and date_add(wu.created, interval 5 minute) >= from_unixtime(timestamp)
+                    group by date_format(from_unixtime(timestamp), '%Y-%m-%d')"""
+
+sources_new = """select date, site as source, entrances as unq_visits from users_and_activities.entrances where nid = {0} and site in (select site from users_and_activities.sources where nid = {0}  group by site having sum(entrances) >= 500 order by sum(entrances) desc )"""
 
