@@ -144,7 +144,7 @@ def causeStaffPicks(cause):
 def listCampaigns():
   try:
     cur2 = openDB2()
-    data = queryToData(cur2,queries.list_all_campaigns)
+    data = queryToData(cur2,queries.list_all_campaigns, need_json=0)
     data = 'test'
     cur2.close()
 
