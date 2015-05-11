@@ -145,6 +145,7 @@ def listCampaigns():
   try:
     cur2 = openDB2()
     data = queryToData(cur2,queries.list_all_campaigns)
+    data = 'test'
     cur2.close()
 
     return render_template('list-campaigns.html', data=data)
