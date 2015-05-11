@@ -142,12 +142,14 @@ def causeStaffPicks(cause):
 @app.route('/list-campaigns')
 @login_required
 def listCampaigns():
+  try:
+    cur2 = openDB2()
+    data = queryToData(cur2,queries.list_all_campaigns)
+    cur2.close()
 
-  cur2 = openDB2()
-  data = queryToData(cur2,queries.list_all_campaigns)
-  cur2.close()
-
-  return render_template('list-campaigns.html', data=data )
+    return render_template('list-campaigns.html', data=data)
+  except Exception as e:
+    print e
 
 
 #returns monthly kpi data
@@ -288,6 +290,7 @@ def getSpecificCampaignNew(campaign):
 
   if int(data[0]['is_sms']) == 1:
     su = queryToData(cur2,queries.new_sign_ups_new_mobile.format(c_id))
+    print su
     nm = queryToData(cur2,queries.new_members_new_mobile.format(c_id))
     srcs = queryToData(cur2,queries.sources_new.format(data[0]['nid']))
 
