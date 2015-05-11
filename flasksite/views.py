@@ -150,6 +150,7 @@ def listCampaigns():
     return render_template('list-campaigns.html', data=data)
   except Exception as e:
     print e
+    print data
 
 
 #returns monthly kpi data
