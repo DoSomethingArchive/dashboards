@@ -151,7 +151,7 @@ def listCampaigns():
   except Exception as e:
 
     error =  flash(e)
-    return render_template('list-campaigns.html', error=error)
+    return render_template('login.html', error=error)
 
 
 
