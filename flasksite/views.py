@@ -281,12 +281,15 @@ def getSpecificCampaignNew(campaign):
   else:
     c_id = "'999'"
 
+  if int(data[0]['is_sms']) == 0:
+    su = queryToData(cur2,queries.new_sign_ups_new.format(c_id, data[0]['nid']))
+    nm = queryToData(cur2,queries.new_members_new.format(c_id, data[0]['nid']))
+    srcs = queryToData(cur2,queries.sources_new.format(data[0]['nid']))
 
-  su = queryToData(cur2,queries.new_sign_ups_new.format(c_id, data[0]['nid']))
-  nm = queryToData(cur2,queries.new_members_new.format(c_id, data[0]['nid']))
-  srcs = queryToData(cur2,queries.sources_new.format(data[0]['nid']))
-  print queries.new_members_new.format(c_id, data[0]['nid'])
-  print srcs
+  if int(data[0]['is_sms']) == 1:
+    su = queryToData(cur2,queries.new_sign_ups_new_mobile.format(c_id))
+    nm = queryToData(cur2,queries.new_members_new_mobile.format(c_id))
+    srcs = queryToData(cur2,queries.sources_new.format(data[0]['nid']))
 
 
 
