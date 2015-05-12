@@ -86,6 +86,12 @@ def queryToData(cursor_obj,query,index=None,keyname=None,need_json=None):
   	data = cursor_obj.fetchall()
   	return data
 
+  if index!=None and keyname!=None and need_json!=None:
+
+    cursor_obj.execute(query)
+    data = cursor_obj.fetchall()[index][keyname]
+    return data
+
 import views, models
 if __name__ == '__main__':
   app.run()
