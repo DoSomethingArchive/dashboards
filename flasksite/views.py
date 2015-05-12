@@ -7,6 +7,7 @@ import locale
 import queries
 import requests
 from datetime import datetime as dt
+from collections import OrderedDict
 
 locale.setlocale(locale.LC_ALL, 'en_US')
 
@@ -272,33 +273,43 @@ def campaignDataEnpoint(nid):
 @login_required
 def getSpecificCampaignNew(campaign):
   campaign = campaign.replace('^&^', '#')
+  campaign = campaign.replace('^^^', '?')
 
   cur2 = openDB2()
   data = queryToData(cur2,queries.list_one_campaign.format(campaign),need_json=0)
-  print data
-  #ned to differentiate out sms games because of web alphas, even for sign ups
-  #some new members issues?
-  #sorces by campaign run?
-  #sources different for non staff as lower threshold
+
   if data[0]['mobile_ids'] is not None and data[0]['mobile_ids'] != '0':
     c_id = ",".join(['"'+i+'"' for i in data[0]['mobile_ids'].split(',') if i != 0])
   else:
     c_id = "'999'"
 
   if int(data[0]['is_sms']) == 0:
+    total_su = queryToData(cur2,queries.signups_total.format(c_id, data[0]['nid']), index=0, keyname='total_signups', need_json=0)
+    total_web_su = queryToData(cur2,queries.signups_web.format(data[0]['nid']), index=0, keyname='web_su', need_json=0)
+    total_nm = queryToData(cur2,queries.new_members_total.format(c_id, data[0]['nid']), index=0, keyname='new_members_total', need_json=0)
+    total_rb = queryToData(cur2,queries.report_back_total_web.format(data[0]['nid'], '10000'), index=0, keyname='rb', need_json=0)
+    total_impact = queryToData(cur2,queries.impact_total.format(data[0]['nid'], '10000'), index=0, keyname='impact', need_json=0)
+    total_traffic = queryToData(cur2,queries.traffic_total.format(data[0]['nid']), index=0, keyname='traffic', need_json=0)
+    overall = OrderedDict([('Sign Ups',total_su), ('New Members',total_nm), ('Reportbacks',total_rb), ('Impact',total_impact), ('Traffic',total_traffic), ('Conversion Rate',round(float(total_web_su)/float(total_traffic) * 100, 2))])
+    overall = json.dumps(overall)
+
     su = queryToData(cur2,queries.new_sign_ups_new.format(c_id, data[0]['nid']))
     nm = queryToData(cur2,queries.new_members_new.format(c_id, data[0]['nid']))
     srcs = queryToData(cur2,queries.sources_new.format(data[0]['nid']))
 
   if int(data[0]['is_sms']) == 1:
+    total_su = queryToData(cur2,queries.new_sign_ups_new_mobile_total.format(c_id), index=0, keyname='mobile_signup_total', need_json=0)
+    total_nm = queryToData(cur2,queries.new_members_new_mobile_total.format(c_id), index=0, keyname='mobile_new_members_total', need_json=0)
+    total_alpha = queryToData(cur2,queries.new_sign_ups_new_alphas.format(c_id), index=0, keyname='alphas', need_json=0)
+    total_traffic = queryToData(cur2,queries.traffic_total.format(data[0]['nid']), index=0, keyname='traffic', need_json=0)
+    overall = OrderedDict([('Sign Ups',total_su), ('New Members',total_nm), ('Reportbacks',total_alpha), ('Impact',total_alpha), ('Traffic',total_traffic), ('Conversion Rate',round(float(total_alpha)/float(total_traffic) * 100, 2))])
+    overall = json.dumps(overall)
+
     su = queryToData(cur2,queries.new_sign_ups_new_mobile.format(c_id))
-    print su
     nm = queryToData(cur2,queries.new_members_new_mobile.format(c_id))
     srcs = queryToData(cur2,queries.sources_new.format(data[0]['nid']))
 
-
-
-  return render_template('campaign-new.html', campaign=campaign, su=su, nm=nm, srcs=srcs)
+  return render_template('campaign-new.html', campaign=campaign, su=su, nm=nm, srcs=srcs, overall=overall)
 
 
 
