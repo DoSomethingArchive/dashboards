@@ -142,17 +142,15 @@ def causeStaffPicks(cause):
 @app.route('/list-campaigns')
 @login_required
 def listCampaigns():
-  try:
-    cur2 = openDB2()
-    data = queryToData(cur2,queries.list_all_campaigns, need_json=0)
-    data = 'test'
-    cur2.close()
 
-    return render_template('list-campaigns.html', data=data)
-  except Exception as e:
+  cur2 = openDB2()
+  data = queryToData(cur2,queries.list_all_campaigns, need_json=0)
+  data = [{'title':i['title'].decode('ascii', 'ignore')} for i in data]
+  print data
+  data = json.dumps(data)
+  cur2.close()
+  return render_template('list-campaigns.html', data=data)
 
-    error =  flash(e)
-    return render_template('login.html', error=error)
 
 
 
