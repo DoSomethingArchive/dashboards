@@ -96,7 +96,7 @@ kpiTextInsert = "insert into kpi_content (timestamp, all_text, box_id) values ('
 # campaign metadata endpoint query
 campaignDataEnpoint_basic_campaign_metadata = "select campaign, sign_ups, new_members, report_backs, all_traffic, start_date, end_date  from overall.overall where nid = %d"
 
-list_all_campaigns = "select  title from users_and_activities.campaign_master order by title"
+list_all_campaigns = "select  title from users_and_activities.campaign_master where title not in ('hgfdjhvj,bkh.', 'Tag Your Friends', 'XYZ Factor Test', 'A/B Test File Hosting Campaign', 'Birthday Mail (Fake)', 'Chai Impact', 'Bully Text Dummy Campaign') order by title"
 
 list_one_campaign = """select c.nid, title, alias, status, group_concat(m.campaign_id) as mobile_ids,
                         case
@@ -130,7 +130,7 @@ new_members_new = """select date_format(from_unixtime(timestamp), '%Y-%m-%d') as
                     from users_and_activities.mobile_subscriptions m
                     join users_and_activities.mobile_users mu
                     on m.phone_number=mu.phone_number
-                    where campaign_id in ( {0}) and been_alpha = 0 and first_seen_campaign = 1 and date_add(mu.created_at, interval 5 minute) >= m.activated_at
+                    where campaign_id in ({0}) and been_alpha = 0 and first_seen_campaign = 1 and date_add(mu.created_at, interval 5 minute) >= m.activated_at
                     group by date_format(activated_at, '%Y-%m-%d')) m
                     on date_format(from_unixtime(timestamp), '%Y-%m-%d')=m.date
                     where nid = {1} and date_add(from_unixtime(u.created), interval 5 minute) >= from_unixtime(timestamp)
@@ -138,17 +138,81 @@ new_members_new = """select date_format(from_unixtime(timestamp), '%Y-%m-%d') as
 
 new_sign_ups_new_mobile = """select date_format(activated_at, '%Y-%m-%d') as date, 0 as web, ifnull(count(phone_number),0) as mobile
                   from users_and_activities.mobile_subscriptions
-                  where campaign_id in ( {0}) and been_alpha = 0 and first_seen_campaign = 1
+                  where campaign_id in ({0}) and first_seen_campaign = 1
                   group by date_format(activated_at, '%Y-%m-%d')"""
 
 new_members_new_mobile = """select date_format(activated_at, '%Y-%m-%d') as date, 0 as web, ifnull(count(m.phone_number),0) as mobile
                     from users_and_activities.mobile_subscriptions m
                     join users_and_activities.mobile_users mu
                     on m.phone_number=mu.phone_number
-                    where campaign_id in ( {0}) and been_alpha = 0 and first_seen_campaign = 1 and date_add(mu.created_at, interval 5 minute) >= m.activated_at
+                    where campaign_id in ({0}) and first_seen_campaign = 1 and date_add(mu.created_at, interval 5 minute) >= m.activated_at
                     group by date_format(activated_at, '%Y-%m-%d')"""
 
 sources_new = """select date, e.site as source, entrances as unq_visits from users_and_activities.entrances e join
               (select site from users_and_activities.entrances where nid = {0} group by site order by sum(entrances) desc limit 15) s on e.site=s.site
               where nid = {0}"""
+
+signups_total = """select
+                ifnull(count(uid),0)
+                +
+                (select  ifnull(count(phone_number),0)
+                from users_and_activities.mobile_subscriptions
+                where campaign_id in ({0}) and been_alpha = 0 and first_seen_campaign = 1)
+                as total_signups
+                from dosomething.dosomething_signup w
+                where nid = {1}"""
+signups_web = """select
+                ifnull(count(uid),0) as web_su
+                from dosomething.dosomething_signup
+                where nid = {0}"""
+
+new_members_total = """select
+                    ifnull(count(w.uid),0)
+                    +
+                    (select ifnull(count(m.phone_number),0)
+                    from users_and_activities.mobile_subscriptions m
+                    join users_and_activities.mobile_users mu
+                    on m.phone_number=mu.phone_number
+                    where campaign_id in  ({0}) and been_alpha = 0 and first_seen_campaign = 1 and date_add(mu.created_at, interval 5 minute) >= m.activated_at)
+                    as new_members_total
+                    from dosomething.dosomething_signup w
+                    join dosomething.users u on w.uid=u.uid
+                    where nid = {1} and date_add(from_unixtime(u.created), interval 5 minute) >= from_unixtime(timestamp)"""
+
+report_back_total_web = """select
+                        count(*) as rb
+                        from
+                        dosomething.dosomething_reportback
+                        where nid = {0} and flagged = 0 and quantity <= {1} """
+
+report_back_total_sms = """select
+                        count(*) as alpha
+                        from users_and_activities.mobile_subscriptions
+                        where campaign_id in ({0}) and web_alpha = 1"""
+
+impact_total = """select
+                  sum(quantity) as impact
+                  from
+                  dosomething.dosomething_reportback
+                  where nid = {0} and flagged = 0 and quantity <= {1}"""
+
+traffic_total = """select
+               sum(visitors) as traffic
+               from
+               users_and_activities.all_traffic
+               where nid = {0}"""
+
+new_sign_ups_new_mobile_total = """select ifnull(count(phone_number),0) as mobile_signup_total
+                                   from users_and_activities.mobile_subscriptions
+                                   where campaign_id in ({0}) and first_seen_campaign = 1"""
+
+new_members_new_mobile_total = """select ifnull(count(m.phone_number),0) as mobile_new_members_total
+                                  from users_and_activities.mobile_subscriptions m
+                                  join users_and_activities.mobile_users mu
+                                  on m.phone_number=mu.phone_number
+                                  where campaign_id in ({0}) and first_seen_campaign = 1 and date_add(mu.created_at, interval 5 minute) >= m.activated_at"""
+
+new_sign_ups_new_alphas = """select ifnull(count(phone_number),0) as alphas
+                             from users_and_activities.mobile_subscriptions
+                             where campaign_id in ({0}) and web_alpha = 1"""
 
