@@ -1,7 +1,10 @@
 {% extends "layout.html" %}
 
 {% block content %}
+
 <h2>{{campaign}}</h2>
+
+<div id="campaign-overall-stats"></div>
 
 <div id="chart">
   <p>Sign Ups by Day</p>
@@ -22,18 +25,37 @@
 var su = {{su|safe}};
 var nm = {{nm|safe}};
 var srcs = {{srcs|safe}}
-
-
+var overall = {{overall|safe}}
 </script>
 
 <script type="text/javascript">
+var format = d3.format("0,000");
+//div for overall metrics
+var div = d3.select("#campaign-overall-stats")
+            .attr("class","grid2");
+//add p for each metric
+console.log(overall);
+for (i in overall) {
+  var p = d3.select("div.grid2")
+    .append("p")
+    .attr("class","overall")
+    .append("p")
+    .attr("class","words")
+    .html(function (d) {
+      if (i === 'Conversion Rate') {
+        return i + " " + ":" + " " + overall[i] + '%';
+      }
+      else {
+        return i + " " + ":" + " " + format(overall[i]);
+      }
+    });
+}
 //chart 1 - sign ups
 ds.makeMultiBarChart('#chart', ds.multiBarDataFormat(su));
-
 //chart 2 - new members
 ds.makeMultiBarChart('#chart2', ds.multiBarDataFormat(nm));
-
 //chart 3 - traffic sources
 ds.makeStackedAreaChart('#chart3 svg',ds.stackedAreaDataFormat(srcs));
 </script
+
 {% endblock %}
