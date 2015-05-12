@@ -7,23 +7,18 @@
 var data = {{data|safe}};
 var list = document.getElementById("campaignlist");
 
-
-
-
 for (i=0; i<data.length; i++) {
   var elem = document.createElement("li");
   var textnode = document.createTextNode(data[i].title);
   elem.appendChild(textnode);
   list.appendChild(elem);
-
-
 }
 
 var ul = document.getElementById('campaignlist');
 
 ul.addEventListener('click', function(e) {
     if (e.target.tagName === 'LI'){
-      var li_content = e.target.textContent.replace('#','^&^');
+      var li_content = e.target.textContent.replace('#','^&^').replace('?','^^^');
       window.location = '/' + li_content;
     }
 });
