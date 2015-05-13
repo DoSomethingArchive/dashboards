@@ -3,7 +3,7 @@ var format = d3.format("0,000");
 var div = d3.select("#campaign-overall-stats")
             .attr("class","grid2");
 //add p for each metric
-console.log(overall);
+
 for (i in overall) {
   var p = d3.select("div.grid2")
     .append("p")
