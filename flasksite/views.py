@@ -147,13 +147,9 @@ def listCampaigns():
   cur2 = openDB2()
   data = queryToData(cur2,queries.list_all_campaigns, need_json=0)
   data = [{'title':i['title'].decode('ascii', 'ignore')} for i in data]
-  print data
   data = json.dumps(data)
   cur2.close()
   return render_template('list-campaigns.html', data=data)
-
-
-
 
 #returns monthly kpi data
 @app.route('/monthly-stats')
@@ -277,6 +273,7 @@ def getSpecificCampaignNew(campaign):
 
   cur2 = openDB2()
   data = queryToData(cur2,queries.list_one_campaign.format(campaign),need_json=0)
+  print data
 
   if data[0]['mobile_ids'] is not None and data[0]['mobile_ids'] != '0':
     c_id = ",".join(['"'+i+'"' for i in data[0]['mobile_ids'].split(',') if i != 0])
@@ -311,7 +308,7 @@ def getSpecificCampaignNew(campaign):
     su = queryToData(cur2,queries.new_sign_ups_new_mobile.format(c_id))
     nm = queryToData(cur2,queries.new_members_new_mobile.format(c_id))
     rb = queryToData(cur2,queries.reportback_sms_daily.format(c_id))
-    impact = queryToData(cur2,queries.reportback_sms_daily.format(c_id))
+    impact = 0
     srcs = queryToData(cur2,queries.sources_new.format(data[0]['nid']))
     traffic = queryToData(cur2,queries.traffic_daily.format(data[0]['nid']))
 
