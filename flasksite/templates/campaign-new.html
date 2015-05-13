@@ -6,56 +6,49 @@
 
 <div id="campaign-overall-stats"></div>
 
-<div id="chart">
-  <p>Sign Ups by Day</p>
+<div class="campaign-spec-charts" id="chart">
+  <p>Sign Ups</p>
   <svg></svg>
 </div>
 
-<div id="chart2">
-<p>New Members by Day</p>
+<div class="campaign-spec-charts" id="chart2">
+<p>New Members</p>
   <svg></svg>
 </div>
 
-<div id="chart3">
-  <p>Traffic Sources by Day</p>
+<div class="campaign-spec-charts" id="chart5">
+  <p>Reportbacks</p>
+  <svg></svg>
+</div>
+
+<div class="campaign-spec-charts" id="chart6">
+  <p>Impact</p>
+  <svg></svg>
+</div>
+
+<div class="campaign-spec-charts" id="chart3">
+  <p>Traffic Sources (Entrances)</p>
+  <svg></svg>
+</div>
+
+<div class="campaign-spec-charts" id="chart4">
+  <p>All Traffic</p>
   <svg></svg>
 </div>
 
 <script type="text/javascript">
+var is_sms = {{is_sms|safe}}
 var su = {{su|safe}};
 var nm = {{nm|safe}};
-var srcs = {{srcs|safe}}
-var overall = {{overall|safe}}
-</script>
+var rb = {{rb|safe}};
 
-<script type="text/javascript">
-var format = d3.format("0,000");
-//div for overall metrics
-var div = d3.select("#campaign-overall-stats")
-            .attr("class","grid2");
-//add p for each metric
-console.log(overall);
-for (i in overall) {
-  var p = d3.select("div.grid2")
-    .append("p")
-    .attr("class","overall")
-    .append("p")
-    .attr("class","words")
-    .html(function (d) {
-      if (i === 'Conversion Rate') {
-        return i + " " + ":" + " " + overall[i] + '%';
-      }
-      else {
-        return i + " " + ":" + " " + format(overall[i]);
-      }
-    });
+if (is_sms === 0) {
+  var impact = {{impact|safe}};
 }
-//chart 1 - sign ups
-ds.makeMultiBarChart('#chart', ds.multiBarDataFormat(su));
-//chart 2 - new members
-ds.makeMultiBarChart('#chart2', ds.multiBarDataFormat(nm));
-//chart 3 - traffic sources
-ds.makeStackedAreaChart('#chart3 svg',ds.stackedAreaDataFormat(srcs));
-</script
+var srcs = {{srcs|safe}};
+var overall = {{overall|safe}};
+var traffic = {{traffic|safe}};
+</script>
+<script type="text/javascript" src="/static/js/campaign-new.js"></script>
 
 {% endblock %}
