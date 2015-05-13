@@ -174,36 +174,12 @@ override gridlines from nvd3 css
 }
 
 /*
-campaign specific page, chart 1
+campaign specific charts sizing
  */
-#chart svg {
+
+.campaign-spec-charts svg {
 
   height: 500px;
-}
-
-/*
-campaign specific page, chart 2
- */
-#chart2 svg {
-
-  height: 500px;
-}
-
-/*
-campaign specific page, chart 3
- */
-#chart3 svg {
-
-  height: 500px;
-}
-
-/*
-campaign specific page, chart 4
- */
-#chart4 svg {
-
-  height: 500px;
-  padding-bottom: 100px;
 }
 
 /*
