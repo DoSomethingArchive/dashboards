@@ -216,3 +216,31 @@ new_sign_ups_new_alphas = """select ifnull(count(phone_number),0) as alphas
                              from users_and_activities.mobile_subscriptions
                              where campaign_id in ({0}) and web_alpha = 1"""
 
+traffic_daily = """select
+               date, visitors
+               from
+               users_and_activities.all_traffic
+               where nid = {0}"""
+
+reportback_web_daily = """select
+               date_format(from_unixtime(updated), '%Y-%m-%d') as date,
+               count(rbid) as reportbacks
+               from
+               dosomething.dosomething_reportback
+               where nid = {0} and flagged = 0 and quantity <= {1}
+               group by date_format(from_unixtime(updated), '%Y-%m-%d')"""
+
+reportback_sms_daily = """select
+                        date_format(activated_at, '%Y-%m-%d') as date,
+                        count(phone_number) as alphas
+                        from users_and_activities.mobile_subscriptions
+                        where campaign_id in ({0}) and web_alpha = 1
+                        group by date_format(activated_at, '%Y-%m-%d')"""
+
+impact_daily = """select
+                  date_format(from_unixtime(updated), '%Y-%m-%d') as date,
+                  sum(quantity) as impact
+                  from
+                  dosomething.dosomething_reportback
+                  where nid = {0} and flagged = 0 and quantity <= {1}
+                  group by date_format(from_unixtime(updated), '%Y-%m-%d')"""
