@@ -13,6 +13,18 @@ ds.coerceToInt = function(list) {
   }
 }
 
+//capitalize first letter
+ds.capitalizeFirst = function(string) {
+  var string_aray = string.split(" ");
+  var final_array = new Array;
+  for (var i = 0; i < string_aray.length; i++) {
+    var new_str = string_aray[i].charAt(0).toUpperCase() + string_aray[i].substr(1).toLowerCase();
+    final_array.push(new_str);
+  }
+  var final_str = final_array.join(" ")
+  return final_str;
+}
+
 //apply coerceToInt to objects in main array
 ds.shapeData = function(main_list) {
   for (var i=0; i<main_list.length;i++) {
@@ -74,33 +86,23 @@ ds.makeMultiBarChart = function(selector, data) {
 };
 
 //data formatting for multibar - array of objects (one per bar) that values is an array of objects
+ds.multiBarDataFormat = function(data, array_of_metrics) {
+  var final_metric = [];
+  for (var met = 0; met < array_of_metrics.length; met++) {
+    var formatted = {key:ds.capitalizeFirst(array_of_metrics[met]), values:[]};
 
-ds.multiBarDataFormat = function(data) {
-  var metric = [];
-  var m = {key:'Mobile', values:[]};
-  var w = {key:'Web', values:[]};
-
-  for (var i = 0; i < data.length; i++) {
-    if (data[i].mobile) {
-      var element = {x:data[i].date,y:+data[i].mobile};
-      m.values.push(element);
+    for (var i = 0; i < data.length; i++) {
+      if (data[i][array_of_metrics[met]]) {
+        var element = {x:data[i].date,y:+data[i][array_of_metrics[met]]};
+        formatted.values.push(element);
+      }
     }
 
-    if (data[i].web) {
-      var element = {x:data[i].date,y:+data[i].web};
-      w.values.push(element);
+    if (formatted.values.length > 1 ) {
+      final_metric.push(formatted);
     }
   }
-
-  if (m.values.length <1 ) {
-    metric.push(w);
-  }
-
-  else {
-    metric.push(m);
-    metric.push(w);
-  }
-  return metric;
+  return final_metric;
 };
 
 //get distinct item from an array of objects, return array
