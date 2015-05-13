@@ -295,7 +295,10 @@ def getSpecificCampaignNew(campaign):
 
     su = queryToData(cur2,queries.new_sign_ups_new.format(c_id, data[0]['nid']))
     nm = queryToData(cur2,queries.new_members_new.format(c_id, data[0]['nid']))
+    rb = queryToData(cur2,queries.reportback_web_daily.format(data[0]['nid'], '10000'))
+    impact = queryToData(cur2,queries.impact_daily.format(data[0]['nid'], '10000'))
     srcs = queryToData(cur2,queries.sources_new.format(data[0]['nid']))
+    traffic = queryToData(cur2,queries.traffic_daily.format(data[0]['nid']))
 
   if int(data[0]['is_sms']) == 1:
     total_su = queryToData(cur2,queries.new_sign_ups_new_mobile_total.format(c_id), index=0, keyname='mobile_signup_total', need_json=0)
@@ -307,9 +310,12 @@ def getSpecificCampaignNew(campaign):
 
     su = queryToData(cur2,queries.new_sign_ups_new_mobile.format(c_id))
     nm = queryToData(cur2,queries.new_members_new_mobile.format(c_id))
+    rb = queryToData(cur2,queries.reportback_sms_daily.format(c_id))
+    impact = queryToData(cur2,queries.reportback_sms_daily.format(c_id))
     srcs = queryToData(cur2,queries.sources_new.format(data[0]['nid']))
+    traffic = queryToData(cur2,queries.traffic_daily.format(data[0]['nid']))
 
-  return render_template('campaign-new.html', campaign=campaign, su=su, nm=nm, srcs=srcs, overall=overall)
+  return render_template('campaign-new.html', is_sms=data[0]['is_sms'], campaign=campaign, su=su, nm=nm, rb=rb, impact=impact, srcs=srcs, overall=overall, traffic=traffic)
 
 
 
