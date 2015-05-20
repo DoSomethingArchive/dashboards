@@ -183,7 +183,8 @@ report_back_total_web = """select
                         count(*) as rb
                         from
                         dosomething.dosomething_reportback
-                        where nid = {0} and flagged = 0 and quantity <= {1} """
+                        where nid = {0} and flagged = 0 and quantity <= {1}
+                        or nid = {0} and flagged is null and quantity <= {1}"""
 
 report_back_total_sms = """select
                         count(*) as alpha
@@ -194,7 +195,8 @@ impact_total = """select
                   sum(quantity) as impact
                   from
                   dosomething.dosomething_reportback
-                  where nid = {0} and flagged = 0 and quantity <= {1}"""
+                  where nid = {0} and flagged = 0 and quantity <= {1}
+                  or nid = {0} and flagged is null and quantity <= {1}"""
 
 traffic_total = """select
                sum(visitors) as traffic
@@ -228,6 +230,8 @@ reportback_web_daily = """select
                from
                dosomething.dosomething_reportback
                where nid = {0} and flagged = 0 and quantity <= {1}
+               or
+               nid = {0} and flagged is null and quantity <= {1}
                group by date_format(from_unixtime(updated), '%Y-%m-%d')"""
 
 reportback_sms_daily = """select
@@ -243,4 +247,6 @@ impact_daily = """select
                   from
                   dosomething.dosomething_reportback
                   where nid = {0} and flagged = 0 and quantity <= {1}
+                  or
+                  nid = {0} and flagged is null and quantity <= {1}
                   group by date_format(from_unixtime(updated), '%Y-%m-%d')"""
