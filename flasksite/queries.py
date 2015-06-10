@@ -116,10 +116,10 @@ new_sign_ups_new = """select date_format(from_unixtime(timestamp), '%Y-%m-%d') a
                   left join
                   (select date_format(activated_at, '%Y-%m-%d') as date, count(phone_number) as phones
                   from users_and_activities.mobile_subscriptions
-                  where campaign_id in ( {0}) and been_alpha = 0 and first_seen_campaign = 1
+                  where campaign_id in ( {0}) and been_alpha = 0 and first_seen_campaign = 1 and date_format(activated_at, '%Y-%m-%d') >= "{2}" and date_format(activated_at, '%Y-%m-%d') <= "{3}"
                   group by date_format(activated_at, '%Y-%m-%d')) m
                   on date_format(from_unixtime(timestamp), '%Y-%m-%d')=m.date
-                  where nid = {1}
+                  where nid = {1} and from_unixtime(timestamp, '%Y-%m-%d') >= "{2}" and from_unixtime(timestamp, '%Y-%m-%d') <= "{3}"
                   group by date_format(from_unixtime(timestamp), '%Y-%m-%d')"""
 
 new_members_new = """select date_format(from_unixtime(timestamp), '%Y-%m-%d') as date, ifnull(count(w.uid),0) as web, ifnull(phones,0) as mobile
@@ -130,41 +130,42 @@ new_members_new = """select date_format(from_unixtime(timestamp), '%Y-%m-%d') as
                     from users_and_activities.mobile_subscriptions m
                     join users_and_activities.mobile_users mu
                     on m.phone_number=mu.phone_number
-                    where campaign_id in ({0}) and been_alpha = 0 and first_seen_campaign = 1 and date_add(mu.created_at, interval 5 minute) >= m.activated_at
+                    where campaign_id in ({0}) and been_alpha = 0 and first_seen_campaign = 1 and date_add(mu.created_at, interval 5 minute) >= m.activated_at and date_format(activated_at, '%Y-%m-%d') >= "{2}" and date_format(activated_at, '%Y-%m-%d') <= "{3}"
                     group by date_format(activated_at, '%Y-%m-%d')) m
                     on date_format(from_unixtime(timestamp), '%Y-%m-%d')=m.date
-                    where nid = {1} and date_add(from_unixtime(u.created), interval 5 minute) >= from_unixtime(timestamp)
+                    where nid = {1} and date_add(from_unixtime(u.created), interval 5 minute) >= from_unixtime(timestamp) and from_unixtime(timestamp, '%Y-%m-%d') >= "{2}" and from_unixtime(timestamp, '%Y-%m-%d') <= "{3}"
                     group by date_format(from_unixtime(timestamp), '%Y-%m-%d')"""
 
 new_sign_ups_new_mobile = """select date_format(activated_at, '%Y-%m-%d') as date, 0 as web, ifnull(count(phone_number),0) as mobile
                   from users_and_activities.mobile_subscriptions
-                  where campaign_id in ({0}) and first_seen_campaign = 1
+                  where campaign_id in ({0}) and first_seen_campaign = 1 and date_format(activated_at, '%Y-%m-%d') >= "{1}" and date_format(activated_at, '%Y-%m-%d') <= "{2}"
                   group by date_format(activated_at, '%Y-%m-%d')"""
 
 new_members_new_mobile = """select date_format(activated_at, '%Y-%m-%d') as date, 0 as web, ifnull(count(m.phone_number),0) as mobile
                     from users_and_activities.mobile_subscriptions m
                     join users_and_activities.mobile_users mu
                     on m.phone_number=mu.phone_number
-                    where campaign_id in ({0}) and first_seen_campaign = 1 and date_add(mu.created_at, interval 5 minute) >= m.activated_at
+                    where campaign_id in ({0}) and first_seen_campaign = 1 and date_add(mu.created_at, interval 5 minute) >= m.activated_at and date_format(activated_at, '%Y-%m-%d') >= "{1}" and date_format(activated_at, '%Y-%m-%d') <= "{2}"
                     group by date_format(activated_at, '%Y-%m-%d')"""
 
-sources_new = """select date, e.site as source, entrances as unq_visits from users_and_activities.entrances e join
-              (select site from users_and_activities.entrances where nid = {0} group by site order by sum(entrances) desc limit 15) s on e.site=s.site
-              where nid = {0}"""
+sources_new = """select date, e.site as source, ifnull(entrances,0) as unq_visits from users_and_activities.entrances e join
+              (select site from users_and_activities.entrances where nid = {0} and date >= "{1}" and date <= "{2}" group by site order by sum(entrances) desc limit 15) s on e.site=s.site
+              where nid = {0} and date >= "{1}" and date <= "{2}" """
 
 signups_total = """select
                 ifnull(count(uid),0)
                 +
                 (select  ifnull(count(phone_number),0)
                 from users_and_activities.mobile_subscriptions
-                where campaign_id in ({0}) and been_alpha = 0 and first_seen_campaign = 1)
+                where campaign_id in ({0}) and been_alpha = 0 and first_seen_campaign = 1 and date_format(activated_at, '%Y-%m-%d') >= "{2}" and date_format(activated_at, '%Y-%m-%d') <= "{3}")
                 as total_signups
                 from dosomething.dosomething_signup w
-                where nid = {1}"""
+                where nid = {1} and from_unixtime(timestamp, '%Y-%m-%d') >= "{2}" and from_unixtime(timestamp, '%Y-%m-%d') <= "{3}" """
+
 signups_web = """select
                 ifnull(count(uid),0) as web_su
                 from dosomething.dosomething_signup
-                where nid = {0}"""
+                where nid = {0} and from_unixtime(timestamp, '%Y-%m-%d') >= "{1}" and from_unixtime(timestamp, '%Y-%m-%d') <= "{2}" """
 
 new_members_total = """select
                     ifnull(count(w.uid),0)
@@ -173,80 +174,80 @@ new_members_total = """select
                     from users_and_activities.mobile_subscriptions m
                     join users_and_activities.mobile_users mu
                     on m.phone_number=mu.phone_number
-                    where campaign_id in  ({0}) and been_alpha = 0 and first_seen_campaign = 1 and date_add(mu.created_at, interval 5 minute) >= m.activated_at)
+                    where campaign_id in  ({0}) and been_alpha = 0 and first_seen_campaign = 1 and date_add(mu.created_at, interval 5 minute) >= m.activated_at and date_format(activated_at, '%Y-%m-%d') >= "{2}" and date_format(activated_at, '%Y-%m-%d') <= "{3}" )
                     as new_members_total
                     from dosomething.dosomething_signup w
                     join dosomething.users u on w.uid=u.uid
-                    where nid = {1} and date_add(from_unixtime(u.created), interval 5 minute) >= from_unixtime(timestamp)"""
+                    where nid = {1} and date_add(from_unixtime(u.created), interval 5 minute) >= from_unixtime(timestamp) and from_unixtime(timestamp, '%Y-%m-%d') >= "{2}" and from_unixtime(timestamp, '%Y-%m-%d') <= "{3}" """
 
 report_back_total_web = """select
-                        count(*) as rb
+                        ifnull(count(*),0) as rb
                         from
                         dosomething.dosomething_reportback
-                        where nid = {0} and flagged = 0 and quantity <= {1}
-                        or nid = {0} and flagged is null and quantity <= {1}"""
+                        where nid = {0} and flagged = 0 and quantity <= {1} and from_unixtime(updated, '%Y-%m-%d') >= "{2}" and from_unixtime(updated, '%Y-%m-%d') <= "{3}"
+                        or nid = {0} and flagged is null and quantity <= {1} and from_unixtime(updated, '%Y-%m-%d') >= "{2}" and from_unixtime(updated, '%Y-%m-%d') <= "{3}" """
 
 report_back_total_sms = """select
-                        count(*) as alpha
+                        ifnull(count(*),0) as alpha
                         from users_and_activities.mobile_subscriptions
-                        where campaign_id in ({0}) and web_alpha = 1"""
+                        where campaign_id in ({0}) and web_alpha = 1 and date_format(activated_at, '%Y-%m-%d') >= "{1}" and date_format(activated_at, '%Y-%m-%d') <= "{2}" """
 
 impact_total = """select
-                  sum(quantity) as impact
+                  ifnull(sum(quantity),0) as impact
                   from
                   dosomething.dosomething_reportback
-                  where nid = {0} and flagged = 0 and quantity <= {1}
-                  or nid = {0} and flagged is null and quantity <= {1}"""
+                  where nid = {0} and flagged = 0 and quantity <= {1} and from_unixtime(updated, '%Y-%m-%d') >= "{2}" and from_unixtime(updated, '%Y-%m-%d') <= "{3}"
+                  or nid = {0} and flagged is null and quantity <= {1} and from_unixtime(updated, '%Y-%m-%d') >= "{2}" and from_unixtime(updated, '%Y-%m-%d') <= "{3}" """
 
 traffic_total = """select
-               sum(visitors) as traffic
+               ifnull(sum(visitors),0) as traffic
                from
                users_and_activities.all_traffic
-               where nid = {0}"""
+               where nid = {0} and date >= "{1}" and date <= "{2}" """
 
 new_sign_ups_new_mobile_total = """select ifnull(count(phone_number),0) as mobile_signup_total
                                    from users_and_activities.mobile_subscriptions
-                                   where campaign_id in ({0}) and first_seen_campaign = 1"""
+                                   where campaign_id in ({0}) and first_seen_campaign = 1 and date_format(activated_at, '%Y-%m-%d') >= "{1}" and date_format(activated_at, '%Y-%m-%d') <= "{2}" """
 
 new_members_new_mobile_total = """select ifnull(count(m.phone_number),0) as mobile_new_members_total
                                   from users_and_activities.mobile_subscriptions m
                                   join users_and_activities.mobile_users mu
                                   on m.phone_number=mu.phone_number
-                                  where campaign_id in ({0}) and first_seen_campaign = 1 and date_add(mu.created_at, interval 5 minute) >= m.activated_at"""
+                                  where campaign_id in ({0}) and first_seen_campaign = 1 and date_add(mu.created_at, interval 5 minute) >= m.activated_at and date_format(activated_at, '%Y-%m-%d') >= "{1}" and date_format(activated_at, '%Y-%m-%d') <= "{2}" """
 
 new_sign_ups_new_alphas = """select ifnull(count(phone_number),0) as alphas
                              from users_and_activities.mobile_subscriptions
-                             where campaign_id in ({0}) and web_alpha = 1"""
+                             where campaign_id in ({0}) and web_alpha = 1 and date_format(activated_at, '%Y-%m-%d') >= "{1}" and date_format(activated_at, '%Y-%m-%d') <= "{2}" """
 
 traffic_daily = """select
-               date, visitors
+               date, ifnull(visitors,0)
                from
                users_and_activities.all_traffic
-               where nid = {0}"""
+               where nid = {0} and date_format(date, '%Y-%m-%d') >= "{1}" and date_format(date, '%Y-%m-%d') <= "{2}" """
 
 reportback_web_daily = """select
                date_format(from_unixtime(updated), '%Y-%m-%d') as date,
-               count(rbid) as reportbacks
+               ifnull(count(rbid),0) as reportbacks
                from
                dosomething.dosomething_reportback
-               where nid = {0} and flagged = 0 and quantity <= {1}
+               where nid = {0} and flagged = 0 and quantity <= {1} and from_unixtime(updated, '%Y-%m-%d') >= "{2}" and from_unixtime(updated, '%Y-%m-%d') <= "{3}"
                or
-               nid = {0} and flagged is null and quantity <= {1}
+               nid = {0} and flagged is null and quantity <= {1} and from_unixtime(updated, '%Y-%m-%d') >= "{2}" and from_unixtime(updated, '%Y-%m-%d') <= "{3}"
                group by date_format(from_unixtime(updated), '%Y-%m-%d')"""
 
 reportback_sms_daily = """select
                         date_format(activated_at, '%Y-%m-%d') as date,
-                        count(phone_number) as alphas
+                        ifnull(count(phone_number),0) as alphas
                         from users_and_activities.mobile_subscriptions
-                        where campaign_id in ({0}) and web_alpha = 1
+                        where campaign_id in ({0}) and web_alpha = 1 and date_format(activated_at, '%Y-%m-%d') >= "{1}" and date_format(activated_at, '%Y-%m-%d') <= "{2}"
                         group by date_format(activated_at, '%Y-%m-%d')"""
 
 impact_daily = """select
                   date_format(from_unixtime(updated), '%Y-%m-%d') as date,
-                  sum(quantity) as impact
+                  ifnull(sum(quantity),0) as impact
                   from
                   dosomething.dosomething_reportback
-                  where nid = {0} and flagged = 0 and quantity <= {1}
+                  where nid = {0} and flagged = 0 and quantity <= {1} and from_unixtime(updated, '%Y-%m-%d') >= "{2}" and from_unixtime(updated, '%Y-%m-%d') <= "{3}"
                   or
-                  nid = {0} and flagged is null and quantity <= {1}
+                  nid = {0} and flagged is null and quantity <= {1} and from_unixtime(updated, '%Y-%m-%d') >= "{2}" and from_unixtime(updated, '%Y-%m-%d') <= "{3}"
                   group by date_format(from_unixtime(updated), '%Y-%m-%d')"""
