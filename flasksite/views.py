@@ -281,40 +281,97 @@ def getSpecificCampaignNew(campaign):
     c_id = "'999'"
 
   if int(data[0]['is_sms']) == 0:
-    total_su = queryToData(cur2,queries.signups_total.format(c_id, data[0]['nid']), index=0, keyname='total_signups', need_json=0)
-    total_web_su = queryToData(cur2,queries.signups_web.format(data[0]['nid']), index=0, keyname='web_su', need_json=0)
-    total_nm = queryToData(cur2,queries.new_members_total.format(c_id, data[0]['nid']), index=0, keyname='new_members_total', need_json=0)
-    total_rb = queryToData(cur2,queries.report_back_total_web.format(data[0]['nid'], '10000'), index=0, keyname='rb', need_json=0)
-    total_impact = queryToData(cur2,queries.impact_total.format(data[0]['nid'], '10000'), index=0, keyname='impact', need_json=0)
-    total_traffic = queryToData(cur2,queries.traffic_total.format(data[0]['nid']), index=0, keyname='traffic', need_json=0)
+    total_su = queryToData(cur2,queries.signups_total.format(c_id, data[0]['nid'], '2000-01-01', '3000-01-01'), index=0, keyname='total_signups', need_json=0)
+    total_web_su = queryToData(cur2,queries.signups_web.format(data[0]['nid'], '2000-01-01', '3000-01-01'), index=0, keyname='web_su', need_json=0)
+    total_nm = queryToData(cur2,queries.new_members_total.format(c_id, data[0]['nid'], '2000-01-01', '3000-01-01'), index=0, keyname='new_members_total', need_json=0)
+    total_rb = queryToData(cur2,queries.report_back_total_web.format(data[0]['nid'], '10000', '2000-01-01', '3000-01-01'), index=0, keyname='rb', need_json=0)
+    total_impact = queryToData(cur2,queries.impact_total.format(data[0]['nid'], '10000', '2000-01-01', '3000-01-01'), index=0, keyname='impact', need_json=0)
+    total_traffic = queryToData(cur2,queries.traffic_total.format(data[0]['nid'], '2000-01-01', '3000-01-01'), index=0, keyname='traffic', need_json=0)
     overall = OrderedDict([('Sign Ups',total_su), ('New Members',total_nm), ('Reportbacks',total_rb), ('Impact',total_impact), ('Traffic',total_traffic), ('Conversion Rate',round(float(total_web_su)/float(total_traffic) * 100, 2))])
     overall = json.dumps(overall)
 
-    su = queryToData(cur2,queries.new_sign_ups_new.format(c_id, data[0]['nid']))
-    nm = queryToData(cur2,queries.new_members_new.format(c_id, data[0]['nid']))
-    rb = queryToData(cur2,queries.reportback_web_daily.format(data[0]['nid'], '10000'))
-    impact = queryToData(cur2,queries.impact_daily.format(data[0]['nid'], '10000'))
-    srcs = queryToData(cur2,queries.sources_new.format(data[0]['nid']))
-    traffic = queryToData(cur2,queries.traffic_daily.format(data[0]['nid']))
+    su = queryToData(cur2,queries.new_sign_ups_new.format(c_id, data[0]['nid'], '2000-01-01', '3000-01-01'))
+    print total_su
+    nm = queryToData(cur2,queries.new_members_new.format(c_id, data[0]['nid'], '2000-01-01', '3000-01-01'))
+    rb = queryToData(cur2,queries.reportback_web_daily.format(data[0]['nid'], '10000', '2000-01-01', '3000-01-01'))
+    impact = queryToData(cur2,queries.impact_daily.format(data[0]['nid'], '10000', '2000-01-01', '3000-01-01'))
+    srcs = queryToData(cur2,queries.sources_new.format(data[0]['nid'], '2000-01-01', '3000-01-01'))
+    traffic = queryToData(cur2,queries.traffic_daily.format(data[0]['nid'], '2000-01-01', '3000-01-01'))
 
   if int(data[0]['is_sms']) == 1:
-    total_su = queryToData(cur2,queries.new_sign_ups_new_mobile_total.format(c_id), index=0, keyname='mobile_signup_total', need_json=0)
-    total_nm = queryToData(cur2,queries.new_members_new_mobile_total.format(c_id), index=0, keyname='mobile_new_members_total', need_json=0)
-    total_alpha = queryToData(cur2,queries.new_sign_ups_new_alphas.format(c_id), index=0, keyname='alphas', need_json=0)
-    total_traffic = queryToData(cur2,queries.traffic_total.format(data[0]['nid']), index=0, keyname='traffic', need_json=0)
+    total_su = queryToData(cur2,queries.new_sign_ups_new_mobile_total.format(c_id, '2000-01-01', '3000-01-01'), index=0, keyname='mobile_signup_total', need_json=0)
+    total_nm = queryToData(cur2,queries.new_members_new_mobile_total.format(c_id, '2000-01-01', '3000-01-01'), index=0, keyname='mobile_new_members_total', need_json=0)
+    total_alpha = queryToData(cur2,queries.new_sign_ups_new_alphas.format(c_id, '2000-01-01', '3000-01-01'), index=0, keyname='alphas', need_json=0)
+    total_traffic = queryToData(cur2,queries.traffic_total.format(data[0]['nid'], '2000-01-01', '3000-01-01'), index=0, keyname='traffic', need_json=0)
     overall = OrderedDict([('Sign Ups',total_su), ('New Members',total_nm), ('Reportbacks',total_alpha), ('Impact',total_alpha), ('Traffic',total_traffic), ('Conversion Rate',round(float(total_alpha)/float(total_traffic) * 100, 2))])
     overall = json.dumps(overall)
 
-    su = queryToData(cur2,queries.new_sign_ups_new_mobile.format(c_id))
-    nm = queryToData(cur2,queries.new_members_new_mobile.format(c_id))
-    rb = queryToData(cur2,queries.reportback_sms_daily.format(c_id))
+    su = queryToData(cur2,queries.new_sign_ups_new_mobile.format(c_id, '2000-01-01', '3000-01-01'))
+    nm = queryToData(cur2,queries.new_members_new_mobile.format(c_id, '2000-01-01', '3000-01-01'))
+    rb = queryToData(cur2,queries.reportback_sms_daily.format(c_id, '2000-01-01', '3000-01-01'))
     impact = 0
-    srcs = queryToData(cur2,queries.sources_new.format(data[0]['nid']))
-    traffic = queryToData(cur2,queries.traffic_daily.format(data[0]['nid']))
-
+    srcs = queryToData(cur2,queries.sources_new.format(data[0]['nid'], '2000-01-01', '3000-01-01'))
+    traffic = queryToData(cur2,queries.traffic_daily.format(data[0]['nid'], '2000-01-01', '3000-01-01'))
+  print overall
   return render_template('campaign-new.html', is_sms=data[0]['is_sms'], campaign=campaign, su=su, nm=nm, rb=rb, impact=impact, srcs=srcs, overall=overall, traffic=traffic)
 
+@app.route('/daterange', methods=['POST'])
+@login_required
+def dateRange():
+  #gets new start and end from ajax post and pulls queries with new parameters
+  start = request.form['start']
+  end = request.form['end']
+  campaign = request.form['campaign']
 
+  cur2 = openDB2()
+  data = queryToData(cur2,queries.list_one_campaign.format(campaign),need_json=0)
 
+  if data[0]['mobile_ids'] is not None and data[0]['mobile_ids'] != '0':
+    c_id = ",".join(['"'+i+'"' for i in data[0]['mobile_ids'].split(',') if i != 0])
+  else:
+    c_id = "'999'"
+
+  if int(data[0]['is_sms']) == 0:
+    total_su = queryToData(cur2,queries.signups_total.format(c_id, data[0]['nid'], start, end), index=0, keyname='total_signups', need_json=0)
+    total_web_su = queryToData(cur2,queries.signups_web.format(data[0]['nid'], start, end), index=0, keyname='web_su', need_json=0)
+    total_nm = queryToData(cur2,queries.new_members_total.format(c_id, data[0]['nid'], start, end), index=0, keyname='new_members_total', need_json=0)
+    total_rb = queryToData(cur2,queries.report_back_total_web.format(data[0]['nid'], '10000', start, end), index=0, keyname='rb', need_json=0)
+    total_impact = queryToData(cur2,queries.impact_total.format(data[0]['nid'], '10000', start, end), index=0, keyname='impact', need_json=0)
+    total_traffic = queryToData(cur2,queries.traffic_total.format(data[0]['nid'], start, end), index=0, keyname='traffic', need_json=0)
+
+    try:
+      conv_rate = round(float(total_web_su)/float(total_traffic) * 100, 2)
+    except:
+      conv_rate = 0.0
+
+    overall = OrderedDict([('Sign Ups',total_su), ('New Members',total_nm), ('Reportbacks',total_rb), ('Impact',total_impact), ('Traffic',total_traffic), ('Conversion Rate',conv_rate)])
+    overall = json.dumps(overall)
+    su = queryToData(cur2,queries.new_sign_ups_new.format(c_id, data[0]['nid'], start, end))
+    nm = queryToData(cur2,queries.new_members_new.format(c_id, data[0]['nid'], start, end))
+    rb = queryToData(cur2,queries.reportback_web_daily.format(data[0]['nid'], '10000', start, end))
+    impact = queryToData(cur2,queries.impact_daily.format(data[0]['nid'], '10000', start, end))
+    srcs = queryToData(cur2,queries.sources_new.format(data[0]['nid'], start, end))
+    traffic = queryToData(cur2,queries.traffic_daily.format(data[0]['nid'], start, end))
+
+  if int(data[0]['is_sms']) == 1:
+    total_su = queryToData(cur2,queries.new_sign_ups_new_mobile_total.format(c_id, start, end), index=0, keyname='mobile_signup_total', need_json=0)
+    total_nm = queryToData(cur2,queries.new_members_new_mobile_total.format(c_id, start, end), index=0, keyname='mobile_new_members_total', need_json=0)
+    total_alpha = queryToData(cur2,queries.new_sign_ups_new_alphas.format(c_id, start, end), index=0, keyname='alphas', need_json=0)
+    total_traffic = queryToData(cur2,queries.traffic_total.format(data[0]['nid'], start, end), index=0, keyname='traffic', need_json=0)
+    try:
+      conv_rate = round(float(total_alpha)/float(total_traffic) * 100, 2)
+    except:
+      conv_rate = 0.0
+    overall = OrderedDict([('Sign Ups',total_su), ('New Members',total_nm), ('Reportbacks',total_alpha), ('Impact',total_alpha), ('Traffic',total_traffic), ('Conversion Rate',conv_rate)])
+    overall = json.dumps(overall)
+
+    su = queryToData(cur2,queries.new_sign_ups_new_mobile.format(c_id, start, end))
+    nm = queryToData(cur2,queries.new_members_new_mobile.format(c_id, start, end))
+    rb = queryToData(cur2,queries.reportback_sms_daily.format(c_id, start, end))
+    impact = 0
+    srcs = queryToData(cur2,queries.sources_new.format(data[0]['nid'], start, end))
+    traffic = queryToData(cur2,queries.traffic_daily.format(data[0]['nid'], start, end))
+
+  return jsonify(is_sms=data[0]['is_sms'], campaign=campaign, su=su, nm=nm, rb=rb, impact=impact, srcs=srcs, overall=overall, traffic=traffic)
 
 
