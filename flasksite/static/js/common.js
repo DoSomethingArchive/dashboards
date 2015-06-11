@@ -265,3 +265,11 @@ ds.makeBarWithLines = function(svgname,data) {
   return chart4;
   });
 }
+
+//remove children
+ds.removeChildren = function (id) {
+  var elem_overall = document.getElementById(id);
+  while (elem_overall.firstChild) {
+    elem_overall.removeChild(elem_overall.firstChild);
+  }
+}
