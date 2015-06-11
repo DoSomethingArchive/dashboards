@@ -66,7 +66,7 @@ def openDB2():
 
 #handles quering mysql, output to json
 def queryToData(cursor_obj,query,index=None,keyname=None,need_json=None):
-  print query
+  #print query
   if index==None and keyname==None and need_json==None:
     cursor_obj.execute(query)
     data = cursor_obj.fetchall()
