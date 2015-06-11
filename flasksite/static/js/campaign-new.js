@@ -54,13 +54,7 @@ else {
 ds.makeStackedAreaChart('#chart3 svg',ds.stackedAreaDataFormat(srcs));
 //chart 4 - traffic
 ds.makeMultiBarChart('#chart4', ds.multiBarDataFormat(traffic, ['visitors']));
-//function to remove child elements of a node
-var removeChildren = function (id) {
-  var elem_overall = document.getElementById(id);
-  while (elem_overall.firstChild) {
-    elem_overall.removeChild(elem_overall.firstChild);
-  }
-}
+
 //handles ajax data and regeneration of data
 function dateRangeSubmit(my_id) {
   //gets start date
@@ -90,33 +84,33 @@ function dateRangeSubmit(my_id) {
     function (result) {
       //not sure if need to remove for nvd3 charts. often it's fine without removing, but it's not a performance
       //hit and ensures it chart regeneration works
-      removeChildren("campaign-overall-stats");
+      ds.removeChildren("campaign-overall-stats");
       buildOverall(JSON.parse(result['overall']));
 
-      removeChildren("chart_svg");
+      ds.removeChildren("chart_svg");
       ds.makeMultiBarChart('#chart', ds.multiBarDataFormat(JSON.parse(result['su']), ['web', 'mobile']));
 
-      removeChildren("chart2_svg");
+      ds.removeChildren("chart2_svg");
       ds.makeMultiBarChart('#chart2', ds.multiBarDataFormat(JSON.parse(result['nm']), ['web', 'mobile']));
 
       if (JSON.parse(result['is_sms']) === 0) {
         //chart 5 - reportback
-        removeChildren("chart5_svg");
+        ds.removeChildren("chart5_svg");
         ds.makeMultiBarChart('#chart5', ds.multiBarDataFormat(JSON.parse(result['rb']), ['reportbacks']));
         //chart 6 - impact
-        removeChildren("chart6_svg");
+        ds.removeChildren("chart6_svg");
         ds.makeMultiBarChart('#chart6', ds.multiBarDataFormat(JSON.parse(result['impact']), ['impact']));
       }
       else {
         //chart 5 - reportback
-        removeChildren("chart5_svg");
+        ds.removeChildren("chart5_svg");
         ds.makeMultiBarChart('#chart5', ds.multiBarDataFormat(JSON.parse(result['rb']), ['alphas']));
       }
       //chart 3 - traffic sources
-      removeChildren("chart3_svg");
+      ds.removeChildren("chart3_svg");
       ds.makeStackedAreaChart('#chart3 svg',ds.stackedAreaDataFormat(JSON.parse(result['srcs'])));
       //chart 4 - traffic
-      removeChildren("chart4_svg");
+      ds.removeChildren("chart4_svg");
       ds.makeMultiBarChart('#chart4', ds.multiBarDataFormat(JSON.parse(result['traffic']), ['visitors']));
 
   })
