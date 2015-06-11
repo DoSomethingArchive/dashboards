@@ -374,4 +374,14 @@ def dateRange():
 
   return jsonify(is_sms=data[0]['is_sms'], campaign=campaign, su=su, nm=nm, rb=rb, impact=impact, srcs=srcs, overall=overall, traffic=traffic)
 
+@app.route('/campaignsearch', methods=['POST'])
+@login_required
+def campaignSearch():
+
+  search_str = request.form['search_str']
+  cur2 = openDB2()
+  campaigns = queryToData(cur2,queries.search_campaigns.format(search_str))
+  return jsonify(campaigns=campaigns)
+
+
 
