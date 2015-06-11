@@ -251,3 +251,5 @@ impact_daily = """select
                   or
                   nid = {0} and flagged is null and quantity <= {1} and from_unixtime(updated, '%Y-%m-%d') >= "{2}" and from_unixtime(updated, '%Y-%m-%d') <= "{3}"
                   group by date_format(from_unixtime(updated), '%Y-%m-%d')"""
+
+search_campaigns = "select title from dosomething.node where title like '%{0}%' and type = 'campaign' "
