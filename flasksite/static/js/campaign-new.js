@@ -111,8 +111,6 @@ function dateRangeSubmit(my_id) {
         //chart 5 - reportback
         removeChildren("chart5_svg");
         ds.makeMultiBarChart('#chart5', ds.multiBarDataFormat(JSON.parse(result['rb']), ['alphas']));
-        var elem = document.getElementById("chart6");
-        elem.remove();
       }
       //chart 3 - traffic sources
       removeChildren("chart3_svg");
