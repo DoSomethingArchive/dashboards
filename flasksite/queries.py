@@ -220,7 +220,7 @@ new_sign_ups_new_alphas = """select ifnull(count(phone_number),0) as alphas
                              where campaign_id in ({0}) and web_alpha = 1 and date_format(activated_at, '%Y-%m-%d') >= "{1}" and date_format(activated_at, '%Y-%m-%d') <= "{2}" """
 
 traffic_daily = """select
-               date, ifnull(visitors,0)
+               date, ifnull(visitors,0) as visitors
                from
                users_and_activities.all_traffic
                where nid = {0} and date_format(date, '%Y-%m-%d') >= "{1}" and date_format(date, '%Y-%m-%d') <= "{2}" """
