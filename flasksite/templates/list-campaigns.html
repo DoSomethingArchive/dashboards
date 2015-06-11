@@ -2,27 +2,14 @@
 
 {% block content %}
 
-<ul id="campaignlist"></ul>
-<script type="text/javascript">
-var data = {{data|safe}};
-var list = document.getElementById("campaignlist");
 
-for (i=0; i<data.length; i++) {
-  var elem = document.createElement("li");
-  var textnode = document.createTextNode(data[i].title);
-  elem.appendChild(textnode);
-  list.appendChild(elem);
-}
+<div id="campaign_search">
+  <input id="campaign_searchbox" type="text">
+  <input id="campaign_searchbtn" type="submit" value="FIND" onClick="campSearch()">
+</div>
 
-var ul = document.getElementById('campaignlist');
+<div id="campaignlist_div"></div>
 
-ul.addEventListener('click', function(e) {
-    if (e.target.tagName === 'LI'){
-      var li_content = e.target.textContent.replace('#','^&^').replace('?','^^^');
-      window.location = '/' + li_content;
-    }
-});
-
-</script>
+<script type="text/javascript" src="/static/js/list-campaigns.js"></script>
 
 {% endblock %}
