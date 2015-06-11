@@ -303,7 +303,6 @@ p.metric_subheader {
   padding:21px 63px;
   text-decoration:none;
   border-style:none;
-
 }
 
 #login_button:hover {
@@ -344,6 +343,59 @@ p.metric_subheader {
   background: #FFCC33;
 }
 
+#campaignlist_div {
+  padding-top: 50px;
+  width: 400px;
+  margin-left: auto;
+  margin-right:auto;
+  text-align: center;
+}
 
+#campaignlist_div div {
+  height:50px;
+  cursor:pointer;
+  border-radius:2px;
+  margin-bottom: 5px;
+  margin-left: auto;
+  margin-right:auto;
+  background: #00CCFF;
+  width:300px;
+}
+
+#campaignlist_div p {
+  color:white;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 18px;
+  position:relative;
+  top:12px;
+  margin-left: auto;
+  margin-right:auto;
+}
+
+#campaignlist_div div:hover {
+  background: #FFCC33;
+  cursor:pointer;
+}
+
+#campaign_searchbtn {
+  float: right;
+  padding: 10px 20px;
+  border-radius: 2px;
+  cursor: pointer;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color:#333333;
+  font-size: 14px;
+  background: #eee;
+  border: 0;
+  outline: none;
+  font-weight:bold;
+
+}
+
+#campaign_searchbtn:hover {
+  -webkit-box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.75);
+  -moz-box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.75);
+  box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.75);
+}
 
 
