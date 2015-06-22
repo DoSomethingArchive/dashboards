@@ -89,11 +89,8 @@ def home():
   cur.close()
   cur2.close()
 
-  fbook = get_facebook_data()
-  likes = formatThousandNumber(fbook["likes"])
-  talking_about = formatThousandNumber(fbook["talking_about_count"])
 
-  return render_template('home.html',formatted_data=formatted_data, data2 = data2_f, data3 = data3_f, data4 = data4_f, data5 = data5_f, data6 = data6_f, talking_about = talking_about, likes = likes)
+  return render_template('home.html',formatted_data=formatted_data, data2 = data2_f, data3 = data3_f, data4 = data4_f, data5 = data5_f, data6 = data6_f)
 
 #returns cause-level json
 @app.route('/get-causes.json')
@@ -168,7 +165,7 @@ def getSpecificCampaign(cause,campaign):
   #when redoing this function, don't need to break it down so far. because there are no longer tables for each campaign
   #if there si no data it will just be blank. the decsionibg happens for conversion rate, report backs, and impact.
   # campaign=str(request.form['vals']).replace(" ","_").lower()
-  print campaign
+
   name=str(campaign).replace("+","_").lower()
   cur = openDB()
   data = queryToData(cur,queries.getSpecificCampaign_campaign_info.format(name),need_json=0)
@@ -248,11 +245,12 @@ def kpisubmit():
 def formatThousandNumber(num):
   return locale.format("%d", num, grouping=True)
 
+#commenting out, not currently being used
 # @cache.cached(timeout=50, key_prefix='facebook_data')
-def get_facebook_data():
-  r = requests.get("http://graph.facebook.com/7630216751/")
-  fbook = (json.loads(r.content))
-  return fbook
+#def get_facebook_data():
+#  r = requests.get("http://graph.facebook.com/7630216751/")
+#  fbook = (json.loads(r.content))
+#  return fbook
 
 @app.route('/campaign_signups/<nid>')
 def campaignDataEnpoint(nid):
@@ -273,7 +271,6 @@ def getSpecificCampaignNew(campaign):
 
   cur2 = openDB2()
   data = queryToData(cur2,queries.list_one_campaign.format(campaign),need_json=0)
-  print data
 
   if data[0]['mobile_ids'] is not None and data[0]['mobile_ids'] != '0':
     c_id = ",".join(['"'+i+'"' for i in data[0]['mobile_ids'].split(',') if i != 0])
@@ -291,7 +288,6 @@ def getSpecificCampaignNew(campaign):
     overall = json.dumps(overall)
 
     su = queryToData(cur2,queries.new_sign_ups_new.format(c_id, data[0]['nid'], '2000-01-01', '3000-01-01'))
-    print total_su
     nm = queryToData(cur2,queries.new_members_new.format(c_id, data[0]['nid'], '2000-01-01', '3000-01-01'))
     rb = queryToData(cur2,queries.reportback_web_daily.format(data[0]['nid'], '10000', '2000-01-01', '3000-01-01'))
     impact = queryToData(cur2,queries.impact_daily.format(data[0]['nid'], '10000', '2000-01-01', '3000-01-01'))
@@ -312,7 +308,7 @@ def getSpecificCampaignNew(campaign):
     impact = 0
     srcs = queryToData(cur2,queries.sources_new.format(data[0]['nid'], '2000-01-01', '3000-01-01'))
     traffic = queryToData(cur2,queries.traffic_daily.format(data[0]['nid'], '2000-01-01', '3000-01-01'))
-  print overall
+
   return render_template('campaign-new.html', is_sms=data[0]['is_sms'], campaign=campaign, su=su, nm=nm, rb=rb, impact=impact, srcs=srcs, overall=overall, traffic=traffic)
 
 @app.route('/daterange', methods=['POST'])
