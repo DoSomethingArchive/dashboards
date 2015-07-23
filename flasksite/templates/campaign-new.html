@@ -6,37 +6,178 @@
 
 <div id="campaign-overall-stats"></div>
 
+<div id="date_btn" onclick="showDiv()">
+  Adjust Time Frame
+</div>
+
+<div id="daterange" style="display:none;">
+
+  <select id="month_start" class="date_drop">
+    <option value="01">January</option>
+    <option value="02">February</option>
+    <option value="03">March</option>
+    <option value="04">April</option>
+    <option value="05">May</option>
+    <option value="06">June</option>
+    <option value="07">July</option>
+    <option value="08">August</option>
+    <option value="09">September</option>
+    <option value="10">October</option>
+    <option value="11">November</option>
+    <option value="12">December</option>
+  </select>
+
+  <select id="day_start" class="date_drop">
+    <option value="01">1</option>
+    <option value="02">2</option>
+    <option value="03">3</option>
+    <option value="04">4</option>
+    <option value="05">5</option>
+    <option value="06">6</option>
+    <option value="07">7</option>
+    <option value="08">8</option>
+    <option value="09">9</option>
+    <option value="10">10</option>
+    <option value="11">11</option>
+    <option value="12">12</option>
+    <option value="13">13</option>
+    <option value="14">14</option>
+    <option value="15">15</option>
+    <option value="16">16</option>
+    <option value="17">17</option>
+    <option value="18">18</option>
+    <option value="19">19</option>
+    <option value="20">20</option>
+    <option value="21">21</option>
+    <option value="22">22</option>
+    <option value="23">23</option>
+    <option value="24">24</option>
+    <option value="25">25</option>
+    <option value="26">26</option>
+    <option value="27">27</option>
+    <option value="28">28</option>
+    <option value="29">29</option>
+    <option value="30">30</option>
+    <option value="31">31</option>
+  </select>
+
+  <select id="year_start" class="date_drop">
+    <option value="2008">2008</option>
+    <option value="2009">2009</option>
+    <option value="2010">2010</option>
+    <option value="2011">2011</option>
+    <option value="2012">2012</option>
+    <option value="2013">2013</option>
+    <option value="2014">2014</option>
+    <option selected = "selected" value="2015">2015</option>
+    <option value="2016">2016</option>
+    <option value="2017">2017</option>
+    <option value="2018">2018</option>
+    <option value="2019">2019</option>
+    <option value="2020">2020</option>
+  </select>
+
+  <select id="month_end" class="date_drop">
+    <option value="01">January</option>
+    <option value="02">February</option>
+    <option value="03">March</option>
+    <option value="04">April</option>
+    <option value="05">May</option>
+    <option value="06">June</option>
+    <option value="07">July</option>
+    <option value="08">August</option>
+    <option value="09">September</option>
+    <option value="10">October</option>
+    <option value="11">November</option>
+    <option value="12">December</option>
+  </select>
+
+  <select id="day_end" class="date_drop">
+    <option value="01">1</option>
+    <option value="02">2</option>
+    <option value="03">3</option>
+    <option value="04">4</option>
+    <option value="05">5</option>
+    <option value="06">6</option>
+    <option value="07">7</option>
+    <option value="08">8</option>
+    <option value="09">9</option>
+    <option value="10">10</option>
+    <option value="11">11</option>
+    <option value="12">12</option>
+    <option value="13">13</option>
+    <option value="14">14</option>
+    <option value="15">15</option>
+    <option value="16">16</option>
+    <option value="17">17</option>
+    <option value="18">18</option>
+    <option value="19">19</option>
+    <option value="20">20</option>
+    <option value="21">21</option>
+    <option value="22">22</option>
+    <option value="23">23</option>
+    <option value="24">24</option>
+    <option value="25">25</option>
+    <option value="26">26</option>
+    <option value="27">27</option>
+    <option value="28">28</option>
+    <option value="29">29</option>
+    <option value="30">30</option>
+    <option value="31">31</option>
+  </select>
+
+  <select id="year_end" class="date_drop">
+    <option value="2008">2008</option>
+    <option value="2009">2009</option>
+    <option value="2010">2010</option>
+    <option value="2011">2011</option>
+    <option value="2012">2012</option>
+    <option value="2013">2013</option>
+    <option value="2014">2014</option>
+    <option selected = "selected" value="2015">2015</option>
+    <option value="2016">2016</option>
+    <option value="2017">2017</option>
+    <option value="2018">2018</option>
+    <option value="2019">2019</option>
+    <option value="2020">2020</option>
+  </select>
+
+  <button type="button" id="my_button_daterange" class="kpi_button" onclick="dateRangeSubmit(this.id)">Submit</button>
+
+</div>
+
 <div class="campaign-spec-charts" id="chart">
-  <p>Sign Ups</p>
-  <svg></svg>
+  <p id="top_title">Sign Ups</p>
+  <svg id="chart_svg"></svg>
 </div>
 
 <div class="campaign-spec-charts" id="chart2">
 <p>New Members</p>
-  <svg></svg>
+  <svg id="chart2_svg"></svg>
 </div>
 
 <div class="campaign-spec-charts" id="chart5">
   <p>Reportbacks</p>
-  <svg></svg>
+  <svg id="chart5_svg"></svg>
 </div>
 
 <div class="campaign-spec-charts" id="chart6">
   <p>Impact</p>
-  <svg></svg>
+  <svg id="chart6_svg"></svg>
 </div>
 
 <div class="campaign-spec-charts" id="chart3">
   <p>Traffic Sources (Entrances)</p>
-  <svg></svg>
+  <svg id="chart3_svg"></svg>
 </div>
 
 <div class="campaign-spec-charts" id="chart4">
   <p>All Traffic</p>
-  <svg></svg>
+  <svg id="chart4_svg"></svg>
 </div>
 
 <script type="text/javascript">
+var campaign = "{{campaign}}";
 var is_sms = {{is_sms|safe}};
 var su = {{su|safe}};
 var nm = {{nm|safe}};
@@ -44,11 +185,11 @@ var rb = {{rb|safe}};
 
 if (is_sms === 0) {
   var impact = {{impact|safe}};
-};
+}
 var srcs = {{srcs|safe}};
 var overall = {{overall|safe}};
 var traffic = {{traffic|safe}};
-console.log(overall);
+
 </script>
 <script type="text/javascript" src="/static/js/campaign-new.js"></script>
 
