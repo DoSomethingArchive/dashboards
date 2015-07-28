@@ -25,7 +25,7 @@ app.config.from_pyfile('../env/config.py')
 app.config['CACHE_TYPE'] = 'simple'
 
 #db settings
-db_sett = 'mysql://%s:%s@%s/%s' % (app.config['USER'], app.config['PW'], app.config['HOST'], app.config['DB'])
+db_sett = 'mysql://%s:%s@%s/%s' % (app.config['USER'], app.config['PW'], app.config['HOST'], app.config['DB_USERS'])
 app.config['SQLALCHEMY_DATABASE_URI'] =  db_sett
 
 from models import db
