@@ -1,2 +1,4 @@
-from flasksite import app
-app.run(debug=True)
+from flasksite import app as application
+
+if __name__ == "__main__":
+    application.run(debug=True)
