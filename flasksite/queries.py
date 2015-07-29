@@ -86,7 +86,7 @@ kpisVerifiedAll_W = "select date as x, average_verified_web as y, days_in_month 
 
 kpisNew = "select date as x, average_new as y, days_in_month from new_by_month order by date"
 
-kpiText = """select k.box_id, replace(replace(all_text, '|', "'"),'%^&','"') as all_text from kpi_content k
+kpiText = """select k.box_id, replace(replace(all_text, '|', "'"),'%^&','"') as all_text from dashboards.kpi_content k
           join ( select box_id, max(timestamp) as timestamp from dashboards.kpi_content group by box_id ) t
           on k.box_id=t.box_id and k.timestamp=t.timestamp
           group by box_id"""
