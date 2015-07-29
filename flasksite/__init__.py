@@ -50,7 +50,7 @@ def openDB():
                     conv=my_conv,# datatype conversions
                     cursorclass=MySQLdb.cursors.DictCursor)
   cur = db.cursor()
-  return cur
+  return db, cur
 
 
 #connect to separate db
@@ -62,7 +62,7 @@ def openDB2():
                     conv=my_conv,# datatype conversions
                     cursorclass=MySQLdb.cursors.DictCursor)
   cur2 = db2.cursor()
-  return cur2
+  return db2, cur2
 
 #handles quering mysql, output to json
 def queryToData(cursor_obj,query,index=None,keyname=None,need_json=None):
