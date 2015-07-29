@@ -69,8 +69,10 @@ def logout():
 @login_required
 @cache.cached(timeout=1000)
 def home():
-  cur = openDB()
-  cur2 = openDB2()
+
+  db2_obj = openDB2()
+  db2 = db2_obj[0]
+  cur2 = db2_obj[1]
 
   data = queryToData(cur2,queries.home_total_members,0,'total')
   data = int(json.loads(data))
@@ -86,9 +88,8 @@ def home():
 
   data6_f = queryToData(cur2,queries.home_gross_mail_optedout_members)
 
-  cur.close()
   cur2.close()
-
+  db2.close()
 
   return render_template('home.html',formatted_data=formatted_data, data2 = data2_f, data3 = data3_f, data4 = data4_f, data5 = data5_f, data6 = data6_f)
 
@@ -96,8 +97,12 @@ def home():
 @app.route('/get-causes.json')
 @login_required
 def getCausesdata():
-  cur = openDB()
+  db_obj = openDB()
+  db = db_obj[0]
+  cur = db_obj[1]
   data = queryToData(cur,queries.getCausesdata_causes)
+  cur.close
+  db.close()
   return data
 
 #returns cause-level page
@@ -126,10 +131,12 @@ def causeStaffPicks(cause):
   else:
     q = queries.causeStaffPicks_causes % (staff)
 
-  cur = openDB()
+  db_obj = openDB()
+  db = db_obj[0]
+  cur = db_obj[1]
   j = queryToData(cur,q)
   cur.close()
-
+  db.close()
   if len(j) > 2:
     return render_template('cause-campaigns.html', title=title,causes=cause, j=j)
 
@@ -141,11 +148,14 @@ def causeStaffPicks(cause):
 @login_required
 def listCampaigns():
 
-  cur2 = openDB2()
+  db2_obj = openDB2()
+  db2 = db2_obj[0]
+  cur2 = db2_obj[1]
   data = queryToData(cur2,queries.list_all_campaigns, need_json=0)
   data = [{'title':i['title'].decode('ascii', 'ignore')} for i in data]
   data = json.dumps(data)
   cur2.close()
+  db2.close()
   return render_template('list-campaigns.html', data=data)
 
 #returns monthly kpi data
@@ -153,10 +163,12 @@ def listCampaigns():
 @login_required
 def monthly():
 
-  cur = openDB()
+  db_obj = openDB()
+  db = db_obj[0]
+  cur = db_obj[1]
   data = queryToData(cur,queries.monthly_stats)
   cur.close()
-
+  db.close()
   return render_template('monthly-stats.html', data=data )
 
 @app.route('/cause/campaigns/<cause>/<campaign>')
@@ -167,7 +179,9 @@ def getSpecificCampaign(cause,campaign):
   # campaign=str(request.form['vals']).replace(" ","_").lower()
 
   name=str(campaign).replace("+","_").lower()
-  cur = openDB()
+  db_obj = openDB()
+  db = db_obj[0]
+  cur = db_obj[1]
   data = queryToData(cur,queries.getSpecificCampaign_campaign_info.format(name),need_json=0)
   is_sms = data[0]['is_sms']
   is_staff_pick = data[0]['staff_pick']
@@ -200,33 +214,35 @@ def getSpecificCampaign(cause,campaign):
     query('overall', queries.getSpecificCampaign_overall.format(name))
 
   cur.close()
-
+  db.close()
   return render_template('campaign-specific.html',campaign=campaign.replace("+"," ").upper(),signups=data['signups'],newmembers=data['newmembers'],sources=data['sources'],traffic=data['traffic'],overall=data['overall'])
 
 #kpis page
 @app.route('/kpis')
 @login_required
 def kpis():
+
+  db2_obj = openDB2()
+  db2 = db2_obj[0]
+  cur2 = db2_obj[1]
+
   q_active = queries.kpisActive
-  cur = openDB2()
-  active = queryToData(cur,q_active)
+  active = queryToData(cur2,q_active)
 
   q_verified_all_s = queries.kpisVerifiedAll_S
-  cur = openDB2()
-  verified_all_s = queryToData(cur,q_verified_all_s)
+  verified_all_s = queryToData(cur2,q_verified_all_s)
 
   q_verified_all_w = queries.kpisVerifiedAll_W
-  cur = openDB2()
-  verified_all_w = queryToData(cur,q_verified_all_w)
+  verified_all_w = queryToData(cur2,q_verified_all_w)
 
   q_new = queries.kpisNew
-  cur = openDB2()
-  new = queryToData(cur,q_new)
+  new = queryToData(cur2,q_new)
 
   q_text = queries.kpiText
-  cur = openDB()
-  text = queryToData(cur,q_text)
-  cur.close()
+  text = queryToData(cur2,q_text)
+
+  cur2.close()
+  db2.close()
 
   return render_template('kpi_page.html', active=active, verified_all_w=verified_all_w, verified_all_s=verified_all_s,  new_m=new, q_text=text, user_role=g.user.role)
 
@@ -234,11 +250,18 @@ def kpis():
 @app.route('/kpisubmit', methods=['POST'])
 @login_required
 def kpisubmit():
+
+  db2_obj = openDB2()
+  db2 = db2_obj[0]
+  cur2 = db2_obj[1]
   #get rid of quotes aspostraphes when writing to mysql, and replace them later when called to the page
   text = request.form['text'].replace("'","|").replace('"',"%^&")
   q_insert = queries.kpiTextInsert % (dt.now(), text, request.form['box_id'])
-  cur = openDB()
-  insert = queryToData(cur,q_insert)
+  cur2.execute(q_insert)
+  db2.commit()
+
+  cur2.close()
+  db2.close()
 
   return q_insert
 
@@ -257,8 +280,14 @@ def campaignDataEnpoint(nid):
   try:
     nid = int(nid)
     q_metadata = queries.campaignDataEnpoint_basic_campaign_metadata % (nid)
-    cur = openDB()
+    db_obj = openDB()
+    db = db_obj[0]
+    cur = db_obj[1]
     text = queryToData(cur,q_metadata)
+
+    cur.close()
+    db.close()
+
     return text
   except:
     return json.dumps({'error':500})
@@ -266,10 +295,14 @@ def campaignDataEnpoint(nid):
 @app.route('/<campaign>')
 @login_required
 def getSpecificCampaignNew(campaign):
+
+  db2_obj = openDB2()
+  db2 = db2_obj[0]
+  cur2 = db2_obj[1]
+
   campaign = campaign.replace('^&^', '#')
   campaign = campaign.replace('^^^', '?')
 
-  cur2 = openDB2()
   data = queryToData(cur2,queries.list_one_campaign.format(campaign),need_json=0)
 
   if data[0]['mobile_ids'] is not None and data[0]['mobile_ids'] != '0':
@@ -309,6 +342,9 @@ def getSpecificCampaignNew(campaign):
     srcs = queryToData(cur2,queries.sources_new.format(data[0]['nid'], '2000-01-01', '3000-01-01'))
     traffic = queryToData(cur2,queries.traffic_daily.format(data[0]['nid'], '2000-01-01', '3000-01-01'))
 
+  cur2.close()
+  db2.close()
+
   return render_template('campaign-new.html', is_sms=data[0]['is_sms'], campaign=campaign, su=su, nm=nm, rb=rb, impact=impact, srcs=srcs, overall=overall, traffic=traffic)
 
 @app.route('/daterange', methods=['POST'])
@@ -319,7 +355,9 @@ def dateRange():
   end = request.form['end']
   campaign = request.form['campaign']
 
-  cur2 = openDB2()
+  db2_obj = openDB2()
+  db2 = db2_obj[0]
+  cur2 = db2_obj[1]
   data = queryToData(cur2,queries.list_one_campaign.format(campaign),need_json=0)
 
   if data[0]['mobile_ids'] is not None and data[0]['mobile_ids'] != '0':
@@ -368,15 +406,25 @@ def dateRange():
     srcs = queryToData(cur2,queries.sources_new.format(data[0]['nid'], start, end))
     traffic = queryToData(cur2,queries.traffic_daily.format(data[0]['nid'], start, end))
 
+  cur2.close()
+  db2.close()
+
   return jsonify(is_sms=data[0]['is_sms'], campaign=campaign, su=su, nm=nm, rb=rb, impact=impact, srcs=srcs, overall=overall, traffic=traffic)
 
 @app.route('/campaignsearch', methods=['POST'])
 @login_required
 def campaignSearch():
 
+  db2_obj = openDB2()
+  db2 = db2_obj[0]
+  cur2 = db2_obj[1]
+
   search_str = request.form['search_str']
-  cur2 = openDB2()
   campaigns = queryToData(cur2,queries.search_campaigns.format(search_str))
+
+  cur2.close()
+  db2.close()
+
   return jsonify(campaigns=campaigns)
 
 
