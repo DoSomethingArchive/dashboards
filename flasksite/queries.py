@@ -253,3 +253,17 @@ impact_daily = """select
                   group by date_format(from_unixtime(updated), '%Y-%m-%d')"""
 
 search_campaigns = "select title from dosomething.node where title like '%{0}%' and type = 'campaign' "
+
+demographics_action_gender = "select 'Action_by_Reported_Gender' as header, name, group_concat(gender) as metric, group_concat(count) as count from action_gender group by name"
+demographics_action_income = "select 'Action_by_Income' as header, name, group_concat(income_level) as metric, group_concat(count) as count from action_income group by name"
+demographics_cause_gender = "select 'Cause_by_Reported_Gender' as header, name,  group_concat(gender) as metric, group_concat(count) as count from cause_gender group by name"
+demographics_cause_income = "select 'Cause_by_Income' as header, name, group_concat(income_level) as metric, group_concat(count) as count from cause_income group by name"
+demographics_mobile_age = "select 'Mobile_Age' as header, group_concat(age) as metric, group_concat(count) as count from baseline_mobile_age"
+demographics_mobile_gender = "select 'Mobile_Assigned_Gender' as header, group_concat(gender) as metric, group_concat(count) as count from baseline_mobile_gender"
+demographics_mobile_income = "select 'Mobile_Income' as header, group_concat(income_level) as metric, group_concat(count) as count from baseline_mobile_income"
+demographics_mobile_race = "select 'Mobile_Race' as header, group_concat(race) as metric, group_concat(count) as count from baseline_mobile_race"
+demographics_web_age = "select 'Web_Age' as header, group_concat(age) as metric, group_concat(count) as count from baseline_web_age"
+demographics_web_gender = "select 'Web_Assigned_Gender' as header, group_concat(gender) as metric, group_concat(count) as count from baseline_web_gender"
+demographics_web_income = "select 'Web_Income' as header, group_concat(income_level) as metric, group_concat(count) as count from baseline_web_income"
+demographics_web_race = "select 'Web_Race' as header, group_concat(race) as metric, group_concat(count) as count from baseline_web_race"
+

@@ -427,5 +427,50 @@ def campaignSearch():
 
   return jsonify(campaigns=campaigns)
 
+@app.route('/demographics')
+@login_required
+def demographicsPull():
+  #open db connect
+  db2_obj = openDB2()
+  db2 = db2_obj[0]
+  cur2 = db2_obj[1]
+
+  def formatDemo(query, name_present):
+    cur2.execute(query)
+    out = cur2.fetchall()
+    #format json data for lists
+    master_list = {'header':out[0]['header'], 'item_list':list()}
+    for item in out:
+      counts = [int(num) for num in item['count'].split(",")]
+      total = sum(counts)
+      #create percent str
+      percents = [str(round((i/float(total))*100,2)) + '%' for i in counts]
+      metric = item['metric'].split(",")
+      inner_dict = dict(zip(metric,percents))
+      if name_present is True:
+        temp_dict = {item['name']:inner_dict}
+      else:
+        temp_dict = inner_dict
+      master_list['item_list'].append(temp_dict)
+    return json.dumps(master_list)
+
+  action_gender = formatDemo(queries.demographics_action_gender, True)
+  action_income = formatDemo(queries.demographics_action_income, True)
+  cause_gender = formatDemo(queries.demographics_cause_gender, True)
+  cause_income = formatDemo(queries.demographics_cause_income, True)
+  #to use this data, just uncomment!
+  #formatDemo(queries.demographics_mobile_age, False)
+  #formatDemo(queries.demographics_mobile_gender, False)
+  #formatDemo(queries.demographics_mobile_income, False)
+  #formatDemo(queries.demographics_mobile_race, False)
+  #formatDemo(queries.demographics_web_age, False)
+  #formatDemo(queries.demographics_web_gender, False)
+  #formatDemo(queries.demographics_web_race, False)
+
+  cur2.close()
+  db2.close()
+
+  return render_template('demographics.html', action_gender=action_gender, cause_gender=cause_gender, action_income=action_income, cause_income=cause_income)
+
 
 
