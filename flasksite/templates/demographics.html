@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<script type="text/javascript">
+var action_gender = {{action_gender|safe}};
+var cause_gender = {{cause_gender|safe}};
+var action_income ={{action_income|safe}}
+var cause_income = {{cause_income|safe}}
+</script>
+
+<script type="text/javascript" src="/static/js/demographics-page.js"></script>
+{% endblock %}
